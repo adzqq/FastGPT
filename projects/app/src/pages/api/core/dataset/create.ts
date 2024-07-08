@@ -51,11 +51,11 @@ async function handler(req: NextApiRequest) {
   });
 
   if (type === DatasetTypeEnum.dataset) {
-    await createDefaultCollection({
-      datasetId: _id,
-      teamId,
-      tmbId
-    });
+    // await createDefaultCollection({
+    //   datasetId: _id,
+    //   teamId,
+    //   tmbId
+    // });
   }
 
   return _id;

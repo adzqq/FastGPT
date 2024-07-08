@@ -95,6 +95,8 @@ async function handler(req: ApiRequestProps<FileIdCreateDatasetCollectionParams>
       session
     });
 
+    console.log('爱动加入索引队列')
+
     // 6. insert to training queue
     await pushDataListToTrainingQueue({
       teamId,

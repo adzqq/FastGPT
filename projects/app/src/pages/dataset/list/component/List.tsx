@@ -33,6 +33,7 @@ import {
 import EmptyTip from '@fastgpt/web/components/common/EmptyTip';
 import { useFolderDrag } from '@/components/common/folder/useFolderDrag';
 import MyBox from '@fastgpt/web/components/common/MyBox';
+import { useUserStore } from '@/web/support/user/useUserStore';
 import { useI18n } from '@/web/context/I18n';
 import { useTranslation } from 'react-i18next';
 
@@ -50,6 +51,7 @@ function List() {
     setEditedDataset,
     onDelDataset
   } = useContextSelector(DatasetsContext, (v) => v);
+  const { userInfo } = useUserStore();
   const [editPerDatasetIndex, setEditPerDatasetIndex] = useState<number>();
   const { myDatasets, loadMyDatasets } = useDatasetStore();
   const [loadingDatasetId, setLoadingDatasetId] = useState<string>();

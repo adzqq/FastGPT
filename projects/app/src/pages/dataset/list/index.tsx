@@ -17,7 +17,7 @@ import MyIcon from '@fastgpt/web/components/common/Icon';
 import { FolderIcon, FolderImgUrl } from '@fastgpt/global/common/file/image/constants';
 import { EditFolderFormType } from '@fastgpt/web/components/common/MyModal/EditFolderModal';
 import dynamic from 'next/dynamic';
-import { postCreateDataset, putDatasetById } from '@/web/core/dataset/api';
+import { postCreateDataset, putDatasetById,createAdDatasets } from '@/web/core/dataset/api';
 import { DatasetTypeEnum } from '@fastgpt/global/core/dataset/constants';
 import FolderSlideCard from '@/components/common/folder/SlideCard';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
@@ -208,8 +208,19 @@ const Dataset = () => {
                 name,
                 type: DatasetTypeEnum.folder,
                 avatar: FolderImgUrl,
-                intro: ''
+                intro: '',
+                kb_name: name,
+                user_id: userInfo?._id
               });
+            //   await createAdDatasets({
+            //     parentId: parentId || undefined,
+            //     name,
+            //     type: DatasetTypeEnum.folder,
+            //     avatar: FolderImgUrl,
+            //     intro: '',
+            //     kb_name: name,
+            //     user_id: userInfo?._id
+            //   });
               refetchDatasets();
               refetchPaths();
             } catch (error) {

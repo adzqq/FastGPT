@@ -83,6 +83,10 @@ function checkRes(data: ResponseDataType) {
   } else if (data.code < 200 || data.code >= 400) {
     return Promise.reject(data);
   }
+  //爱动特殊处理
+  if(!data.data){
+    return data;
+  }
   return data.data;
 }
 

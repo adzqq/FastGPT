@@ -129,6 +129,8 @@ export type DatasetSimpleItemType = {
   name: string;
   vectorModel: VectorModelItemType;
 };
+
+//添加userId字段
 export type DatasetListItemType = {
   _id: string;
   parentId: string;
@@ -139,6 +141,8 @@ export type DatasetListItemType = {
   permission: DatasetPermission;
   vectorModel: VectorModelItemType;
   defaultPermission: PermissionValueType;
+  userId: string;
+  adId?: string;
 };
 
 export type DatasetItemType = Omit<DatasetSchemaType, 'vectorModel' | 'agentModel'> & {

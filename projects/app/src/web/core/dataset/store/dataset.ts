@@ -5,7 +5,11 @@ import type {
   DatasetListItemType,
   DatasetSimpleItemType
 } from '@fastgpt/global/core/dataset/type.d';
-import { getAllDataset, getDatasets } from '@/web/core/dataset/api';
+import { getAllDataset, getDatasets ,getAdDatasets} from '@/web/core/dataset/api';
+
+import { getTokenLogin } from '@/web/support/user/api';
+
+
 
 type State = {
   allDatasets: DatasetSimpleItemType[];
@@ -28,7 +32,17 @@ export const useDatasetStore = create<State>()(
         },
         myDatasets: [],
         async loadMyDatasets(parentId = '') {
+            console.log('爱动loadMyDatasets');
           const res = await getDatasets({ parentId });
+          //获取账号信息
+          const accountInfo = await getTokenLogin();
+          //用户id
+          const userId = accountInfo._id
+          //获取知识库列表
+          const adres = await getAdDatasets(userId);
+          res.forEach((item,index) => {
+            item.adId = adres[index][0]
+          });
           set((state) => {
             state.myDatasets = res;
           });

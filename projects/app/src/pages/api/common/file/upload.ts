@@ -14,12 +14,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   const filePaths: string[] = [];
 
   try {
+    console.log('爱动开始上传数据');
     await connectToDatabase();
     const { file, bucketName, metadata } = await upload.doUpload(req, res);
 
     filePaths.push(file.path);
 
     const { teamId, tmbId } = await authCert({ req, authToken: true });
+
+    console.log('teamId=====================================',teamId)
+    console.log('tmbId=====================================',tmbId)
 
     if (!bucketName) {
       throw new Error('bucketName is empty');

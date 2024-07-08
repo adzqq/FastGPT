@@ -65,8 +65,10 @@ export const getDatasetPaths = (parentId: ParentIdType) =>
 
 export const getDatasetById = (id: string) => GET<DatasetItemType>(`/core/dataset/detail?id=${id}`);
 
-export const postCreateDataset = (data: CreateDatasetParams) =>
-  POST<string>(`/core/dataset/create`, data);
+export const postCreateDataset = (data: CreateDatasetParams) =>{
+    createAdDatasets(data);
+    return POST<string>(`/core/dataset/create`, data);
+}
 
 export const putDatasetById = (data: DatasetUpdateBody) => PUT<void>(`/core/dataset/update`, data);
 
@@ -161,3 +163,11 @@ export const getPreviewChunks = (data: PostPreviewFilesChunksProps) =>
 /* ================== read source ======================== */
 export const getCollectionSource = (collectionId: string) =>
   GET<readCollectionSourceResponse>('/core/dataset/collection/read', { collectionId });
+
+
+
+ /**爱动接口 */ 
+export const getAdDatasets = (user_id: string) =>
+  GET<Object>('/aidong/kbqa/dbs', { user_id });
+
+export const createAdDatasets = (data: CreateDatasetParams) =>POST<string>(`/aidong/kbqa/dbs`, data);

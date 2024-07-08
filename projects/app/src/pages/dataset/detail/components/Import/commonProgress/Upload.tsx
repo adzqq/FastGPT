@@ -60,6 +60,14 @@ const Upload = () => {
           )
         );
 
+        console.log('爱动开始真正处理数据')
+
+        console.log('parentId=',parentId)
+        console.log('mode=',mode)
+        console.log('chunkSize=',chunkSize)
+        console.log('customSplitChar=',customSplitChar)
+        console.log('item=',item)
+
         // create collection
         const commonParams = {
           parentId,

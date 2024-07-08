@@ -68,6 +68,7 @@ const Header = ({}: {}) => {
       tip: t('dataset.Manual collection Tip'),
       canEmpty: false
     });
+    
   const {
     isOpen: isOpenFileSourceSelector,
     onOpen: onOpenFileSourceSelector,

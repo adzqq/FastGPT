@@ -11,7 +11,7 @@ import { useRequest } from '@fastgpt/web/hooks/useRequest';
 import Avatar from '@/components/Avatar';
 import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
 import MyModal from '@fastgpt/web/components/common/MyModal';
-import { postCreateDataset } from '@/web/core/dataset/api';
+import { createAdDatasets, postCreateDataset } from '@/web/core/dataset/api';
 import type { CreateDatasetParams } from '@/global/core/dataset/api.d';
 import { useTranslation } from 'next-i18next';
 import MyRadio from '@/components/common/MyRadio';
@@ -21,7 +21,8 @@ import AIModelSelector from '@/components/Select/AIModelSelector';
 import { useI18n } from '@/web/context/I18n';
 import QuestionTip from '@fastgpt/web/components/common/MyTooltip/QuestionTip';
 import { DatasetDefaultPermissionVal } from '@fastgpt/global/support/permission/dataset/constant';
-
+import { userInfo } from 'os';
+import { useUserStore } from '@/web/support/user/useUserStore';
 const CreateModal = ({ onClose, parentId }: { onClose: () => void; parentId?: string }) => {
   const { t } = useTranslation();
   const { datasetT } = useI18n();
@@ -47,6 +48,8 @@ const CreateModal = ({ onClose, parentId }: { onClose: () => void; parentId?: st
   const datasetType = watch('type');
   const vectorModel = watch('vectorModel');
   const agentModel = watch('agentModel');
+
+  const { userInfo } = useUserStore();
 
   const { File, onOpen: onOpenSelectFile } = useSelectFile({
     fileType: '.jpg,.png',
@@ -78,6 +81,9 @@ const CreateModal = ({ onClose, parentId }: { onClose: () => void; parentId?: st
   /* create a new kb and router to it */
   const { mutate: onclickCreate, isLoading: creating } = useRequest({
     mutationFn: async (data: CreateDatasetParams) => {
+        
+        data.user_id = userInfo?._id;
+        data.kb_name = data.name;
       const id = await postCreateDataset(data);
       return id;
     },
