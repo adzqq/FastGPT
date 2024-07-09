@@ -20,7 +20,6 @@ const Plugin = dynamic(() => import('./components/Plugin'), {
 
 const AppDetail = () => {
   const { appDetail } = useContextSelector(AppContext, (e) => e);
-
   return (
     <>
       <NextHead title={appDetail.name} icon={appDetail.avatar}></NextHead>

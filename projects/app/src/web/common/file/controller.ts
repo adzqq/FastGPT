@@ -1,4 +1,4 @@
-import { postUploadImg, postUploadFiles } from '@/web/common/file/api';
+import { postUploadImg, postUploadFiles,postAidongUploadFiles } from '@/web/common/file/api';
 import { UploadImgProps } from '@fastgpt/global/common/file/api';
 import { BucketNameEnum } from '@fastgpt/global/common/file/constants';
 import { preUploadImgProps } from '@fastgpt/global/common/file/api';
@@ -29,6 +29,26 @@ export const uploadFile2DB = ({
     percentListen && percentListen(percent);
   });
 };
+
+
+export const uploadFile2AidongDB = ({
+    kb_id,
+    user_id,
+    file
+  }: {
+    file: File;
+    kb_id:string,
+    user_id:string
+  }) => {
+    const form = new FormData();
+    form.append('kb_id', kb_id);
+    form.append('user_id', user_id);
+    form.append('files', file, encodeURIComponent(file.name));
+    return postAidongUploadFiles(form, (e) => {
+      if (!e.total) return;
+    });
+  };
+
 
 export const getUploadBase64ImgController = (
   props: CompressImgProps & UploadImgProps,

@@ -128,6 +128,7 @@ export type DatasetSimpleItemType = {
   avatar: string;
   name: string;
   vectorModel: VectorModelItemType;
+  adId?: string;
 };
 
 //添加userId字段

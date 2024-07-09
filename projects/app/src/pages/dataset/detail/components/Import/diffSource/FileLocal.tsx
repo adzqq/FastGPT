@@ -17,13 +17,13 @@ const Upload = dynamic(() => import('../commonProgress/Upload'));
 
 const fileType = '.txt, .docx, .csv, .xlsx, .pdf, .md, .html, .pptx';
 
-const FileLocal = () => {
+const FileLocal = ({ datasetId, kb_id}: { datasetId: string,kb_id:string }) => {
   const activeStep = useContextSelector(DatasetImportContext, (v) => v.activeStep);
 
   return (
     <>
-      {activeStep === 0 && <SelectFile />}
-      {activeStep === 1 && <DataProcess showPreviewChunks />}
+      {activeStep === 0 && <SelectFile datasetId={datasetId} kb_id={kb_id}/>}
+      {activeStep === 1 && <DataProcess showPreviewChunks={false} />}
       {activeStep === 2 && <Upload />}
     </>
   );
@@ -31,7 +31,8 @@ const FileLocal = () => {
 
 export default React.memo(FileLocal);
 
-const SelectFile = React.memo(function SelectFile() {
+const SelectFile = React.memo(function SelectFile({ datasetId, kb_id}: { datasetId: string,kb_id:string }) {
+    console.log('爱动SelectFile',datasetId+"---"+kb_id);
   const { t } = useTranslation();
   const { goToNext, sources, setSources } = useContextSelector(DatasetImportContext, (v) => v);
   const [selectFiles, setSelectFiles] = useState<ImportSourceItemType[]>(
@@ -59,6 +60,8 @@ const SelectFile = React.memo(function SelectFile() {
         fileType={fileType}
         selectFiles={selectFiles}
         setSelectFiles={setSelectFiles}
+        datasetId={datasetId}
+        kb_id={kb_id}
         onStartSelect={() => setUploading(true)}
         onFinishSelect={() => setUploading(false)}
       />

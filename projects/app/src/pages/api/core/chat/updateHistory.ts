@@ -9,6 +9,9 @@ import { ApiRequestProps } from '@fastgpt/service/type/next';
 /* update chat top, custom title */
 async function handler(req: ApiRequestProps<UpdateHistoryProps>, res: NextApiResponse) {
   const { appId, chatId, title, customTitle, top } = req.body;
+
+  console.log("爱动req.body",req.body)
+
   await autChatCrud({
     req,
     authToken: true,
@@ -16,15 +19,17 @@ async function handler(req: ApiRequestProps<UpdateHistoryProps>, res: NextApiRes
     per: 'w'
   });
 
-  await MongoChat.findOneAndUpdate(
+  const result = await MongoChat.findOneAndUpdate(
     { appId, chatId },
     {
       updateTime: new Date(),
       ...(title !== undefined && { title }),
       ...(customTitle !== undefined && { customTitle }),
       ...(top !== undefined && { top })
-    }
+    },
+    {upsert: true}
   );
+  console.log("爱动updateHistory",result)
   jsonRes(res);
 }
 

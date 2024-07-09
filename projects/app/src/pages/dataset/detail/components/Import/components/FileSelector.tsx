@@ -10,10 +10,13 @@ import { getNanoid } from '@fastgpt/global/common/string/tools';
 import { useRequest } from '@fastgpt/web/hooks/useRequest';
 import { getFileIcon } from '@fastgpt/global/common/file/icon';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
-import { uploadFile2DB } from '@/web/common/file/controller';
+import { uploadFile2AidongDB, uploadFile2DB } from '@/web/common/file/controller';
 import { BucketNameEnum } from '@fastgpt/global/common/file/constants';
 import { ImportSourceItemType } from '@/web/core/dataset/type';
 import { useI18n } from '@/web/context/I18n';
+import { useUserStore } from '@/web/support/user/useUserStore';
+
+
 
 export type SelectFileItemType = {
   fileId: string;
@@ -24,6 +27,8 @@ export type SelectFileItemType = {
 const FileSelector = ({
   fileType,
   selectFiles,
+  datasetId,
+  kb_id,
   setSelectFiles,
   onStartSelect,
   onFinishSelect,
@@ -31,10 +36,15 @@ const FileSelector = ({
 }: {
   fileType: string;
   selectFiles: ImportSourceItemType[];
+  datasetId:string,
+  kb_id:string,
   setSelectFiles: React.Dispatch<React.SetStateAction<ImportSourceItemType[]>>;
   onStartSelect: () => void;
   onFinishSelect: () => void;
 } & FlexProps) => {
+
+
+  console.log("爱动FileSelector",datasetId+"==========="+kb_id)  
   const { t } = useTranslation();
   const { fileT } = useI18n();
 
@@ -43,6 +53,8 @@ const FileSelector = ({
 
   const maxCount = feConfigs?.uploadFileMaxAmount || 1000;
   const maxSize = (feConfigs?.uploadFileMaxSize || 1024) * 1024 * 1024;
+
+  const { userInfo } = useUserStore();
 
   const { File, onOpen } = useSelectFile({
     fileType,
@@ -105,6 +117,8 @@ const FileSelector = ({
                   );
                 }
               });
+              //上传到爱动服务器
+              await uploadFile2AidongDB({kb_id,user_id:userInfo?._id,file:file});
               setSelectFiles((state) =>
                 state.map((item) =>
                   item.id === fileId

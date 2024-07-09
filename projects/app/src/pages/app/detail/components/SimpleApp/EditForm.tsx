@@ -76,6 +76,8 @@ const EditForm = ({
 
   const { appDetail } = useContextSelector(AppContext, (v) => v);
 
+  console.log('爱动appForm', appForm);
+
   const { allDatasets } = useDatasetStore();
   const { llmModelList } = useSystemStore();
   const [, startTst] = useTransition();
@@ -239,7 +241,8 @@ const EditForm = ({
                     router.push({
                       pathname: '/dataset/detail',
                       query: {
-                        datasetId: item._id
+                        datasetId: item._id,
+                        kb_id:item.adId
                       }
                     })
                   }

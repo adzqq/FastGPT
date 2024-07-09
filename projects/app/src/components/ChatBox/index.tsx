@@ -329,6 +329,8 @@ const ChatBox = (
         const abortSignal = new AbortController();
         questionGuideController.current = abortSignal;
 
+        console.log('爱动createQuestionGuide', history);
+
         const result = await postQuestionGuide(
           {
             messages: chats2GPTMessages({ messages: history, reserveId: false }).slice(-6),
@@ -465,6 +467,10 @@ const ChatBox = (
 
             const messages = chats2GPTMessages({ messages: newChatList, reserveId: true });
 
+            console.log('爱动构建gptmessages', messages);
+
+          
+
             const {
               responseData,
               responseText,
@@ -476,6 +482,11 @@ const ChatBox = (
               generatingMessage: (e) => generatingMessage({ ...e, autoTTSResponse }),
               variables: requestVariables
             });
+
+
+            console.log('爱动ChatBoxresponseData', responseData);
+
+            console.log('爱动ChatBoxresponseText', responseText);
 
             isNewChatReplace.current = isNewChat;
 

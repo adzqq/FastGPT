@@ -17,6 +17,20 @@ export const postUploadFiles = (
     }
   });
 
+
+  export const postAidongUploadFiles = (
+    data: FormData,
+    onUploadProgress: (progressEvent: AxiosProgressEvent) => void
+  ) =>
+    POST<string>('/aidong/kbqa/upload', data, {
+      timeout: 600000,
+      onUploadProgress,
+      headers: {
+        'Content-Type': 'multipart/form-data; charset=utf-8'
+      }
+    }); 
+  
+
 export const getPreviewFileContent = (data: PreviewContextProps) =>
   POST<{
     previewContent: string;

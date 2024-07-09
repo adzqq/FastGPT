@@ -197,10 +197,12 @@ function List() {
                       }
                     });
                   } else {
+                    console.log('爱动dataset', dataset);
                     router.push({
                       pathname: '/dataset/detail',
                       query: {
-                        datasetId: dataset._id
+                        datasetId: dataset._id,
+                        kb_id: dataset.adId
                       }
                     });
                   }

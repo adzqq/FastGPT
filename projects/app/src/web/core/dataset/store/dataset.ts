@@ -25,6 +25,15 @@ export const useDatasetStore = create<State>()(
         allDatasets: [],
         async loadAllDatasets() {
           const res = await getAllDataset();
+            //获取账号信息
+            const accountInfo = await getTokenLogin();
+            //用户id
+            const userId = accountInfo._id
+            //获取知识库列表
+            const adres = await getAdDatasets(userId);
+            res.forEach((item,index) => {
+              item.adId = adres[index][1] === item.name?adres[index][0]:''
+            });
           set((state) => {
             state.allDatasets = res;
           });
@@ -41,7 +50,7 @@ export const useDatasetStore = create<State>()(
           //获取知识库列表
           const adres = await getAdDatasets(userId);
           res.forEach((item,index) => {
-            item.adId = adres[index][0]
+            item.adId = adres[index][1] === item.name?adres[index][0]:''
           });
           set((state) => {
             state.myDatasets = res;

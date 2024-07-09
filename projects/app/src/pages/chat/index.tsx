@@ -5,6 +5,7 @@ import { delChatRecordById, getChatHistories, getInitChatInfo } from '@/web/core
 import { Box, Flex, Drawer, DrawerOverlay, DrawerContent, useTheme } from '@chakra-ui/react';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import { streamFetch } from '@/web/common/api/fetch';
+import { adStreamFetch } from '@/web/common/api/adfetch';
 import { useChatStore } from '@/web/core/chat/context/storeChat';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useTranslation } from 'next-i18next';
@@ -21,9 +22,13 @@ import { serviceSideProps } from '@/web/common/utils/i18n';
 import { checkChatSupportSelectFileByChatModels } from '@/web/core/chat/utils';
 import { getChatTitleFromChatMessage } from '@fastgpt/global/core/chat/utils';
 import { ChatStatusEnum } from '@fastgpt/global/core/chat/constants';
+import {FlowNodeTypeEnum} from '@fastgpt/global/core/workflow/node/constant';
+
 import { GPTMessages2Chats } from '@fastgpt/global/core/chat/adapt';
-import { getMyApps } from '@/web/core/app/api';
+import { getMyApps ,getAppDetailById} from '@/web/core/app/api';
 import { useRequest2 } from '@fastgpt/web/hooks/useRequest';
+
+
 
 import { useMount } from 'ahooks';
 import { getNanoid } from '@fastgpt/global/common/string/tools';
@@ -68,18 +73,34 @@ const Chat = ({
       const prompts = messages.slice(-2);
       const completionChatId = chatId ? chatId : getNanoid();
 
+      //根据appId 获取知识库id
+
+      const result = await getAppDetailById(appId)
+      console.log("爱动result",result);
+      const node = result.modules.find(x =>x.flowNodeType==FlowNodeTypeEnum.datasetSearchNode)
+      const datasetInfos = node?.inputs.find(x => x.key === 'datasets')?.value;
+      const kb_ids = datasetInfos.map(x =>x.datasetId);
+      console.log("爱动kb_ids",kb_ids);
+
       const { responseText, responseData } = await streamFetch({
         data: {
           messages: prompts,
           variables,
           appId,
-          chatId: completionChatId
+          chatId: completionChatId,
+          user_id:userInfo?._id,
+          kb_ids:kb_ids
         },
         onMessage: generatingMessage,
         abortCtrl: controller
       });
 
+      console.log("爱动responseData",responseData);
+
       const newTitle = getChatTitleFromChatMessage(GPTMessages2Chats(prompts)[0]);
+
+      console.log("爱动newTitle",newTitle)
+
 
       // new chat
       if (completionChatId !== chatId) {
@@ -109,6 +130,9 @@ const Chat = ({
 
   // get chat app info
   const [chatData, setChatData] = useState<InitChatResponse>(defaultChatData);
+
+  console.log("爱动chatData",chatData)
+
   const { loading } = useRequest2(
     async () => {
       if (!appId || forbidLoadChat.current) return;
