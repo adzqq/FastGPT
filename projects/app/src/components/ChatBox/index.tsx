@@ -469,6 +469,7 @@ const ChatBox = (
 
             console.log('爱动构建gptmessages', messages);
 
+            console.log("爱动构建newChatList",newChatList);
           
 
             const {

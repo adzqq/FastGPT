@@ -9,9 +9,6 @@ import { ApiRequestProps } from '@fastgpt/service/type/next';
 /* update chat top, custom title */
 async function handler(req: ApiRequestProps<UpdateHistoryProps>, res: NextApiResponse) {
   const { appId, chatId, title, customTitle, top } = req.body;
-
-  console.log("爱动req.body",req.body)
-
   await autChatCrud({
     req,
     authToken: true,

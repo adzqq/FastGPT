@@ -360,6 +360,9 @@ export async function dispatchWorkFlow(data: Props): Promise<DispatchFlowRespons
   runtimeNodes.forEach((item) => {
     item.isEntry = false;
   });
+
+  console.log('爱动entryNodes',entryNodes);
+  
   await checkNodeCanRun(entryNodes);
 
   // focus try to run pluginOutput

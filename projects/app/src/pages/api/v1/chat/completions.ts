@@ -80,6 +80,9 @@ type AuthResponseType = {
 };
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
+
+  console.log('爱动 /v1/chat/completions   req.body',req.body)  
+
   res.on('close', () => {
     res.end();
   });
@@ -120,6 +123,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     let startTime = Date.now();
 
     const chatMessages = GPTMessages2Chats(messages);
+
+    console.log("爱动chatMessages",chatMessages);
+
     if (chatMessages[chatMessages.length - 1].obj !== ChatRoleEnum.Human) {
       chatMessages.pop();
     }
@@ -168,6 +174,16 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         });
       })();
 
+      //打印这些字段 teamId, tmbId, user, app, responseDetail, authType, apikey, canWrite, outLinkUserId
+      console.log("爱动打印关键字段teamId",teamId);
+      console.log("爱动打印关键字段tmbId",tmbId);
+      console.log("爱动打印关键字段user",user);
+      console.log("爱动打印关键字段app",app);
+      console.log("爱动打印关键字段responseDetail",responseDetail);
+      console.log("爱动打印关键字段authType",authType);
+      console.log("爱动打印关键字段apikey",apikey);
+      console.log("爱动打印关键字段canWrite",canWrite);
+      console.log("爱动打印关键字段outLinkUserId",outLinkUserId);
     // 1. get and concat history; 2. get app workflow
     const limit = getMaxHistoryLimitFromNodes(app.modules);
     const [{ history }, { nodes, edges, chatConfig }] = await Promise.all([
@@ -181,6 +197,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     ]);
     const concatHistories = history.concat(chatMessages);
     const responseChatItemId: string | undefined = messages[messages.length - 1].dataId;
+
+    
 
     /* start flow controller */
     const { flowResponses, flowUsages, assistantResponses, newVariables } = await (async () => {
@@ -227,6 +245,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       });
     })();
 
+    console.log('爱动flowResponses',flowResponses)
+
+    console.log('爱动flowUsages',flowUsages)
+
+    console.log('爱动assistantResponses',assistantResponses)
+
+    console.log('爱动newVariables',newVariables)
+
     // save chat
     if (chatId) {
       const isOwnerUse = !shareId && !spaceTeamId && String(tmbId) === String(app.tmbId);
@@ -242,6 +268,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         }
         return ChatSourceEnum.online;
       })();
+
+      console.log('爱动saveChat执行了');
 
       await saveChat({
         chatId,

@@ -124,6 +124,8 @@ export const streamFetch = ({
         })
       };
 
+      console.log('爱动fetchEventSource',requestData)
+
       // send request
       await fetchEventSource(url, {
         ...requestData,

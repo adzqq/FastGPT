@@ -6,6 +6,8 @@ import { Box, Flex, Drawer, DrawerOverlay, DrawerContent, useTheme } from '@chak
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import { streamFetch } from '@/web/common/api/fetch';
 import { adStreamFetch } from '@/web/common/api/adfetch';
+
+
 import { useChatStore } from '@/web/core/chat/context/storeChat';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useTranslation } from 'next-i18next';
@@ -27,6 +29,8 @@ import {FlowNodeTypeEnum} from '@fastgpt/global/core/workflow/node/constant';
 import { GPTMessages2Chats } from '@fastgpt/global/core/chat/adapt';
 import { getMyApps ,getAppDetailById} from '@/web/core/app/api';
 import { useRequest2 } from '@fastgpt/web/hooks/useRequest';
+
+import { insertChatItem2DB} from '@/web/core/dataset/api';
 
 
 
@@ -74,16 +78,16 @@ const Chat = ({
       const completionChatId = chatId ? chatId : getNanoid();
 
       //根据appId 获取知识库id
-
       const result = await getAppDetailById(appId)
       console.log("爱动result",result);
       const node = result.modules.find(x =>x.flowNodeType==FlowNodeTypeEnum.datasetSearchNode)
       const datasetInfos = node?.inputs.find(x => x.key === 'datasets')?.value;
       const kb_ids = datasetInfos.map(x =>x.datasetId);
-      console.log("爱动kb_ids",kb_ids);
+      console.log("爱动知识库kb_ids",kb_ids);
 
-      const { responseText, responseData } = await streamFetch({
+      const { responseText, responseData } = await adStreamFetch({
         data: {
+          question:prompts?.find(x =>x.role === 'user')?.content,
           messages: prompts,
           variables,
           appId,
@@ -94,6 +98,21 @@ const Chat = ({
         onMessage: generatingMessage,
         abortCtrl: controller
       });
+
+
+      const requestData = {
+        messages: prompts,
+        variables,
+        appId,
+        chatId: completionChatId,
+        user_id:userInfo?._id,
+        kb_ids:kb_ids,
+        serverResponse:responseText
+      };
+      await insertChatItem2DB(requestData)
+
+
+
 
       console.log("爱动responseData",responseData);
 
@@ -131,7 +150,7 @@ const Chat = ({
   // get chat app info
   const [chatData, setChatData] = useState<InitChatResponse>(defaultChatData);
 
-  console.log("爱动chatData",chatData)
+//   console.log("爱动chatData",chatData)
 
   const { loading } = useRequest2(
     async () => {

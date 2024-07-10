@@ -171,3 +171,6 @@ export const getAdDatasets = (user_id: string) =>
   GET<Object>('/aidong/kbqa/dbs', { user_id });
 
 export const createAdDatasets = (data: CreateDatasetParams) =>POST<string>(`/aidong/kbqa/dbs`, data);
+
+
+export const insertChatItem2DB = (requestData:any) => POST(`/v1/chat/adcompletions`,requestData)

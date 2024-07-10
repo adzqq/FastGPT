@@ -4,6 +4,7 @@ import { Box, Flex, Drawer, DrawerOverlay, DrawerContent } from '@chakra-ui/reac
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import { streamFetch } from '@/web/common/api/fetch';
+import { adStreamFetch } from '@/web/common/api/adfetch';
 import { useShareChatStore } from '@/web/core/chat/storeShareChat';
 import SideBar from '@/components/SideBar';
 import { GPTMessages2Chats } from '@fastgpt/global/core/chat/adapt';
@@ -34,12 +35,16 @@ import { defaultChatData } from '@/global/core/chat/constants';
 import { useMount } from 'ahooks';
 import { useRequest2 } from '@fastgpt/web/hooks/useRequest';
 
+import { getAppDetailById} from '@/web/core/app/api';
+import {FlowNodeTypeEnum} from '@fastgpt/global/core/workflow/node/constant';
+import { insertChatItem2DB} from '@/web/core/dataset/api';
 type Props = {
   appName: string;
   appIntro: string;
   appAvatar: string;
   shareId: string;
   authToken: string;
+  appId: string;
 };
 
 const OutLink = ({ appName, appIntro, appAvatar }: Props) => {
@@ -99,8 +104,18 @@ const OutLink = ({ appName, appIntro, appAvatar }: Props) => {
         '*'
       );
 
-      const { responseText, responseData } = await streamFetch({
+       //根据appId 获取知识库id
+       const result = await getAppDetailById(appId)
+       console.log("爱动result",result);
+       const node = result.modules.find(x =>x.flowNodeType==FlowNodeTypeEnum.datasetSearchNode)
+       const datasetInfos = node?.inputs.find(x => x.key === 'datasets')?.value;
+       const kb_ids = datasetInfos.map(x =>x.datasetId);
+       console.log("爱动知识库kb_ids",kb_ids);
+ 
+
+      const { responseText, responseData } = await adStreamFetch({
         data: {
+          question:prompts?.find(x =>x.role === 'user')?.content,
           messages: prompts,
           variables: {
             ...variables,
@@ -108,11 +123,31 @@ const OutLink = ({ appName, appIntro, appAvatar }: Props) => {
           },
           shareId,
           chatId: completionChatId,
-          outLinkUid
+          outLinkUid,
+          user_id:'ycw',
+          kb_ids:kb_ids
         },
         onMessage: generatingMessage,
         abortCtrl: controller
       });
+
+      console.log("爱动responseData",responseData);
+
+
+      const requestData = {
+        messages: prompts,
+          variables: {
+            ...variables,
+            ...customVariables
+          },
+          shareId,
+          chatId: completionChatId,
+          outLinkUid,
+          user_id:'ycw',
+          kb_ids:kb_ids,
+          serverResponse:responseText
+      };
+      await insertChatItem2DB(requestData)
 
       const newTitle = getChatTitleFromChatMessage(GPTMessages2Chats(prompts)[0]);
 
@@ -382,6 +417,7 @@ export async function getServerSideProps(context: any) {
       return undefined;
     }
   })();
+
 
   return {
     props: {
