@@ -32,7 +32,10 @@ export const useDatasetStore = create<State>()(
             //获取知识库列表
             const adres = await getAdDatasets(userId);
             res.forEach((item,index) => {
-              item.adId = adres[index][1] === item.name?adres[index][0]:''
+               const result = adres.find(adx => adx[1] === item.name)
+               if(result){
+                item.adId = result[0]
+               }
             });
           set((state) => {
             state.allDatasets = res;
@@ -50,7 +53,10 @@ export const useDatasetStore = create<State>()(
           //获取知识库列表
           const adres = await getAdDatasets(userId);
           res.forEach((item,index) => {
-            item.adId = adres[index][1] === item.name?adres[index][0]:''
+            const result = adres.find(adx => adx[1] === item.name)
+               if(result){
+                item.adId = result[0]
+               }
           });
           set((state) => {
             state.myDatasets = res;

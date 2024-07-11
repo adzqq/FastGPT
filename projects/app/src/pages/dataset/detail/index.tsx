@@ -90,7 +90,7 @@ export async function getServerSideProps(context: any) {
   //日志打印在服务端
   console.log('爱动getServerSideProps',context.query)
 
-  const kb_id = context?.query?.kb_id;
+  const kb_id = context?.query?.kb_id??'';
 
   return {
     props: { currentTab, datasetId,kb_id, ...(await serviceSideProps(context, ['dataset', 'file'])) }

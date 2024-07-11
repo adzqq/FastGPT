@@ -198,7 +198,8 @@ const DataCard = () => {
                 query: {
                   datasetId: router.query.datasetId,
                   parentId: router.query.parentId,
-                  currentTab: TabEnum.collectionCard
+                  currentTab: TabEnum.collectionCard,
+                  kb_id:router.query.kb_id
                 }
               })
             }

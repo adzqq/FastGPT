@@ -84,8 +84,25 @@ export const postSearchText = (data: SearchTestProps) =>
   POST<SearchTestResponse>(`/core/dataset/searchTest`, data);
 
 /* ============================= collections ==================================== */
-export const getDatasetCollections = (data: GetDatasetCollectionsProps) =>
-  POST<PagingData<DatasetCollectionsListItemType>>(`/core/dataset/collection/list`, data);
+export const getDatasetCollections = async (data: GetDatasetCollectionsProps) =>{
+    const result = await POST<PagingData<DatasetCollectionsListItemType>>(`/core/dataset/collection/list`, data);
+    const aidongResult = await getAdDatasetsDocs(data.user_id,data.kb_id)
+    
+    if(aidongResult&&aidongResult.length>0&&result.data.length>0){
+        result.data.forEach(item => {
+            const findItem = aidongResult.find(x => x[1] === item.name);
+            if(findItem){
+                console.log("爱动findItem",findItem);
+                item.trainingAmount = findItem[2]=='green'?0:5
+                item.adFileId = findItem[0]
+            }
+        });
+    }
+    console.log("爱动fastgptResult",result);
+    return new Promise((resolve, reject) => {
+        resolve(result);
+    })
+}
 export const getDatasetCollectionPathById = (parentId: string) =>
   GET<ParentTreePathItemType[]>(`/core/dataset/collection/paths`, { parentId });
 export const getDatasetCollectionById = (id: string) =>
@@ -168,9 +185,23 @@ export const getCollectionSource = (collectionId: string) =>
 
  /**爱动接口 */ 
 export const getAdDatasets = (user_id: string) =>
-  GET<Object>('/aidong/kbqa/dbs', { user_id });
+  GET<Object>('/aidong/kbqa/dbs', { user_id: "user"+user_id});
 
-export const createAdDatasets = (data: CreateDatasetParams) =>POST<string>(`/aidong/kbqa/dbs`, data);
+export const createAdDatasets = (data: CreateDatasetParams) =>POST<string>(`/aidong/kbqa/dbs`, {...data,user_id:'user'+data.user_id});
 
-
+/**插入聊天记录到数据库中 */
 export const insertChatItem2DB = (requestData:any) => POST(`/v1/chat/adcompletions`,requestData)
+
+
+/**
+ * 删除爱动知识库文档
+ * @param params 
+ * @returns 
+ */
+export const delAdDatasetDocs = (user_id: string,kb_id:string,adFileId:string) =>
+  DELETE(`/aidong/kbqa/docs`, {user_id:"user"+user_id,kb_id,file_ids:[adFileId]});
+
+
+/**获取单个知识库的文档列表 */
+  export const getAdDatasetsDocs = (user_id: string,kb_id:string) =>
+  GET<Object>('/aidong/kbqa/docs', { user_id:"user"+user_id,kb_id });

@@ -5,21 +5,22 @@ import { DatasetTrainingSchemaType } from '@fastgpt/global/core/dataset/type';
 import { MongoDatasetTraining } from '@fastgpt/service/core/dataset/training/schema';
 
 export const createDatasetTrainingMongoWatch = () => {
-  const changeStream = MongoDatasetTraining.watch();
+    //爱动删除训练队列
+//   const changeStream = MongoDatasetTraining.watch();
 
-  changeStream.on('change', async (change) => {
-    try {
-      if (change.operationType === 'insert') {
-        const fullDocument = change.fullDocument as DatasetTrainingSchemaType;
-        const { mode } = fullDocument;
-        if (mode === TrainingModeEnum.qa) {
-          generateQA();
-        } else if (mode === TrainingModeEnum.chunk) {
-          generateVector();
-        }
-      }
-    } catch (error) {}
-  });
+//   changeStream.on('change', async (change) => {
+//     try {
+//       if (change.operationType === 'insert') {
+//         const fullDocument = change.fullDocument as DatasetTrainingSchemaType;
+//         const { mode } = fullDocument;
+//         if (mode === TrainingModeEnum.qa) {
+//           generateQA();
+//         } else if (mode === TrainingModeEnum.chunk) {
+//           generateVector();
+//         }
+//       }
+//     } catch (error) {}
+//   });
 };
 
 export const startTrainingQueue = (fast?: boolean) => {

@@ -14,6 +14,7 @@ import { usePagination } from '@fastgpt/web/hooks/usePagination';
 import { DatasetCollectionsListItemType } from '@/global/core/dataset/type';
 import { useRouter } from 'next/router';
 import { DatasetPageContext } from '@/web/core/dataset/context/datasetPageContext';
+import { useUserStore } from '@/web/support/user/useUserStore';
 
 const WebSiteConfigModal = dynamic(() => import('./WebsiteConfig'));
 
@@ -58,6 +59,7 @@ export const CollectionPageContext = createContext<CollectionPageContextType>({
 const CollectionPageContextProvider = ({ children }: { children: ReactNode }) => {
   const { t } = useTranslation();
   const router = useRouter();
+  const { userInfo } = useUserStore();
   const { parentId = '' } = router.query as { parentId: string };
 
   const { datasetDetail, datasetId, updateDataset } = useContextSelector(
@@ -110,7 +112,10 @@ const CollectionPageContextProvider = ({ children }: { children: ReactNode }) =>
     params: {
       datasetId,
       parentId,
-      searchText
+      searchText,
+      //添加爱动参数
+      kb_id:router.query.kb_id,
+      user_id:userInfo?._id
     },
     defaultRequest: false
   });

@@ -190,88 +190,119 @@ const Header = ({}: {}) => {
       {datasetDetail.permission.hasWritePer && (
         <>
           {datasetDetail?.type === DatasetTypeEnum.dataset && (
-            <MyMenu
-              offset={[0, 5]}
-              Button={
-                <MenuButton
+                 <Button
                   _hover={{
                     color: 'primary.500'
                   }}
                   fontSize={['sm', 'md']}
+                  onClick={() =>{
+                    router.replace({
+                        query: {
+                          ...router.query,
+                          currentTab: TabEnum.import,
+                          source: ImportDataSourceEnum.fileLocal
+                        }
+                      })
+                  }}
                 >
-                  <Flex
+                  {/* <Flex
                     alignItems={'center'}
                     px={5}
                     py={2}
                     borderRadius={'md'}
                     cursor={'pointer'}
-                    bg={'primary.500'}
+                    // bg={'primary.500'}
                     overflow={'hidden'}
                     color={'white'}
                     h={['28px', '35px']}
-                  >
+                  > */}
                     <MyIcon name={'common/importLight'} mr={2} w={'14px'} />
                     <Box>{t('dataset.collections.Create And Import')}</Box>
-                  </Flex>
-                </MenuButton>
-              }
-              menuList={[
-                {
-                  children: [
-                    {
-                      label: (
-                        <Flex>
-                          <MyIcon name={'common/folderFill'} w={'20px'} mr={2} />
-                          {t('Folder')}
-                        </Flex>
-                      ),
-                      onClick: () => setEditFolderData({})
-                    },
-                    {
-                      label: (
-                        <Flex>
-                          <MyIcon name={'core/dataset/manualCollection'} mr={2} w={'20px'} />
-                          {t('core.dataset.Manual collection')}
-                        </Flex>
-                      ),
-                      onClick: () => {
-                        onOpenCreateVirtualFileModal({
-                          defaultVal: '',
-                          onSuccess: (name) => {
-                            onCreateCollection({ name, type: DatasetCollectionTypeEnum.virtual });
-                          }
-                        });
-                      }
-                    },
-                    {
-                      label: (
-                        <Flex>
-                          <MyIcon name={'core/dataset/fileCollection'} mr={2} w={'20px'} />
-                          {t('core.dataset.Text collection')}
-                        </Flex>
-                      ),
-                      onClick: onOpenFileSourceSelector
-                    },
-                    {
-                      label: (
-                        <Flex>
-                          <MyIcon name={'core/dataset/tableCollection'} mr={2} w={'20px'} />
-                          {t('core.dataset.Table collection')}
-                        </Flex>
-                      ),
-                      onClick: () =>
-                        router.replace({
-                          query: {
-                            ...router.query,
-                            currentTab: TabEnum.import,
-                            source: ImportDataSourceEnum.csvTable
-                          }
-                        })
-                    }
-                  ]
-                }
-              ]}
-            />
+                  {/* </Flex> */}
+                </Button>
+            // <MyMenu
+            //   offset={[0, 5]}
+            //   Button={
+            //     <MenuButton
+            //       _hover={{
+            //         color: 'primary.500'
+            //       }}
+            //       fontSize={['sm', 'md']}
+            //     >
+            //       <Flex
+            //         alignItems={'center'}
+            //         px={5}
+            //         py={2}
+            //         borderRadius={'md'}
+            //         cursor={'pointer'}
+            //         bg={'primary.500'}
+            //         overflow={'hidden'}
+            //         color={'white'}
+            //         h={['28px', '35px']}
+            //       >
+            //         <MyIcon name={'common/importLight'} mr={2} w={'14px'} />
+            //         <Box>{t('dataset.collections.Create And Import')}</Box>
+            //       </Flex>
+            //     </MenuButton>
+            //   }
+            //   menuList={[
+            //     {
+            //       children: [
+            //         {
+            //           label: (
+            //             <Flex>
+            //               <MyIcon name={'common/folderFill'} w={'20px'} mr={2} />
+            //               {t('Folder')}
+            //             </Flex>
+            //           ),
+            //           onClick: () => setEditFolderData({})
+            //         },
+            //         {
+            //           label: (
+            //             <Flex>
+            //               <MyIcon name={'core/dataset/manualCollection'} mr={2} w={'20px'} />
+            //               {t('core.dataset.Manual collection')}
+            //             </Flex>
+            //           ),
+            //           onClick: () => {
+            //             onOpenCreateVirtualFileModal({
+            //               defaultVal: '',
+            //               onSuccess: (name) => {
+            //                 onCreateCollection({ name, type: DatasetCollectionTypeEnum.virtual });
+            //               }
+            //             });
+            //           }
+            //         },
+            //         {
+            //           label: (
+            //             <Flex>
+            //               <MyIcon name={'core/dataset/fileCollection'} mr={2} w={'20px'} />
+            //               {t('core.dataset.Text collection')}
+            //             </Flex>
+            //           ),
+            //           onClick: onOpenFileSourceSelector
+            //         },
+            //         {
+            //           label: (
+            //             <Flex>
+            //               <MyIcon name={'core/dataset/tableCollection'} mr={2} w={'20px'} />
+            //               {t('core.dataset.Table collection')}
+            //             </Flex>
+            //           ),
+            //           onClick: () =>
+            //             router.replace({
+            //               query: {
+            //                 ...router.query,
+            //                 currentTab: TabEnum.import,
+            //                 source: ImportDataSourceEnum.csvTable
+            //               }
+            //             })
+            //         }
+            //       ]
+            //     }
+            //   ]}
+            // />
+
           )}
           {datasetDetail?.type === DatasetTypeEnum.websiteDataset && (
             <>

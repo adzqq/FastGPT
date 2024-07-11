@@ -14,7 +14,8 @@ import {
 import {
   delDatasetCollectionById,
   putDatasetCollectionById,
-  postLinkCollectionSync
+  postLinkCollectionSync,
+  delAdDatasetDocs
 } from '@/web/core/dataset/api';
 import { useQuery } from '@tanstack/react-query';
 import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
@@ -42,6 +43,7 @@ import MyBox from '@fastgpt/web/components/common/MyBox';
 import { useContextSelector } from 'use-context-selector';
 import { CollectionPageContext } from './Context';
 import { DatasetPageContext } from '@/web/core/dataset/context/datasetPageContext';
+import { useUserStore } from '@/web/support/user/useUserStore';
 
 const Header = dynamic(() => import('./Header'));
 const EmptyCollectionTip = dynamic(() => import('./EmptyCollectionTip'));
@@ -49,6 +51,7 @@ const EmptyCollectionTip = dynamic(() => import('./EmptyCollectionTip'));
 const CollectionCard = () => {
   const BoxRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const { userInfo } = useUserStore();
   const { toast } = useToast();
   const { t } = useTranslation();
   const { datasetDetail, loadDatasetDetail } = useContextSelector(DatasetPageContext, (v) => v);
@@ -236,24 +239,24 @@ const CollectionCard = () => {
                     } catch (error) {}
                     setDragTargetId(undefined);
                   }}
-                  onClick={() => {
-                    if (collection.type === DatasetCollectionTypeEnum.folder) {
-                      router.replace({
-                        query: {
-                          ...router.query,
-                          parentId: collection._id
-                        }
-                      });
-                    } else {
-                      router.replace({
-                        query: {
-                          ...router.query,
-                          collectionId: collection._id,
-                          currentTab: TabEnum.dataCard
-                        }
-                      });
-                    }
-                  }}
+                //   onClick={() => {
+                //     if (collection.type === DatasetCollectionTypeEnum.folder) {
+                //       router.replace({
+                //         query: {
+                //           ...router.query,
+                //           parentId: collection._id
+                //         }
+                //       });
+                //     } else {
+                //       router.replace({
+                //         query: {
+                //           ...router.query,
+                //           collectionId: collection._id,
+                //           currentTab: TabEnum.dataCard
+                //         }
+                //       });
+                //     }
+                //   }}
                 >
                   <Td w={'50px'}>{index + 1}</Td>
                   <Td minW={'150px'} maxW={['200px', '300px']} draggable>
@@ -340,34 +343,34 @@ const CollectionCard = () => {
                                     }
                                   ]
                                 : []),
-                              {
-                                label: (
-                                  <Flex alignItems={'center'}>
-                                    <MyIcon name={'common/file/move'} w={'14px'} mr={2} />
-                                    {t('Move')}
-                                  </Flex>
-                                ),
-                                onClick: () =>
-                                  setMoveCollectionData({ collectionId: collection._id })
-                              },
-                              {
-                                label: (
-                                  <Flex alignItems={'center'}>
-                                    <MyIcon name={'edit'} w={'14px'} mr={2} />
-                                    {t('Rename')}
-                                  </Flex>
-                                ),
-                                onClick: () =>
-                                  onOpenEditTitleModal({
-                                    defaultVal: collection.name,
-                                    onSuccess: (newName) => {
-                                      onUpdateCollectionName({
-                                        collectionId: collection._id,
-                                        name: newName
-                                      });
-                                    }
-                                  })
-                              }
+                            //   {
+                            //     label: (
+                            //       <Flex alignItems={'center'}>
+                            //         <MyIcon name={'common/file/move'} w={'14px'} mr={2} />
+                            //         {t('Move')}
+                            //       </Flex>
+                            //     ),
+                            //     onClick: () =>
+                            //       setMoveCollectionData({ collectionId: collection._id })
+                            //   },
+                            //   {
+                            //     label: (
+                            //       <Flex alignItems={'center'}>
+                            //         <MyIcon name={'edit'} w={'14px'} mr={2} />
+                            //         {t('Rename')}
+                            //       </Flex>
+                            //     ),
+                            //     onClick: () =>
+                            //       onOpenEditTitleModal({
+                            //         defaultVal: collection.name,
+                            //         onSuccess: (newName) => {
+                            //           onUpdateCollectionName({
+                            //             collectionId: collection._id,
+                            //             name: newName
+                            //           });
+                            //         }
+                            //       })
+                            //   }
                             ]
                           },
                           {
@@ -388,7 +391,11 @@ const CollectionCard = () => {
                                 onClick: () =>
                                   openDeleteConfirm(
                                     () => {
-                                      onDelCollection(collection._id);
+                                      console.log("爱动删除collection",collection);
+                                      const result = delAdDatasetDocs(userInfo._id,router.query.kb_id,collection.adFileId)
+                                      if(result){
+                                        onDelCollection(collection._id);
+                                      }
                                     },
                                     undefined,
                                     collection.type === DatasetCollectionTypeEnum.folder

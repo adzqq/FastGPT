@@ -10,12 +10,33 @@ import { RenderUploadFiles } from '../components/RenderFiles';
 import { useContextSelector } from 'use-context-selector';
 import { DatasetImportContext } from '../Context';
 
+import { useRequest } from '@fastgpt/web/hooks/useRequest';
+import { uploadFile2AidongDB,uploadFile2DB } from '@/web/common/file/controller';
+import { formatFileSize } from '@fastgpt/global/common/file/tools';
+import { getFileIcon } from '@fastgpt/global/common/file/icon';
+import { useUserStore } from '@/web/support/user/useUserStore';
+import { BucketNameEnum } from '@fastgpt/global/common/file/constants';
+import { useRouter } from 'next/router';
+import { useToast } from '@fastgpt/web/hooks/useToast';
+
+import {
+    postCreateDatasetFileCollection,
+  } from '@/web/core/dataset/api';
+
+import { TabEnum } from '../../../index';
+
+export type SelectFileItemType = {
+    fileId: string;
+    folderPath: string;
+    file: File;
+  };
+
 const DataProcess = dynamic(() => import('../commonProgress/DataProcess'), {
   loading: () => <Loading fixed={false} />
 });
 const Upload = dynamic(() => import('../commonProgress/Upload'));
 
-const fileType = '.txt, .docx, .csv, .xlsx, .pdf, .md, .html, .pptx';
+const fileType = '.txt, .docx, .csv, .xlsx, .pdf, .md, .pptx';
 
 const FileLocal = ({ datasetId, kb_id}: { datasetId: string,kb_id:string }) => {
   const activeStep = useContextSelector(DatasetImportContext, (v) => v.activeStep);
@@ -44,6 +65,9 @@ const SelectFile = React.memo(function SelectFile({ datasetId, kb_id}: { dataset
   const [uploading, setUploading] = useState(false);
   const successFiles = useMemo(() => selectFiles.filter((item) => !item.errorMsg), [selectFiles]);
 
+  const { toast } = useToast();
+  const router = useRouter();
+
   useEffect(() => {
     setSources(successFiles);
   }, [setSources, successFiles]);
@@ -53,6 +77,110 @@ const SelectFile = React.memo(function SelectFile({ datasetId, kb_id}: { dataset
     setSelectFiles((state) => state.filter((item) => (item.uploadedFileRate || 0) >= 100));
     goToNext();
   }, [goToNext]);
+
+  const { userInfo } = useUserStore();
+
+
+  const startUpload = () =>{
+
+    console.log("爱动selectFiles",selectFiles);
+
+     onSelectFile(selectFiles);
+  }
+
+
+  const { mutate: onSelectFile, isLoading } = useRequest({
+    mutationFn: async (files: ImportSourceItemType[]) => {
+      {
+        
+        setUploading(true)
+        try {
+           //上传文件之前判断是否有文件名重复 
+          // upload file
+
+
+          await Promise.all(
+            files.map(async ({ id, file }) => {
+              //上传到爱动服务器
+              const uploadInfo = await uploadFile2AidongDB({
+                kb_id,
+                user_id:userInfo._id,
+                file,
+                percentListen: (e) => {
+                    console.log('爱动percentListen',e);
+                    setSelectFiles((state) =>
+                      state.map((item) =>
+                        item.id === id
+                          ? {
+                              ...item,
+                              uploadedFileRate: e
+                            }
+                          : item
+                      )
+                    );
+                  }
+            });
+           
+              if(uploadInfo.files&&Object.values(uploadInfo.files).length>0){
+                    const serverFileId = uploadInfo.files[file.name]
+                    console.log("爱动serverFileId",serverFileId);
+                    setSelectFiles((state) =>
+                        state.map((item) =>
+                        item.id === id
+                            ? {
+                                ...item,
+                                dbFileId: serverFileId,
+                                isUploading: false
+                            }
+                            : item
+                        )
+                    );
+
+                 //上传到 fastgpt服务器
+                 const uploadFileId = await uploadFile2DB({
+                    file,
+                    bucketName: BucketNameEnum.dataset,
+                    percentListen: (e) => {}
+                });
+
+                //创建关联
+                const commonParams = {
+                    trainingType: "chunk",
+                    datasetId: router.query.datasetId,
+                    chunkSize:512,
+                    chunkSplitter: "",
+                    qaPrompt:"",
+                    name: file?.name,
+                    fileId:uploadFileId,
+                  };
+                  await postCreateDatasetFileCollection(commonParams)
+                }
+                
+                
+              
+            })
+          );
+        } catch (error) {
+          console.log(error);
+        }
+        setUploading(false)
+
+        
+        toast({
+            title: '文件上传成功，等待向量化',
+            status: 'success'
+          });
+        
+        router.replace({
+            query: {
+              ...router.query,
+              currentTab: TabEnum.collectionCard
+            }
+          });
+        
+      }
+    }
+  });
 
   return (
     <Box>
@@ -64,17 +192,25 @@ const SelectFile = React.memo(function SelectFile({ datasetId, kb_id}: { dataset
         kb_id={kb_id}
         onStartSelect={() => setUploading(true)}
         onFinishSelect={() => setUploading(false)}
+        isFileUploading={uploading}
       />
 
       {/* render files */}
       <RenderUploadFiles files={selectFiles} setFiles={setSelectFiles} showPreviewContent />
 
       <Box textAlign={'right'} mt={5}>
-        <Button isDisabled={successFiles.length === 0 || uploading} onClick={onclickNext}>
+        {/* <Button isDisabled={successFiles.length === 0 || uploading} onClick={onclickNext}>
           {selectFiles.length > 0
             ? `${t('core.dataset.import.Total files', { total: selectFiles.length })} | `
             : ''}
           {t('common.Next Step')}
+        </Button> */}
+
+        <Button isDisabled={successFiles.length === 0 || uploading} onClick={startUpload}>
+          {selectFiles.length > 0
+            ? `${t('core.dataset.import.Total files', { total: selectFiles.length })} | `
+            : ''}
+          开始上传
         </Button>
       </Box>
     </Box>

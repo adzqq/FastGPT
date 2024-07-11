@@ -37,7 +37,7 @@ const Slider = ({ currentTab }: { currentTab: TabEnum }) => {
       value: TabEnum.collectionCard,
       icon: 'common/overviewLight'
     },
-    { label: t('core.dataset.test.Search Test'), value: TabEnum.test, icon: 'kbTest' },
+    // { label: t('core.dataset.test.Search Test'), value: TabEnum.test, icon: 'kbTest' },
     ...(datasetDetail.permission.hasManagePer
       ? [{ label: t('common.Config'), value: TabEnum.info, icon: 'common/settingLight' }]
       : [])
@@ -88,14 +88,14 @@ const Slider = ({ currentTab }: { currentTab: TabEnum }) => {
             onChange={setCurrentTab}
           />
           <Box px={4}>
-            {rebuildingCount > 0 && (
+            {/* {rebuildingCount > 0 && (
               <Box mb={3}>
                 <Box fontSize={'sm'}>
                   {datasetT('Rebuilding index count', { count: rebuildingCount })}
                 </Box>
               </Box>
-            )}
-            <Box mb={3}>
+            )} */}
+            {/* <Box mb={3}>
               <Box fontSize={'sm'}>
                 {t('core.dataset.training.Agent queue')}({agentTrainingMap.tip})
               </Box>
@@ -107,8 +107,8 @@ const Slider = ({ currentTab }: { currentTab: TabEnum }) => {
                 isAnimated
                 hasStripe
               />
-            </Box>
-            <Box mb={3}>
+            </Box> */}
+            {/* <Box mb={3}>
               <Box fontSize={'sm'}>
                 {t('core.dataset.training.Vector queue')}({vectorTrainingMap.tip})
               </Box>
@@ -120,7 +120,7 @@ const Slider = ({ currentTab }: { currentTab: TabEnum }) => {
                 isAnimated
                 hasStripe
               />
-            </Box>
+            </Box> */}
           </Box>
 
           <Flex

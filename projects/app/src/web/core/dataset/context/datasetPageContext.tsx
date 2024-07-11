@@ -93,9 +93,9 @@ export const DatasetPageContextProvider = ({
         vectorModel: datasetDetail.vectorModel.model,
         agentModel: datasetDetail.agentModel.model
       }),
-    {
-      refetchInterval: 10000
-    }
+    // {
+    //   refetchInterval: 10000
+    // }
   );
   const { vectorTrainingMap, agentTrainingMap } = useMemo(() => {
     const vectorTrainingMap = (() => {
@@ -138,9 +138,12 @@ export const DatasetPageContextProvider = ({
 
   // training and rebuild queue
   const { data: { rebuildingCount = 0, trainingCount = 0 } = {}, refetch: refetchDatasetTraining } =
-    useQuery(['getDatasetTrainingQueue'], () => getDatasetTrainingQueue(datasetId), {
-      refetchInterval: 10000
-    });
+  //爱动删除数据
+    // useQuery(['getDatasetTrainingQueue'], () => getDatasetTrainingQueue(datasetId), {
+    //   refetchInterval: 10000
+    // });
+    
+    useQuery(['getDatasetTrainingQueue'], () => getDatasetTrainingQueue(datasetId));
 
   const contextValue: DatasetPageContextType = {
     datasetId,

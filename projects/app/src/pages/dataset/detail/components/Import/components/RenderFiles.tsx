@@ -84,7 +84,7 @@ export const RenderUploadFiles = ({
                 <Td>
                   {!item.isUploading && (
                     <Flex alignItems={'center'} gap={4}>
-                      {showPreviewContent && (
+                      {/* {showPreviewContent && (
                         <MyTooltip label={t('core.dataset.import.Preview raw text')}>
                           <IconButton
                             variant={'whitePrimary'}
@@ -94,7 +94,7 @@ export const RenderUploadFiles = ({
                             onClick={() => setPreviewFile(item)}
                           />
                         </MyTooltip>
-                      )}
+                      )} */}
 
                       <IconButton
                         variant={'grayDanger'}
