@@ -1,5 +1,5 @@
 import { useUserStore } from '@/web/support/user/useUserStore';
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef,useState } from 'react';
 import ChatBox from '@/components/ChatBox';
 import type { ComponentRef, StartChatFnProps } from '@/components/ChatBox/type.d';
 import { streamFetch } from '@/web/common/api/fetch';
@@ -17,8 +17,9 @@ import { useContextSelector } from 'use-context-selector';
 import { AppContext } from './context';
 import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type';
 import { StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
-import { getAppDetailById} from '@/web/core/app/api';
 import {FlowNodeTypeEnum} from '@fastgpt/global/core/workflow/node/constant';
+import { getAllDataset, getDatasets ,getAdDatasets} from '@/web/core/dataset/api';
+
 export const useChatTest = ({
   nodes,
   edges,
@@ -31,6 +32,7 @@ export const useChatTest = ({
   const { userInfo } = useUserStore();
   const ChatBoxRef = useRef<ComponentRef>(null);
   const { appDetail } = useContextSelector(AppContext, (v) => v);
+  const [kbIds, setKbIds] = useState([]);
 
   const startChat = useMemoizedFn(
     async ({ chatList, controller, generatingMessage, variables }: StartChatFnProps) => {
@@ -44,8 +46,18 @@ export const useChatTest = ({
 
       const node = appDetail.modules.find(x =>x.flowNodeType==FlowNodeTypeEnum.datasetSearchNode)
       const datasetInfos = node?.inputs.find(x => x.key === 'datasets')?.value;
-      const kb_ids = datasetInfos.map(x =>x.datasetId);
-      console.log("爱动知识库kb_ids",kb_ids);
+      const datasetIds = datasetInfos.map(x =>x.datasetId);
+      const kb_ids = [];
+      const fastGptres = await getAllDataset();
+      const adres = await getAdDatasets(userInfo?._id);
+      const filterRes = fastGptres.filter(item => datasetIds.includes(item._id))
+      filterRes.forEach(item => {
+        const result = adres.find(adx => adx[1] === item.name)
+        if(result){
+         item.adId = result[0]
+         kb_ids.push(item.adId)
+        }
+     });
 
 
       const prompt = chatList[chatList.length - 2].value;
@@ -63,7 +75,7 @@ export const useChatTest = ({
           variables,
           appId: appDetail._id,
           appName: `调试-${appDetail.name}`,
-          user_id:userInfo?._id,
+          user_id:'user'+userInfo?._id,
           kb_ids:kb_ids,
           question:prompt[0].text.content
         },

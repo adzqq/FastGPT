@@ -38,6 +38,7 @@ import { useRequest2 } from '@fastgpt/web/hooks/useRequest';
 import { getAppDetailById} from '@/web/core/app/api';
 import {FlowNodeTypeEnum} from '@fastgpt/global/core/workflow/node/constant';
 import { insertChatItem2DB} from '@/web/core/dataset/api';
+import { getAllDataset, getDatasets ,getAdDatasets} from '@/web/core/dataset/api';
 type Props = {
   appName: string;
   appIntro: string;
@@ -88,10 +89,12 @@ const OutLink = ({ appName, appIntro, appAvatar }: Props) => {
     onChangeChatId
   } = useContextSelector(ChatContext, (v) => v);
 
+
   const startChat = useCallback(
     async ({ messages, controller, generatingMessage, variables }: StartChatFnProps) => {
       const prompts = messages.slice(-2);
       const completionChatId = chatId ? chatId : nanoid();
+
 
       //post message to report chat start
       window.top?.postMessage(
@@ -104,7 +107,7 @@ const OutLink = ({ appName, appIntro, appAvatar }: Props) => {
         '*'
       );
 
-       //根据appId 获取知识库id
+    //    //根据appId 获取知识库id
        const result = await getAppDetailById(appId)
        console.log("爱动result",result);
        const node = result.modules.find(x =>x.flowNodeType==FlowNodeTypeEnum.datasetSearchNode)
@@ -124,7 +127,7 @@ const OutLink = ({ appName, appIntro, appAvatar }: Props) => {
           shareId,
           chatId: completionChatId,
           outLinkUid,
-          user_id:'ycw',
+          user_id:'user'+shareId,
           kb_ids:kb_ids
         },
         onMessage: generatingMessage,
@@ -143,7 +146,7 @@ const OutLink = ({ appName, appIntro, appAvatar }: Props) => {
           shareId,
           chatId: completionChatId,
           outLinkUid,
-          user_id:'ycw',
+          user_id:'user'+shareId,
           kb_ids:kb_ids,
           serverResponse:responseText
       };

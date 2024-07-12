@@ -42,6 +42,8 @@ import ChatContextProvider, { ChatContext } from '@/web/core/chat/context/chatCo
 import { AppListItemType } from '@fastgpt/global/core/app/type';
 import { useContextSelector } from 'use-context-selector';
 
+import { getAllDataset, getDatasets ,getAdDatasets} from '@/web/core/dataset/api';
+
 type Props = { appId: string; chatId: string };
 
 const Chat = ({
@@ -57,7 +59,7 @@ const Chat = ({
 
   const ChatBoxRef = useRef<ComponentRef>(null);
 
-  const { setLastChatAppId } = useChatStore();
+  const { setLastChatAppId,setKbIds } = useChatStore();
   const {
     loadHistories,
     onUpdateHistory,
@@ -72,18 +74,28 @@ const Chat = ({
   const { userInfo } = useUserStore();
   const { isPc } = useSystemStore();
 
+
   const startChat = useCallback(
     async ({ messages, controller, generatingMessage, variables }: StartChatFnProps) => {
       const prompts = messages.slice(-2);
       const completionChatId = chatId ? chatId : getNanoid();
 
       //根据appId 获取知识库id
-      const result = await getAppDetailById(appId)
-      console.log("爱动result",result);
-      const node = result.modules.find(x =>x.flowNodeType==FlowNodeTypeEnum.datasetSearchNode)
+      const appInfo = await getAppDetailById(appId)
+      const node = appInfo.modules.find(x =>x.flowNodeType==FlowNodeTypeEnum.datasetSearchNode)
       const datasetInfos = node?.inputs.find(x => x.key === 'datasets')?.value;
-      const kb_ids = datasetInfos.map(x =>x.datasetId);
-      console.log("爱动知识库kb_ids",kb_ids);
+      const datasetIds = datasetInfos.map(x =>x.datasetId);
+      const kb_ids = [];
+      const fastGptres = await getAllDataset();
+      const adres = await getAdDatasets(userInfo?._id);
+      const filterRes = fastGptres.filter(item => datasetIds.includes(item._id))
+      filterRes.forEach(item => {
+        const result = adres.find(adx => adx[1] === item.name)
+        if(result){
+         item.adId = result[0]
+         kb_ids.push(item.adId)
+        }
+     });
 
       const { responseText, responseData } = await adStreamFetch({
         data: {
@@ -92,7 +104,7 @@ const Chat = ({
           variables,
           appId,
           chatId: completionChatId,
-          user_id:userInfo?._id,
+          user_id:'user'+userInfo?._id,
           kb_ids:kb_ids
         },
         onMessage: generatingMessage,
@@ -151,6 +163,7 @@ const Chat = ({
   const [chatData, setChatData] = useState<InitChatResponse>(defaultChatData);
 
 //   console.log("爱动chatData",chatData)
+
 
   const { loading } = useRequest2(
     async () => {

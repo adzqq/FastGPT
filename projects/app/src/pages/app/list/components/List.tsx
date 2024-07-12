@@ -184,9 +184,9 @@ const ListItem = () => {
                   <Box flex={'1 0 0'} color={'myGray.900'}>
                     {app.name}
                   </Box>
-                  <Box mr={'-1.25rem'}>
+                  {/* <Box mr={'-1.25rem'}>
                     <AppTypeTag type={app.type} />
-                  </Box>
+                  </Box> */}
                 </HStack>
                 <Box
                   flex={['1 0 60px', '1 0 72px']}
@@ -216,12 +216,12 @@ const ListItem = () => {
                       </HStack>
                     )}
 
-                    <PermissionIconText
+                    {/* <PermissionIconText
                       defaultPermission={app.defaultPermission}
                       color={'myGray.500'}
                       iconColor={'myGray.400'}
                       w={'0.875rem'}
-                    />
+                    /> */}
                   </HStack>
 
                   <HStack>
@@ -267,24 +267,24 @@ const ListItem = () => {
                                     }
                                   }
                                 },
-                                ...(folderDetail?.type === AppTypeEnum.httpPlugin
-                                  ? []
-                                  : [
-                                      {
-                                        icon: 'common/file/move',
-                                        label: t('common.folder.Move to'),
-                                        onClick: () => setMoveAppId(app._id)
-                                      }
-                                    ]),
-                                ...(app.permission.hasManagePer
-                                  ? [
-                                      {
-                                        icon: 'support/team/key',
-                                        label: t('permission.Permission'),
-                                        onClick: () => setEditPerAppIndex(index)
-                                      }
-                                    ]
-                                  : [])
+                                // ...(folderDetail?.type === AppTypeEnum.httpPlugin
+                                //   ? []
+                                //   : [
+                                //       {
+                                //         icon: 'common/file/move',
+                                //         label: t('common.folder.Move to'),
+                                //         onClick: () => setMoveAppId(app._id)
+                                //       }
+                                //     ]),
+                                // ...(app.permission.hasManagePer
+                                //   ? [
+                                //       {
+                                //         icon: 'support/team/key',
+                                //         label: t('permission.Permission'),
+                                //         onClick: () => setEditPerAppIndex(index)
+                                //       }
+                                //     ]
+                                //   : [])
                               ]
                             },
                             {

@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react';
-import { putDatasetById } from '@/web/core/dataset/api';
+import { putDatasetById,deleteAdDatasets } from '@/web/core/dataset/api';
 import { useDatasetStore } from '@/web/core/dataset/store/dataset';
 import { Box, Flex, Grid } from '@chakra-ui/react';
 import { DatasetTypeEnum, DatasetTypeMap } from '@fastgpt/global/core/dataset/constants';
@@ -36,6 +36,7 @@ import MyBox from '@fastgpt/web/components/common/MyBox';
 import { useUserStore } from '@/web/support/user/useUserStore';
 import { useI18n } from '@/web/context/I18n';
 import { useTranslation } from 'react-i18next';
+
 
 function List() {
   const { setLoading } = useSystemStore();
@@ -129,12 +130,16 @@ function List() {
     type: 'delete'
   });
 
-  const onClickDeleteDataset = (id: string) => {
+  const onClickDeleteDataset = (id: string, kb_id: string) => {
     openConfirm(
-      () =>
-        onDelDataset(id).then(() => {
-          refetchPaths();
-          refetchDatasets();
+    () =>
+         onDelDataset(id,kb_id).then(() => {
+            refetchPaths();
+            refetchDatasets();
+            new Promise<void>((resolve) => {
+                deleteAdDatasets(userInfo?._id, kb_id)
+                resolve();
+            })
         }),
       undefined,
       DeleteTipsMap.current[DatasetTypeEnum.dataset]
@@ -244,31 +249,31 @@ function List() {
                       menuList={[
                         {
                           children: [
-                            {
-                              icon: 'edit',
-                              label: commonT('dataset.Edit Info'),
-                              onClick: () =>
-                                setEditedDataset({
-                                  id: dataset._id,
-                                  name: dataset.name,
-                                  intro: dataset.intro,
-                                  avatar: dataset.avatar
-                                })
-                            },
-                            {
-                              icon: 'common/file/move',
-                              label: t('Move'),
-                              onClick: () => setMoveDatasetId(dataset._id)
-                            },
-                            ...(dataset.permission.hasManagePer
-                              ? [
-                                  {
-                                    icon: 'support/team/key',
-                                    label: t('permission.Permission'),
-                                    onClick: () => setEditPerDatasetIndex(index)
-                                  }
-                                ]
-                              : [])
+                            // {
+                            //   icon: 'edit',
+                            //   label: commonT('dataset.Edit Info'),
+                            //   onClick: () =>
+                            //     setEditedDataset({
+                            //       id: dataset._id,
+                            //       name: dataset.name,
+                            //       intro: dataset.intro,
+                            //       avatar: dataset.avatar
+                            //     })
+                            // },
+                            // {
+                            //   icon: 'common/file/move',
+                            //   label: t('Move'),
+                            //   onClick: () => setMoveDatasetId(dataset._id)
+                            // },
+                            // ...(dataset.permission.hasManagePer
+                            //   ? [
+                            //       {
+                            //         icon: 'support/team/key',
+                            //         label: t('permission.Permission'),
+                            //         onClick: () => setEditPerDatasetIndex(index)
+                            //       }
+                            //     ]
+                            //   : [])
                           ]
                         },
                         ...(dataset.type != DatasetTypeEnum.folder
@@ -294,7 +299,7 @@ function List() {
                                     icon: 'delete',
                                     label: t('common.Delete'),
                                     type: 'danger' as 'danger',
-                                    onClick: () => onClickDeleteDataset(dataset._id)
+                                    onClick: () => onClickDeleteDataset(dataset._id,dataset.adId)
                                   }
                                 ]
                               }

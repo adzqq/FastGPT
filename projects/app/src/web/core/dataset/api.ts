@@ -66,7 +66,7 @@ export const getDatasetPaths = (parentId: ParentIdType) =>
 export const getDatasetById = (id: string) => GET<DatasetItemType>(`/core/dataset/detail?id=${id}`);
 
 export const postCreateDataset = (data: CreateDatasetParams) =>{
-    createAdDatasets(data);
+    // createAdDatasets(data);
     return POST<string>(`/core/dataset/create`, data);
 }
 
@@ -187,7 +187,11 @@ export const getCollectionSource = (collectionId: string) =>
 export const getAdDatasets = (user_id: string) =>
   GET<Object>('/aidong/kbqa/dbs', { user_id: "user"+user_id});
 
+  /**创建知识库 */
 export const createAdDatasets = (data: CreateDatasetParams) =>POST<string>(`/aidong/kbqa/dbs`, {...data,user_id:'user'+data.user_id});
+
+/**删除知识库 */
+export const deleteAdDatasets = (user_id: string,kb_id:string) =>DELETE<string>(`/aidong/kbqa/dbs`, {kb_ids:[kb_id],user_id:'user'+user_id});
 
 /**插入聊天记录到数据库中 */
 export const insertChatItem2DB = (requestData:any) => POST(`/v1/chat/adcompletions`,requestData)

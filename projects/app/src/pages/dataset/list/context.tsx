@@ -35,7 +35,7 @@ export type DatasetContextType = {
   folderDetail?: DatasetItemType;
   editedDataset?: EditResourceInfoFormType;
   setEditedDataset: (data?: EditResourceInfoFormType) => void;
-  onDelDataset: (id: string) => Promise<void>;
+  onDelDataset: (id: string,kb_id:string) => Promise<void>;
 };
 
 export const DatasetsContext = createContext<DatasetContextType>({

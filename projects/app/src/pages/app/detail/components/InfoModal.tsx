@@ -180,7 +180,7 @@ const InfoModal = ({ onClose }: { onClose: () => void }) => {
         />
 
         {/* role */}
-        {appDetail.permission.hasManagePer && (
+        {/* {appDetail.permission.hasManagePer && (
           <>
             <Box mt="4">
               <Box fontSize={'sm'}>{t('permission.Default permission')}</Box>
@@ -235,7 +235,7 @@ const InfoModal = ({ onClose }: { onClose: () => void }) => {
               </CollaboratorContextProvider>
             </Box>
           </>
-        )}
+        )} */}
       </ModalBody>
 
       <ModalFooter>

@@ -72,7 +72,7 @@ const CreateModal = ({ onClose, type }: { type: CreateAppType; onClose: () => vo
     defaultValues: {
       avatar: typeData.avatar,
       name: '',
-      templateId: typeData.templates[0].id
+      templateId: typeData.templates[2].id
     }
   });
   const avatar = watch('avatar');
@@ -129,6 +129,8 @@ const CreateModal = ({ onClose, type }: { type: CreateAppType; onClose: () => vo
     errorToast: t('common.Create Failed')
   });
 
+  console.log("爱动typeData.templates",typeData.templates)
+
   return (
     <MyModal
       iconSrc={typeData.icon}
@@ -163,10 +165,10 @@ const CreateModal = ({ onClose, type }: { type: CreateAppType; onClose: () => vo
             })}
           />
         </Flex>
-        <Box mt={[4, 7]} mb={[0, 3]} color={'myGray.800'} fontWeight={'bold'}>
+        {/* <Box mt={[4, 7]} mb={[0, 3]} color={'myGray.800'} fontWeight={'bold'}>
           {t('core.app.Select app from template')}
-        </Box>
-        <Grid
+        </Box> */}
+        {/* <Grid
           userSelect={'none'}
           gridTemplateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
           gridGap={[2, 4]}
@@ -204,7 +206,7 @@ const CreateModal = ({ onClose, type }: { type: CreateAppType; onClose: () => vo
               </Box>
             </Card>
           ))}
-        </Grid>
+        </Grid> */}
       </ModalBody>
 
       <ModalFooter>

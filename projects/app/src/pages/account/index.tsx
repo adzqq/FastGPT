@@ -70,15 +70,15 @@ const Account = ({ currentTab }: { currentTab: TabEnum }) => {
           }
         ]
       : []),
-    ...(userInfo?.team?.permission.hasWritePer
-      ? [
-          {
-            icon: 'support/outlink/apikeyLight',
-            label: t('user.apikey.key'),
-            value: TabEnum.apikey
-          }
-        ]
-      : []),
+    // ...(userInfo?.team?.permission.hasWritePer
+    //   ? [
+    //       {
+    //         icon: 'support/outlink/apikeyLight',
+    //         label: t('user.apikey.key'),
+    //         value: TabEnum.apikey
+    //       }
+    //     ]
+    //   : []),
     {
       icon: 'support/user/individuation',
       label: t('support.account.Individuation'),

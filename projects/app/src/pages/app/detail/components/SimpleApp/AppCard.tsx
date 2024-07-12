@@ -119,11 +119,11 @@ const AppCard = () => {
               menuList={[
                 {
                   children: [
-                    {
-                      icon: 'core/app/type/workflow',
-                      label: appT('Transition to workflow'),
-                      onClick: () => setTransitionCreateNew(true)
-                    },
+                    // {
+                    //   icon: 'core/app/type/workflow',
+                    //   label: appT('Transition to workflow'),
+                    //   onClick: () => setTransitionCreateNew(true)
+                    // },
                     ...(appDetail.permission.hasWritePer && feConfigs?.show_team_chat
                       ? [
                           {
@@ -149,13 +149,13 @@ const AppCard = () => {
             />
           )}
           <Box flex={1} />
-          <MyTag
+          {/* <MyTag
             type="borderFill"
             colorSchema="gray"
             onClick={() => (appDetail.permission.hasManagePer ? onOpenInfoEdit() : undefined)}
           >
             <PermissionIconText defaultPermission={appDetail.defaultPermission} />
-          </MyTag>
+          </MyTag> */}
         </HStack>
       </Box>
       {TeamTagsSet && <TagsEditModal onClose={() => setTeamTagsSet(undefined)} />}

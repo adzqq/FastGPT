@@ -126,18 +126,18 @@ const MyApps = () => {
                   label: appT('type.All'),
                   value: 'ALL'
                 },
-                {
-                  label: appT('type.Simple bot'),
-                  value: AppTypeEnum.simple
-                },
-                {
-                  label: appT('type.Workflow bot'),
-                  value: AppTypeEnum.workflow
-                },
-                {
-                  label: appT('type.Plugin'),
-                  value: AppTypeEnum.plugin
-                }
+                // {
+                //   label: appT('type.Simple bot'),
+                //   value: AppTypeEnum.simple
+                // },
+                // {
+                //   label: appT('type.Workflow bot'),
+                //   value: AppTypeEnum.workflow
+                // },
+                // {
+                //   label: appT('type.Plugin'),
+                //   value: AppTypeEnum.plugin
+                // }
               ]}
               value={appType}
               inlineStyles={{ px: 0.5 }}
@@ -157,53 +157,58 @@ const MyApps = () => {
 
             {userInfo?.team.permission.hasWritePer &&
               folderDetail?.type !== AppTypeEnum.httpPlugin && (
-                <MyMenu
-                  iconSize="1.5rem"
-                  Button={
-                    <Button variant={'primary'} leftIcon={<AddIcon />}>
-                      <Box>{t('common.Create New')}</Box>
-                    </Button>
-                  }
-                  menuList={[
-                    {
-                      children: [
-                        {
-                          icon: 'core/app/simpleBot',
-                          label: appT('type.Simple bot'),
-                          description: appT('type.Create simple bot tip'),
-                          onClick: () => setCreateAppType(AppTypeEnum.simple)
-                        },
-                        {
-                          icon: 'core/app/type/workflowFill',
-                          label: appT('type.Workflow bot'),
-                          description: appT('type.Create workflow tip'),
-                          onClick: () => setCreateAppType(AppTypeEnum.workflow)
-                        },
-                        {
-                          icon: 'core/app/type/pluginFill',
-                          label: appT('type.Plugin'),
-                          description: appT('type.Create one plugin tip'),
-                          onClick: () => setCreateAppType(AppTypeEnum.plugin)
-                        },
-                        {
-                          icon: 'core/app/type/httpPluginFill',
-                          label: appT('type.Http plugin'),
-                          description: appT('type.Create http plugin tip'),
-                          onClick: onOpenCreateHttpPlugin
-                        }
-                      ]
-                    },
-                    {
-                      children: [
-                        {
-                          icon: FolderIcon,
-                          label: t('Folder'),
-                          onClick: () => setEditFolder({})
-                        }
-                      ]
-                    }
-                  ]}
-                />
+                                
+                <Button variant={'primary'} leftIcon={<AddIcon />} onClick={()=>{setCreateAppType(AppTypeEnum.simple)}}>
+                    <Box>{t('common.Create New')}</Box>
+                </Button>
+                  
+                // <MyMenu
+                //   iconSize="1.5rem"
+                //   Button={
+                //     <Button variant={'primary'} leftIcon={<AddIcon />}>
+                //       <Box>{t('common.Create New')}</Box>
+                //     </Button>
+                //   }
+                //   menuList={[
+                //     {
+                //       children: [
+                //         {
+                //           icon: 'core/app/simpleBot',
+                //           label: appT('type.Simple bot'),
+                //           description: appT('type.Create simple bot tip'),
+                //           onClick: () => setCreateAppType(AppTypeEnum.simple)
+                //         },
+                //         {
+                //           icon: 'core/app/type/workflowFill',
+                //           label: appT('type.Workflow bot'),
+                //           description: appT('type.Create workflow tip'),
+                //           onClick: () => setCreateAppType(AppTypeEnum.workflow)
+                //         },
+                //         {
+                //           icon: 'core/app/type/pluginFill',
+                //           label: appT('type.Plugin'),
+                //           description: appT('type.Create one plugin tip'),
+                //           onClick: () => setCreateAppType(AppTypeEnum.plugin)
+                //         },
+                //         {
+                //           icon: 'core/app/type/httpPluginFill',
+                //           label: appT('type.Http plugin'),
+                //           description: appT('type.Create http plugin tip'),
+                //           onClick: onOpenCreateHttpPlugin
+                //         }
+                //       ]
+                //     },
+                //     {
+                //       children: [
+                //         {
+                //           icon: FolderIcon,
+                //           label: t('Folder'),
+                //           onClick: () => setEditFolder({})
+                //         }
+                //       ]
+                //     }
+                //   ]}
+                // />
               )}
           </Flex>
 

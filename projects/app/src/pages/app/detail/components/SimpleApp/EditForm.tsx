@@ -132,7 +132,7 @@ const EditForm = ({
               {appT('AI Settings')}
             </FormLabel>
           </Flex>
-          <Flex alignItems={'center'} mt={5}>
+          {/* <Flex alignItems={'center'} mt={5}>
             <Box {...LabelStyles}>{t('core.ai.Model')}</Box>
             <Box flex={'1 0 0'}>
               <SettingLLMModel
@@ -157,9 +157,9 @@ const EditForm = ({
                 }}
               />
             </Box>
-          </Flex>
+          </Flex> */}
 
-          <Box mt={3}>
+          {/* <Box mt={3}>
             <HStack {...LabelStyles}>
               <Box>{t('core.ai.Prompt')}</Box>
               <QuestionTip label={t('core.app.tip.chatNodeSystemPromptTip')} />
@@ -183,7 +183,7 @@ const EditForm = ({
                 title={t('core.ai.Prompt')}
               />
             </Box>
-          </Box>
+          </Box> */}
         </Box>
 
         {/* dataset */}
@@ -203,7 +203,7 @@ const EditForm = ({
             >
               {t('common.Choose')}
             </Button>
-            <Button
+            {/* <Button
               variant={'transparentBase'}
               leftIcon={<MyIcon name={'edit'} w={'14px'} />}
               iconSpacing={1}
@@ -212,7 +212,7 @@ const EditForm = ({
               onClick={onOpenDatasetParams}
             >
               {t('common.Params')}
-            </Button>
+            </Button> */}
           </Flex>
           {appForm.dataset.datasets?.length > 0 && (
             <Box my={3}>
@@ -258,7 +258,7 @@ const EditForm = ({
         </Box>
 
         {/* tool choice */}
-        <Box {...BoxStyles}>
+        {/* <Box {...BoxStyles}>
           <Flex alignItems={'center'}>
             <Flex alignItems={'center'} flex={1}>
               <MyIcon name={'core/app/toolCall'} w={'20px'} />
@@ -313,20 +313,20 @@ const EditForm = ({
               </MyTooltip>
             ))}
           </Grid>
-        </Box>
+        </Box> */}
 
         {/* variable */}
-        <Box {...BoxStyles}>
+        {/* <Box {...BoxStyles}>
           <VariableEdit
             variables={appForm.chatConfig.variables}
             onChange={(e) => {
               appForm.chatConfig.variables = e;
             }}
           />
-        </Box>
+        </Box> */}
 
         {/* welcome */}
-        <Box {...BoxStyles}>
+        {/* <Box {...BoxStyles}>
           <WelcomeTextConfig
             value={appForm.chatConfig.welcomeText}
             onChange={(e) => {
@@ -339,7 +339,7 @@ const EditForm = ({
               }));
             }}
           />
-        </Box>
+        </Box> */}
 
         {/* tts */}
         <Box {...BoxStyles}>
@@ -375,7 +375,7 @@ const EditForm = ({
         </Box>
 
         {/* question guide */}
-        <Box {...BoxStyles}>
+        {/* <Box {...BoxStyles}>
           <QGSwitch
             isChecked={appForm.chatConfig.questionGuide}
             onChange={(e) => {
@@ -388,10 +388,10 @@ const EditForm = ({
               }));
             }}
           />
-        </Box>
+        </Box> */}
 
         {/* question tips */}
-        <Box {...BoxStyles}>
+        {/* <Box {...BoxStyles}>
           <InputGuideConfig
             appId={appDetail._id}
             value={appForm.chatConfig.chatInputGuide}
@@ -405,10 +405,10 @@ const EditForm = ({
               }));
             }}
           />
-        </Box>
+        </Box> */}
 
         {/* timer trigger */}
-        <Box {...BoxStyles} borderBottom={'none'}>
+        {/* <Box {...BoxStyles} borderBottom={'none'}>
           <ScheduledTriggerConfig
             value={appForm.chatConfig.scheduledTriggerConfig}
             onChange={(e) => {
@@ -421,7 +421,7 @@ const EditForm = ({
               }));
             }}
           />
-        </Box>
+        </Box> */}
       </Box>
 
       {isOpenDatasetSelect && (
