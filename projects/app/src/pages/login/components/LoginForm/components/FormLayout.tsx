@@ -83,7 +83,8 @@ const FormLayout = ({ children, setPageType, pageType }: Props) => {
           <Image src={LOGO_ICON} w={['24px', '28px']} alt={'icon'} />
         </Flex>
         <Box ml={3} fontSize={['2xl', '3xl']} fontWeight={'bold'}>
-          {feConfigs?.systemTitle}
+          {/* {feConfigs?.systemTitle} */}
+          爱动GPT
         </Box>
       </Flex>
       {children}
