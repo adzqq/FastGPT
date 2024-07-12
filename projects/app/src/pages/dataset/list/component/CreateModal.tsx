@@ -82,15 +82,18 @@ const CreateModal = ({ onClose, parentId }: { onClose: () => void; parentId?: st
   const { mutate: onclickCreate, isLoading: creating } = useRequest({
     mutationFn: async (data: CreateDatasetParams) => {
         
-        data.user_id = userInfo?._id;
-        data.kb_name = data.name;
-      const id = await postCreateDataset(data);
-      return id;
+      data.user_id = userInfo?._id;
+      data.kb_name = data.name;
+      const result = await createAdDatasets(data);
+      if(result&&result.kb_id){
+        const id = await postCreateDataset(data);
+        return {id,kb_id:result.kb_id};
+      }
     },
     successToast: t('common.Create Success'),
     errorToast: t('common.Create Failed'),
-    onSuccess(id) {
-      router.push(`/dataset/detail?datasetId=${id}`);
+    onSuccess({id,kb_id}) {
+      router.push(`/dataset/detail?datasetId=${id}&kb_id=${kb_id}`);
     }
   });
 
