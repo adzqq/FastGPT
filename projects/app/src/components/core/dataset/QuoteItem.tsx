@@ -8,6 +8,8 @@ import { useTranslation } from 'next-i18next';
 import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
 import dynamic from 'next/dynamic';
 import MyBox from '@fastgpt/web/components/common/MyBox';
+import Markdown, { CodeClassName } from '@/components/Markdown';
+
 import { SearchScoreTypeEnum, SearchScoreTypeMap } from '@fastgpt/global/core/dataset/constants';
 
 const InputDataModal = dynamic(() => import('@/pages/dataset/detail/components/InputDataModal'));
@@ -195,9 +197,10 @@ const QuoteItem = ({
             ))}
         </Flex>
 
-        <Box flex={'1 0 0'}>
+        <Box flex={'1 0 0'} >
           <Box color={'black'}>{quoteItem.q}</Box>
-          <Box color={'myGray.600'}>{quoteItem.a}</Box>
+          {/* <Box color={'myGray.600'}>{quoteItem.a}</Box> */}
+          <Markdown source={quoteItem.a} showAnimation={true} />
         </Box>
 
         {canViewSource && (
@@ -212,7 +215,7 @@ const QuoteItem = ({
             <MyTooltip label={t('core.dataset.Quote Length')}>
               <Flex alignItems={'center'}>
                 <MyIcon name="common/text/t" w={'14px'} mr={1} color={'myGray.500'} />
-                {quoteItem.q.length + (quoteItem.a?.length || 0)}
+                {/* {quoteItem.q.length + (quoteItem.a?.length || 0)} */}
               </Flex>
             </MyTooltip>
             <RawSourceBox
@@ -252,7 +255,7 @@ const QuoteItem = ({
                 </Box>
               </MyTooltip>
             )}
-            {linkToDataset && (
+            {/* {linkToDataset && (
               <Link
                 as={NextLink}
                 className="hover-data"
@@ -264,7 +267,7 @@ const QuoteItem = ({
                 {t('core.dataset.Go Dataset')}
                 <MyIcon name={'common/rightArrowLight'} w={'10px'} />
               </Link>
-            )}
+            )} */}
           </Flex>
         )}
       </MyBox>

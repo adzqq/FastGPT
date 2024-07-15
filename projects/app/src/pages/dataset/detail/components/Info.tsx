@@ -142,7 +142,7 @@ const Info = ({ datasetId }: { datasetId: string }) => {
         </FormLabel>
         <Box flex={1}>{datasetDetail._id}</Box>
       </Flex>
-      <Flex mt={8} w={'100%'} alignItems={'center'} flexWrap={'wrap'}>
+      {/* <Flex mt={8} w={'100%'} alignItems={'center'} flexWrap={'wrap'}>
         <FormLabel flex={['0 0 90px', '0 0 160px']} w={0}>
           {t('core.ai.model.Vector Model')}
         </FormLabel>
@@ -169,14 +169,14 @@ const Info = ({ datasetId }: { datasetId: string }) => {
             }}
           />
         </Box>
-      </Flex>
-      <Flex mt={8} w={'100%'} alignItems={'center'}>
+      </Flex> */}
+      {/* <Flex mt={8} w={'100%'} alignItems={'center'}>
         <FormLabel flex={['0 0 90px', '0 0 160px']} w={0}>
           {t('core.Max Token')}
         </FormLabel>
         <Box flex={[1, '0 0 320px']}>{vectorModel.maxToken}</Box>
-      </Flex>
-      <Flex mt={6} alignItems={'center'} flexWrap={'wrap'}>
+      </Flex> */}
+      {/* <Flex mt={6} alignItems={'center'} flexWrap={'wrap'}>
         <FormLabel flex={['0 0 90px', '0 0 160px']} w={0}>
           {t('core.ai.model.Dataset Agent Model')}
         </FormLabel>
@@ -195,7 +195,7 @@ const Info = ({ datasetId }: { datasetId: string }) => {
             }}
           />
         </Box>
-      </Flex>
+      </Flex> */}
 
       <MyDivider my={6} h={'2px'} maxW={'500px'} />
 
@@ -250,7 +250,7 @@ const Info = ({ datasetId }: { datasetId: string }) => {
         <Textarea flex={[1, '0 0 320px']} {...register('intro')} placeholder={t('common.Intro')} />
       </Flex>
 
-      {datasetDetail.permission.hasManagePer && (
+      {/* {datasetDetail.permission.hasManagePer && (
         <>
           <MyDivider my={6} h={'2px'} maxW={'500px'} />
 
@@ -291,7 +291,7 @@ const Info = ({ datasetId }: { datasetId: string }) => {
             </Box>
           </Flex>
         </>
-      )}
+      )} */}
 
       <Flex mt={5} w={'100%'} alignItems={'flex-end'}>
         <Box flex={['0 0 90px', '0 0 160px']} w={0}></Box>

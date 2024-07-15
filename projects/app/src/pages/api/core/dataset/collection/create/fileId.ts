@@ -25,12 +25,15 @@ import { WritePermissionVal } from '@fastgpt/global/support/permission/constant'
 async function handler(req: ApiRequestProps<FileIdCreateDatasetCollectionParams>) {
   const {
     fileId,
+    extraFileId,
     trainingType = TrainingModeEnum.chunk,
     chunkSize = 512,
     chunkSplitter,
     qaPrompt,
     ...body
   } = req.body;
+
+  console.log("爱动创建 知识库文档表",extraFileId);
 
   const { teamId, tmbId, dataset } = await authDataset({
     req,
@@ -69,6 +72,7 @@ async function handler(req: ApiRequestProps<FileIdCreateDatasetCollectionParams>
       type: DatasetCollectionTypeEnum.file,
       name: filename,
       fileId,
+      extraFileId,
       metadata: {
         relatedImgId: fileId
       },

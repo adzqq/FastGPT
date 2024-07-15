@@ -187,14 +187,14 @@ const ResponseTags = ({
             </MyTooltip>
           )}
           <MyTooltip label={t('core.chat.response.Read complete response tips')}>
-            <MyTag
+            {/* <MyTag
               colorSchema="gray"
               type="borderSolid"
               cursor={'pointer'}
               onClick={onOpenWholeModal}
             >
               {t('core.chat.response.Read complete response')}
-            </MyTag>
+            </MyTag> */}
           </MyTooltip>
         </Flex>
       )}

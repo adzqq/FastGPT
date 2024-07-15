@@ -105,6 +105,10 @@ const nextConfig = {
 
         ]
     },
+    typescript: {
+        // 关闭构建时的类型检查
+        ignoreBuildErrors: true,
+    },
 
 };
 

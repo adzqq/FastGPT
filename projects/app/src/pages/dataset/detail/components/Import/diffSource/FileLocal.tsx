@@ -152,6 +152,7 @@ const SelectFile = React.memo(function SelectFile({ datasetId, kb_id}: { dataset
                     qaPrompt:"",
                     name: file?.name,
                     fileId:uploadFileId,
+                    extraFileId:serverFileId,
                   };
                   await postCreateDatasetFileCollection(commonParams)
                 }

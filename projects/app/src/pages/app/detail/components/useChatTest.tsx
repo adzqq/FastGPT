@@ -41,25 +41,27 @@ export const useChatTest = ({
 
       const history = chatList.slice(-historyMaxLen - 2, -2);
 
+      console.log("爱动创建应用node",nodes);
+
        
       //根据appId 获取知识库id
 
-      const node = appDetail.modules.find(x =>x.flowNodeType==FlowNodeTypeEnum.datasetSearchNode)
-      const datasetInfos = node?.inputs.find(x => x.key === 'datasets')?.value;
-      const datasetIds = datasetInfos.map(x =>x.datasetId);
+      const node = nodes.find(x =>x.flowNodeType==FlowNodeTypeEnum.datasetSearchNode)
       const kb_ids = [];
-      const fastGptres = await getAllDataset();
-      const adres = await getAdDatasets(userInfo?._id);
-      const filterRes = fastGptres.filter(item => datasetIds.includes(item._id))
-      filterRes.forEach(item => {
-        const result = adres.find(adx => adx[1] === item.name)
-        if(result){
-         item.adId = result[0]
-         kb_ids.push(item.adId)
-        }
-     });
-
-
+      if(node){
+        const datasetInfos = node?.inputs.find(x => x.key === 'datasets')?.value;
+        const datasetIds = datasetInfos.map(x =>x.datasetId);
+        const fastGptres = await getAllDataset();
+        const adres = await getAdDatasets(userInfo?._id);
+        const filterRes = fastGptres.filter(item => datasetIds.includes(item._id))
+        filterRes.forEach(item => {
+            const result = adres.find(adx => adx[1] === item.name)
+            if(result){
+            item.adId = result[0]
+            kb_ids.push(item.adId)
+            }
+        });
+      }
       const prompt = chatList[chatList.length - 2].value;
       console.log("爱动prompt",prompt);
      

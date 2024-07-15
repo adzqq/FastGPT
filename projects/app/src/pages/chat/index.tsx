@@ -119,7 +119,8 @@ const Chat = ({
         chatId: completionChatId,
         user_id:userInfo?._id,
         kb_ids:kb_ids,
-        serverResponse:responseText
+        textResponse:responseText,
+        responseData:responseData
       };
       await insertChatItem2DB(requestData)
 

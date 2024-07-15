@@ -467,9 +467,9 @@ const ChatBox = (
 
             const messages = chats2GPTMessages({ messages: newChatList, reserveId: true });
 
-            console.log('爱动构建gptmessages', messages);
+            // console.log('爱动构建gptmessages', messages);
 
-            console.log("爱动构建newChatList",newChatList);
+            // console.log("爱动构建newChatList",newChatList);
           
 
             const {
