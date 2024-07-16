@@ -470,7 +470,6 @@ const ChatBox = (
             // console.log('爱动构建gptmessages', messages);
 
             // console.log("爱动构建newChatList",newChatList);
-          
 
             const {
               responseData,
@@ -483,7 +482,6 @@ const ChatBox = (
               generatingMessage: (e) => generatingMessage({ ...e, autoTTSResponse }),
               variables: requestVariables
             });
-
 
             console.log('爱动ChatBoxresponseData', responseData);
 

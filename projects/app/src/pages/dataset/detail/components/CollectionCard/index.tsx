@@ -83,9 +83,10 @@ const CollectionCard = () => {
         const status = (() => {
           if (collection.trainingAmount > 0) {
             return {
-              statusText: t('dataset.collections.Collection Embedding', {
-                total: collection.trainingAmount
-              }),
+              //   statusText: t('dataset.collections.Collection Embedding', {
+              //     total: collection.trainingAmount
+              //   }),
+              statusText: '索引中',
               color: 'myGray.600',
               bg: 'myGray.50',
               borderColor: 'borderColor.low'
@@ -239,24 +240,24 @@ const CollectionCard = () => {
                     } catch (error) {}
                     setDragTargetId(undefined);
                   }}
-                //   onClick={() => {
-                //     if (collection.type === DatasetCollectionTypeEnum.folder) {
-                //       router.replace({
-                //         query: {
-                //           ...router.query,
-                //           parentId: collection._id
-                //         }
-                //       });
-                //     } else {
-                //       router.replace({
-                //         query: {
-                //           ...router.query,
-                //           collectionId: collection._id,
-                //           currentTab: TabEnum.dataCard
-                //         }
-                //       });
-                //     }
-                //   }}
+                  //   onClick={() => {
+                  //     if (collection.type === DatasetCollectionTypeEnum.folder) {
+                  //       router.replace({
+                  //         query: {
+                  //           ...router.query,
+                  //           parentId: collection._id
+                  //         }
+                  //       });
+                  //     } else {
+                  //       router.replace({
+                  //         query: {
+                  //           ...router.query,
+                  //           collectionId: collection._id,
+                  //           currentTab: TabEnum.dataCard
+                  //         }
+                  //       });
+                  //     }
+                  //   }}
                 >
                   <Td w={'50px'}>{index + 1}</Td>
                   <Td minW={'150px'} maxW={['200px', '300px']} draggable>
@@ -342,35 +343,35 @@ const CollectionCard = () => {
                                         })()
                                     }
                                   ]
-                                : []),
-                            //   {
-                            //     label: (
-                            //       <Flex alignItems={'center'}>
-                            //         <MyIcon name={'common/file/move'} w={'14px'} mr={2} />
-                            //         {t('Move')}
-                            //       </Flex>
-                            //     ),
-                            //     onClick: () =>
-                            //       setMoveCollectionData({ collectionId: collection._id })
-                            //   },
-                            //   {
-                            //     label: (
-                            //       <Flex alignItems={'center'}>
-                            //         <MyIcon name={'edit'} w={'14px'} mr={2} />
-                            //         {t('Rename')}
-                            //       </Flex>
-                            //     ),
-                            //     onClick: () =>
-                            //       onOpenEditTitleModal({
-                            //         defaultVal: collection.name,
-                            //         onSuccess: (newName) => {
-                            //           onUpdateCollectionName({
-                            //             collectionId: collection._id,
-                            //             name: newName
-                            //           });
-                            //         }
-                            //       })
-                            //   }
+                                : [])
+                              //   {
+                              //     label: (
+                              //       <Flex alignItems={'center'}>
+                              //         <MyIcon name={'common/file/move'} w={'14px'} mr={2} />
+                              //         {t('Move')}
+                              //       </Flex>
+                              //     ),
+                              //     onClick: () =>
+                              //       setMoveCollectionData({ collectionId: collection._id })
+                              //   },
+                              //   {
+                              //     label: (
+                              //       <Flex alignItems={'center'}>
+                              //         <MyIcon name={'edit'} w={'14px'} mr={2} />
+                              //         {t('Rename')}
+                              //       </Flex>
+                              //     ),
+                              //     onClick: () =>
+                              //       onOpenEditTitleModal({
+                              //         defaultVal: collection.name,
+                              //         onSuccess: (newName) => {
+                              //           onUpdateCollectionName({
+                              //             collectionId: collection._id,
+                              //             name: newName
+                              //           });
+                              //         }
+                              //       })
+                              //   }
                             ]
                           },
                           {
@@ -390,10 +391,14 @@ const CollectionCard = () => {
                                 type: 'danger',
                                 onClick: () =>
                                   openDeleteConfirm(
-                                    () => {
-                                      console.log("爱动删除collection",collection);
-                                      const result = delAdDatasetDocs(userInfo._id,router.query.kb_id,collection.adFileId)
-                                      if(result){
+                                    async () => {
+                                      console.log('爱动删除collection', collection);
+                                      const result = await delAdDatasetDocs(
+                                        userInfo._id,
+                                        router.query.kb_id,
+                                        collection.adFileId
+                                      );
+                                      if (result && result.status == 'success') {
                                         onDelCollection(collection._id);
                                       }
                                     },

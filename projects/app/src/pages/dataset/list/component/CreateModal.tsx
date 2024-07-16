@@ -81,18 +81,17 @@ const CreateModal = ({ onClose, parentId }: { onClose: () => void; parentId?: st
   /* create a new kb and router to it */
   const { mutate: onclickCreate, isLoading: creating } = useRequest({
     mutationFn: async (data: CreateDatasetParams) => {
-        
       data.user_id = userInfo?._id;
       data.kb_name = data.name;
       const result = await createAdDatasets(data);
-      if(result&&result.kb_id){
+      if (result && result.status == 'success') {
         const id = await postCreateDataset(data);
-        return {id,kb_id:result.kb_id};
+        return { id, kb_id: result.data.kb_id };
       }
     },
     successToast: t('common.Create Success'),
     errorToast: t('common.Create Failed'),
-    onSuccess({id,kb_id}) {
+    onSuccess({ id, kb_id }) {
       router.push(`/dataset/detail?datasetId=${id}&kb_id=${kb_id}`);
     }
   });
@@ -136,19 +135,19 @@ const CreateModal = ({ onClose, parentId }: { onClose: () => void; parentId?: st
                 value: DatasetTypeEnum.dataset,
                 icon: 'core/dataset/commonDataset',
                 desc: datasetT('Common Dataset Desc')
-              },
-            //   {
-            //     title: datasetT('Website Dataset'),
-            //     value: DatasetTypeEnum.websiteDataset,
-            //     icon: 'core/dataset/websiteDataset',
-            //     desc: datasetT('Website Dataset Desc')
-            //   },
-            //   {
-            //     title: datasetT('External File'),
-            //     value: DatasetTypeEnum.externalFile,
-            //     icon: 'core/dataset/externalDataset',
-            //     desc: datasetT('External file Dataset Desc')
-            //   }
+              }
+              //   {
+              //     title: datasetT('Website Dataset'),
+              //     value: DatasetTypeEnum.websiteDataset,
+              //     icon: 'core/dataset/websiteDataset',
+              //     desc: datasetT('Website Dataset Desc')
+              //   },
+              //   {
+              //     title: datasetT('External File'),
+              //     value: DatasetTypeEnum.externalFile,
+              //     icon: 'core/dataset/externalDataset',
+              //     desc: datasetT('External file Dataset Desc')
+              //   }
             ]}
             value={datasetType}
             onChange={onSelectDatasetType}

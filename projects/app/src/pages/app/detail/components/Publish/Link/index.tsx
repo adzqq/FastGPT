@@ -49,12 +49,15 @@ import EmptyTip from '@fastgpt/web/components/common/EmptyTip';
 import FormLabel from '@fastgpt/web/components/common/MyBox/FormLabel';
 import MyBox from '@fastgpt/web/components/common/MyBox';
 
+import { useUserStore } from '@/web/support/user/useUserStore';
+
 const SelectUsingWayModal = dynamic(() => import('./SelectUsingWayModal'));
 
 const Share = ({ appId }: { appId: string; type: PublishChannelEnum }) => {
   const { t } = useTranslation();
   const { Loading, setIsLoading } = useLoading();
   const { feConfigs } = useSystemStore();
+  const { userInfo } = useUserStore();
   const { copyData } = useCopyData();
   const [editLinkData, setEditLinkData] = useState<OutLinkEditType>();
   const [selectedLinkData, setSelectedLinkData] = useState<OutLinkSchema>();
@@ -216,6 +219,7 @@ const Share = ({ appId }: { appId: string; type: PublishChannelEnum }) => {
       {!!editLinkData && (
         <EditLinkModal
           appId={appId}
+          userId={userInfo._id}
           type={PublishChannelEnum.share}
           defaultData={editLinkData}
           onCreate={(id) => {
@@ -248,6 +252,7 @@ const Share = ({ appId }: { appId: string; type: PublishChannelEnum }) => {
 
 // edit link modal
 function EditLinkModal({
+  userId,
   appId,
   type,
   defaultData,
@@ -255,6 +260,7 @@ function EditLinkModal({
   onCreate,
   onEdit
 }: {
+  userId: string;
   appId: string;
   type: PublishChannelEnum;
   defaultData: OutLinkEditType;
@@ -280,7 +286,8 @@ function EditLinkModal({
       createShareChat({
         ...e,
         appId,
-        type
+        type,
+        userId: 'user' + userId
       }),
     errorToast: t('common.Create Failed'),
     onSuccess: onCreate

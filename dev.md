@@ -38,3 +38,9 @@ docker build -f ./projects/app/Dockerfile -t registry.cn-hangzhou.aliyuncs.com/f
 make build name=app image=registry.cn-hangzhou.aliyuncs.com/fastgpt/fastgpt:v4.8.1 proxy=taobao
 ```
 
+
+
+# 构建自己的镜像
+
+docker build -f ./projects/app/Dockerfile -t aidong-backend.tencentcloudcr.com/aidong/fastgpt:v4.8.1 . --build-arg name=aidongfastgpt --build-arg proxy=taobao
+

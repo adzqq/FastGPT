@@ -7,7 +7,6 @@ import { useSystemStore } from '@/web/common/system/useSystemStore';
 import { streamFetch } from '@/web/common/api/fetch';
 import { adStreamFetch } from '@/web/common/api/adfetch';
 
-
 import { useChatStore } from '@/web/core/chat/context/storeChat';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useTranslation } from 'next-i18next';
@@ -24,15 +23,13 @@ import { serviceSideProps } from '@/web/common/utils/i18n';
 import { checkChatSupportSelectFileByChatModels } from '@/web/core/chat/utils';
 import { getChatTitleFromChatMessage } from '@fastgpt/global/core/chat/utils';
 import { ChatStatusEnum } from '@fastgpt/global/core/chat/constants';
-import {FlowNodeTypeEnum} from '@fastgpt/global/core/workflow/node/constant';
+import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 
 import { GPTMessages2Chats } from '@fastgpt/global/core/chat/adapt';
-import { getMyApps ,getAppDetailById} from '@/web/core/app/api';
+import { getMyApps, getAppDetailById } from '@/web/core/app/api';
 import { useRequest2 } from '@fastgpt/web/hooks/useRequest';
 
-import { insertChatItem2DB} from '@/web/core/dataset/api';
-
-
+import { insertChatItem2DB } from '@/web/core/dataset/api';
 
 import { useMount } from 'ahooks';
 import { getNanoid } from '@fastgpt/global/common/string/tools';
@@ -42,7 +39,7 @@ import ChatContextProvider, { ChatContext } from '@/web/core/chat/context/chatCo
 import { AppListItemType } from '@fastgpt/global/core/app/type';
 import { useContextSelector } from 'use-context-selector';
 
-import { getAllDataset, getDatasets ,getAdDatasets} from '@/web/core/dataset/api';
+import { getAllDataset, getDatasets, getAdDatasets } from '@/web/core/dataset/api';
 
 type Props = { appId: string; chatId: string };
 
@@ -59,7 +56,7 @@ const Chat = ({
 
   const ChatBoxRef = useRef<ComponentRef>(null);
 
-  const { setLastChatAppId,setKbIds } = useChatStore();
+  const { setLastChatAppId, setKbIds } = useChatStore();
   const {
     loadHistories,
     onUpdateHistory,
@@ -74,65 +71,61 @@ const Chat = ({
   const { userInfo } = useUserStore();
   const { isPc } = useSystemStore();
 
-
   const startChat = useCallback(
     async ({ messages, controller, generatingMessage, variables }: StartChatFnProps) => {
       const prompts = messages.slice(-2);
       const completionChatId = chatId ? chatId : getNanoid();
 
       //根据appId 获取知识库id
-      const appInfo = await getAppDetailById(appId)
-      const node = appInfo.modules.find(x =>x.flowNodeType==FlowNodeTypeEnum.datasetSearchNode)
-      const datasetInfos = node?.inputs.find(x => x.key === 'datasets')?.value;
-      const datasetIds = datasetInfos.map(x =>x.datasetId);
+      const appInfo = await getAppDetailById(appId);
+      const node = appInfo.modules.find(
+        (x) => x.flowNodeType == FlowNodeTypeEnum.datasetSearchNode
+      );
+      const datasetInfos = node?.inputs.find((x) => x.key === 'datasets')?.value;
+      const datasetIds = datasetInfos.map((x) => x.datasetId);
       const kb_ids = [];
       const fastGptres = await getAllDataset();
       const adres = await getAdDatasets(userInfo?._id);
-      const filterRes = fastGptres.filter(item => datasetIds.includes(item._id))
-      filterRes.forEach(item => {
-        const result = adres.find(adx => adx[1] === item.name)
-        if(result){
-         item.adId = result[0]
-         kb_ids.push(item.adId)
+      const filterRes = fastGptres.filter((item) => datasetIds.includes(item._id));
+      filterRes.forEach((item) => {
+        const result = adres.data.find((adx) => adx.kb_name === item.name);
+        if (result) {
+          item.adId = result.kb_id;
+          kb_ids.push(item.adId);
         }
-     });
+      });
 
       const { responseText, responseData } = await adStreamFetch({
         data: {
-          question:prompts?.find(x =>x.role === 'user')?.content,
+          question: prompts?.find((x) => x.role === 'user')?.content,
           messages: prompts,
           variables,
           appId,
           chatId: completionChatId,
-          user_id:'user'+userInfo?._id,
-          kb_ids:kb_ids
+          user_id: 'user' + userInfo?._id,
+          kb_ids: kb_ids
         },
         onMessage: generatingMessage,
         abortCtrl: controller
       });
-
 
       const requestData = {
         messages: prompts,
         variables,
         appId,
         chatId: completionChatId,
-        user_id:userInfo?._id,
-        kb_ids:kb_ids,
-        textResponse:responseText,
-        responseData:responseData
+        user_id: userInfo?._id,
+        kb_ids: kb_ids,
+        textResponse: responseText,
+        responseData: responseData
       };
-      await insertChatItem2DB(requestData)
+      await insertChatItem2DB(requestData);
 
-
-
-
-      console.log("爱动responseData",responseData);
+      console.log('爱动responseData', responseData);
 
       const newTitle = getChatTitleFromChatMessage(GPTMessages2Chats(prompts)[0]);
 
-      console.log("爱动newTitle",newTitle)
-
+      console.log('爱动newTitle', newTitle);
 
       // new chat
       if (completionChatId !== chatId) {
@@ -163,8 +156,7 @@ const Chat = ({
   // get chat app info
   const [chatData, setChatData] = useState<InitChatResponse>(defaultChatData);
 
-//   console.log("爱动chatData",chatData)
-
+  //   console.log("爱动chatData",chatData)
 
   const { loading } = useRequest2(
     async () => {

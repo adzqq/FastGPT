@@ -24,6 +24,7 @@ export type CreateDatasetParams = {
   agentModel?: string;
   defaultPermission?: PermissionValueType;
   kb_name?: string;
+  kb_id?: string;
   user_id?: string;
 };
 

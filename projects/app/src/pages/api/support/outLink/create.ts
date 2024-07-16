@@ -13,9 +13,10 @@ const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 24);
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     await connectToDatabase();
-    const { appId, ...props } = req.body as OutLinkEditType &
+    const { appId, userId, ...props } = req.body as OutLinkEditType &
       OutLinkEditType & {
         appId: string;
+        userId?: string;
         type: PublishChannelEnum;
       };
 
@@ -32,6 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       teamId,
       tmbId,
       appId,
+      userId,
       ...props
     });
 

@@ -5,11 +5,9 @@ import type {
   DatasetListItemType,
   DatasetSimpleItemType
 } from '@fastgpt/global/core/dataset/type.d';
-import { getAllDataset, getDatasets ,getAdDatasets} from '@/web/core/dataset/api';
+import { getAllDataset, getDatasets, getAdDatasets } from '@/web/core/dataset/api';
 
 import { getTokenLogin } from '@/web/support/user/api';
-
-
 
 type State = {
   allDatasets: DatasetSimpleItemType[];
@@ -25,18 +23,21 @@ export const useDatasetStore = create<State>()(
         allDatasets: [],
         async loadAllDatasets() {
           const res = await getAllDataset();
-            //获取账号信息
-            const accountInfo = await getTokenLogin();
-            //用户id
-            const userId = accountInfo._id
-            //获取知识库列表
-            const adres = await getAdDatasets(userId);
-            res.forEach((item,index) => {
-               const result = adres.find(adx => adx[1] === item.name)
-               if(result){
-                item.adId = result[0]
-               }
+          //获取账号信息
+          const accountInfo = await getTokenLogin();
+          //用户id
+          const userId = accountInfo._id;
+          //获取知识库列表
+          const adres = await getAdDatasets(userId);
+          if (adres.status == 'success') {
+            res.forEach((item, index) => {
+              const result = adres.data.find((adx) => adx.kb_name === item.name);
+              if (result) {
+                item.adId = result.kb_id;
+              }
             });
+          }
+
           set((state) => {
             state.allDatasets = res;
           });
@@ -44,20 +45,22 @@ export const useDatasetStore = create<State>()(
         },
         myDatasets: [],
         async loadMyDatasets(parentId = '') {
-            console.log('爱动loadMyDatasets');
+          console.log('爱动loadMyDatasets');
           const res = await getDatasets({ parentId });
           //获取账号信息
           const accountInfo = await getTokenLogin();
           //用户id
-          const userId = accountInfo._id
+          const userId = accountInfo._id;
           //获取知识库列表
           const adres = await getAdDatasets(userId);
-          res.forEach((item,index) => {
-            const result = adres.find(adx => adx[1] === item.name)
-               if(result){
-                item.adId = result[0]
-               }
-          });
+          if (adres.status == 'success') {
+            res.forEach((item, index) => {
+              const result = adres.data.find((adx) => adx.kb_name === item.name);
+              if (result) {
+                item.adId = result.kb_id;
+              }
+            });
+          }
           set((state) => {
             state.myDatasets = res;
           });

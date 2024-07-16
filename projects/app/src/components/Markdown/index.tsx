@@ -5,6 +5,7 @@ import RemarkMath from 'remark-math';
 import RemarkBreaks from 'remark-breaks';
 import RehypeKatex from 'rehype-katex';
 import RemarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 
 import styles from './index.module.scss';
 import dynamic from 'next/dynamic';
@@ -62,7 +63,7 @@ const Markdown = ({
       ${showAnimation ? `${formatSource ? styles.waitingAnimation : styles.animation}` : ''}
     `}
       remarkPlugins={[RemarkMath, [RemarkGfm, { singleTilde: false }], RemarkBreaks]}
-      rehypePlugins={[RehypeKatex]}
+      rehypePlugins={[RehypeKatex, rehypeRaw]}
       components={components}
       linkTarget={'_blank'}
     >

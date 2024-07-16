@@ -1,5 +1,5 @@
 import { useUserStore } from '@/web/support/user/useUserStore';
-import React, { useCallback, useRef,useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import ChatBox from '@/components/ChatBox';
 import type { ComponentRef, StartChatFnProps } from '@/components/ChatBox/type.d';
 import { streamFetch } from '@/web/common/api/fetch';
@@ -17,8 +17,8 @@ import { useContextSelector } from 'use-context-selector';
 import { AppContext } from './context';
 import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type';
 import { StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
-import {FlowNodeTypeEnum} from '@fastgpt/global/core/workflow/node/constant';
-import { getAllDataset, getDatasets ,getAdDatasets} from '@/web/core/dataset/api';
+import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
+import { getAllDataset, getDatasets, getAdDatasets } from '@/web/core/dataset/api';
 
 export const useChatTest = ({
   nodes,
@@ -41,30 +41,28 @@ export const useChatTest = ({
 
       const history = chatList.slice(-historyMaxLen - 2, -2);
 
-      console.log("爱动创建应用node",nodes);
+      console.log('爱动创建应用node', nodes);
 
-       
       //根据appId 获取知识库id
 
-      const node = nodes.find(x =>x.flowNodeType==FlowNodeTypeEnum.datasetSearchNode)
+      const node = nodes.find((x) => x.flowNodeType == FlowNodeTypeEnum.datasetSearchNode);
       const kb_ids = [];
-      if(node){
-        const datasetInfos = node?.inputs.find(x => x.key === 'datasets')?.value;
-        const datasetIds = datasetInfos.map(x =>x.datasetId);
+      if (node) {
+        const datasetInfos = node?.inputs.find((x) => x.key === 'datasets')?.value;
+        const datasetIds = datasetInfos.map((x) => x.datasetId);
         const fastGptres = await getAllDataset();
         const adres = await getAdDatasets(userInfo?._id);
-        const filterRes = fastGptres.filter(item => datasetIds.includes(item._id))
-        filterRes.forEach(item => {
-            const result = adres.find(adx => adx[1] === item.name)
-            if(result){
-            item.adId = result[0]
-            kb_ids.push(item.adId)
-            }
+        const filterRes = fastGptres.filter((item) => datasetIds.includes(item._id));
+        filterRes.forEach((item) => {
+          const result = adres.data.find((adx) => adx.kb_name === item.name);
+          if (result) {
+            item.adId = result.kb_id;
+            kb_ids.push(item.adId);
+          }
         });
       }
       const prompt = chatList[chatList.length - 2].value;
-      console.log("爱动prompt",prompt);
-     
+      console.log('爱动prompt', prompt);
 
       // 流请求，获取数据
       const { responseText, responseData } = await adStreamFetch({
@@ -77,9 +75,9 @@ export const useChatTest = ({
           variables,
           appId: appDetail._id,
           appName: `调试-${appDetail.name}`,
-          user_id:'user'+userInfo?._id,
-          kb_ids:kb_ids,
-          question:prompt[0].text.content
+          user_id: 'user' + userInfo?._id,
+          kb_ids: kb_ids,
+          question: prompt[0].text.content
         },
         onMessage: generatingMessage,
         abortCtrl: controller

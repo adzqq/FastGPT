@@ -77,7 +77,7 @@ function responseSuccess(response: AxiosResponse<ResponseDataType>) {
  * 响应数据检查
  */
 function checkRes(data: ResponseDataType) {
-    // console.log('爱动checkRes->', data);
+  console.log('爱动checkRes->', data);
   if (data === undefined) {
     console.log('error->', data, 'data is empty');
     return Promise.reject('服务器异常');
@@ -85,7 +85,8 @@ function checkRes(data: ResponseDataType) {
     return Promise.reject(data);
   }
   //爱动特殊处理
-  if(!data.data){
+  if (data.status) {
+    //爱动带有status
     return data;
   }
   return data.data;
@@ -160,7 +161,11 @@ function request(
       baseURL: '/api',
       url,
       method,
-      data: ['POST', 'PUT'].includes(method) ? data : null,
+      data:
+        ['POST', 'PUT'].includes(method) ||
+        (['DELETE'].includes(method) && (url.includes('kbqa/dbs') || url.includes('kbqa/docs')))
+          ? data
+          : null,
       params: !['POST', 'PUT'].includes(method) ? data : null,
       signal: cancelToken?.signal,
       withCredentials,

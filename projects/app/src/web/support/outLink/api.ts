@@ -6,6 +6,7 @@ export function createShareChat<T>(
   data: OutLinkEditType<T> & {
     appId: string;
     type: OutLinkSchema['type'];
+    userId?: string;
   }
 ) {
   return POST<string>(`/support/outLink/create`, data);
@@ -17,6 +18,14 @@ export const putShareChat = (data: OutLinkEditType) =>
 // get shareChat
 export function getShareChatList<T>(data: { appId: string; type: OutLinkSchema<T>['type'] }) {
   return GET<OutLinkSchema<T>[]>(`/support/outLink/list`, data);
+}
+
+export function findShareChat<T>(data: {
+  appId: string;
+  type: OutLinkSchema<T>['type'];
+  shareId: string;
+}) {
+  return GET<OutLinkSchema<T>[]>(`/support/outLink/find`, data);
 }
 
 // delete a  shareChat

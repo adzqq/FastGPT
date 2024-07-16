@@ -27,6 +27,10 @@ const OutLinkSchema = new Schema({
     ref: AppCollectionName,
     required: true
   },
+  userId: {
+    type: String,
+    required: true
+  },
   type: {
     type: String,
     required: true

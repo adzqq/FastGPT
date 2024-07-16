@@ -35,10 +35,14 @@ import { defaultChatData } from '@/global/core/chat/constants';
 import { useMount } from 'ahooks';
 import { useRequest2 } from '@fastgpt/web/hooks/useRequest';
 
-import { getAppDetailById} from '@/web/core/app/api';
-import {FlowNodeTypeEnum} from '@fastgpt/global/core/workflow/node/constant';
-import { insertChatItem2DB} from '@/web/core/dataset/api';
-import { getAllDataset, getDatasets ,getAdDatasets} from '@/web/core/dataset/api';
+import { getAppDetailById } from '@/web/core/app/api';
+import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
+import { insertChatItem2DB } from '@/web/core/dataset/api';
+import { getAllDataset, getDatasets, getAdDatasets } from '@/web/core/dataset/api';
+
+import { findShareChat } from '@/web/support/outLink/api';
+import { PublishChannelEnum } from '@fastgpt/global/support/outLink/constant';
+
 type Props = {
   appName: string;
   appIntro: string;
@@ -62,7 +66,7 @@ const OutLink = ({ appName, appIntro, appAvatar }: Props) => {
     shareId: string;
     chatId: string;
     showHistory: '0' | '1';
-    showHead: '0' | '1',
+    showHead: '0' | '1';
     authToken: string;
     [key: string]: string;
   };
@@ -89,12 +93,10 @@ const OutLink = ({ appName, appIntro, appAvatar }: Props) => {
     onChangeChatId
   } = useContextSelector(ChatContext, (v) => v);
 
-
   const startChat = useCallback(
     async ({ messages, controller, generatingMessage, variables }: StartChatFnProps) => {
       const prompts = messages.slice(-2);
       const completionChatId = chatId ? chatId : nanoid();
-
 
       //post message to report chat start
       window.top?.postMessage(
@@ -107,18 +109,34 @@ const OutLink = ({ appName, appIntro, appAvatar }: Props) => {
         '*'
       );
 
-    //    //根据appId 获取知识库id
-       const result = await getAppDetailById(appId)
-       console.log("爱动result",result);
-       const node = result.modules.find(x =>x.flowNodeType==FlowNodeTypeEnum.datasetSearchNode)
-       const datasetInfos = node?.inputs.find(x => x.key === 'datasets')?.value;
-       const kb_ids = datasetInfos.map(x =>x.datasetId);
-       console.log("爱动知识库kb_ids",kb_ids);
- 
+      //根据shareId获取userId
+      const outlinkList = await findShareChat({ appId, type: PublishChannelEnum.share, shareId });
+      let userId = '';
+      if (outlinkList && outlinkList.length > 0) {
+        userId = outlinkList[0].userId;
+      }
+
+      //根据appId 获取知识库id
+      const result = await getAppDetailById(appId);
+      console.log('爱动result', result);
+      const node = result.modules.find((x) => x.flowNodeType == FlowNodeTypeEnum.datasetSearchNode);
+      const datasetInfos = node?.inputs.find((x) => x.key === 'datasets')?.value;
+      const datasetIds = datasetInfos.map((x) => x.datasetId);
+      const kb_ids = [];
+      const fastGptres = await getAllDataset();
+      const adres = await getAdDatasets(userId);
+      const filterRes = fastGptres.filter((item) => datasetIds.includes(item._id));
+      filterRes.forEach((item) => {
+        const result = adres.data.find((adx) => adx.kb_name === item.name);
+        if (result) {
+          item.adId = result.kb_id;
+          kb_ids.push(item.adId);
+        }
+      });
 
       const { responseText, responseData } = await adStreamFetch({
         data: {
-          question:prompts?.find(x =>x.role === 'user')?.content,
+          question: prompts?.find((x) => x.role === 'user')?.content,
           messages: prompts,
           variables: {
             ...variables,
@@ -127,30 +145,29 @@ const OutLink = ({ appName, appIntro, appAvatar }: Props) => {
           shareId,
           chatId: completionChatId,
           outLinkUid,
-          user_id:'user'+shareId,
-          kb_ids:kb_ids
+          user_id: userId,
+          kb_ids: kb_ids
         },
         onMessage: generatingMessage,
         abortCtrl: controller
       });
 
-      console.log("爱动responseData",responseData);
-
+      console.log('爱动responseData', responseData);
 
       const requestData = {
         messages: prompts,
-          variables: {
-            ...variables,
-            ...customVariables
-          },
-          shareId,
-          chatId: completionChatId,
-          outLinkUid,
-          user_id:'user'+shareId,
-          kb_ids:kb_ids,
-          serverResponse:responseText
+        variables: {
+          ...variables,
+          ...customVariables
+        },
+        shareId,
+        chatId: completionChatId,
+        outLinkUid,
+        user_id: userId,
+        kb_ids: kb_ids,
+        serverResponse: responseText
       };
-      await insertChatItem2DB(requestData)
+      await insertChatItem2DB(requestData);
 
       const newTitle = getChatTitleFromChatMessage(GPTMessages2Chats(prompts)[0]);
 
@@ -334,16 +351,14 @@ const OutLink = ({ appName, appIntro, appAvatar }: Props) => {
             flexDirection={'column'}
           >
             {/* header */}
-            {showHead === "1" ? (
+            {showHead === '1' ? (
               <ChatHeader
-              appAvatar={chatData.app.avatar}
-              appName={chatData.app.name}
-              history={chatData.history}
-              showHistory={showHistory === '1'}
-            />
-            ) : (
-              null
-            )}
+                appAvatar={chatData.app.avatar}
+                appName={chatData.app.name}
+                history={chatData.history}
+                showHistory={showHistory === '1'}
+              />
+            ) : null}
             {/* chat box */}
             <Box flex={1}>
               <ChatBox
@@ -420,7 +435,6 @@ export async function getServerSideProps(context: any) {
       return undefined;
     }
   })();
-
 
   return {
     props: {

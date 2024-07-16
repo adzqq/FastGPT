@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react';
-import { putDatasetById,deleteAdDatasets } from '@/web/core/dataset/api';
+import { putDatasetById, deleteAdDatasets } from '@/web/core/dataset/api';
 import { useDatasetStore } from '@/web/core/dataset/store/dataset';
 import { Box, Flex, Grid } from '@chakra-ui/react';
 import { DatasetTypeEnum, DatasetTypeMap } from '@fastgpt/global/core/dataset/constants';
@@ -36,7 +36,6 @@ import MyBox from '@fastgpt/web/components/common/MyBox';
 import { useUserStore } from '@/web/support/user/useUserStore';
 import { useI18n } from '@/web/context/I18n';
 import { useTranslation } from 'react-i18next';
-
 
 function List() {
   const { setLoading } = useSystemStore();
@@ -132,14 +131,22 @@ function List() {
 
   const onClickDeleteDataset = (id: string, kb_id: string) => {
     openConfirm(
-    () =>
-         onDelDataset(id,kb_id).then(() => {
-            refetchPaths();
-            refetchDatasets();
-            new Promise<void>((resolve) => {
-                deleteAdDatasets(userInfo?._id, kb_id)
+      () =>
+        new Promise<void>((resolve) => {
+          deleteAdDatasets(userInfo?._id, kb_id).then((res) => {
+            if (res.status == 'success') {
+              onDelDataset(id, kb_id).then(() => {
+                refetchPaths();
+                refetchDatasets();
                 resolve();
-            })
+              });
+            } else {
+              toast({
+                status: 'error',
+                title: '删除失败，请重试'
+              });
+            }
+          });
         }),
       undefined,
       DeleteTipsMap.current[DatasetTypeEnum.dataset]
@@ -299,7 +306,7 @@ function List() {
                                     icon: 'delete',
                                     label: t('common.Delete'),
                                     type: 'danger' as 'danger',
-                                    onClick: () => onClickDeleteDataset(dataset._id,dataset.adId)
+                                    onClick: () => onClickDeleteDataset(dataset._id, dataset.adId)
                                   }
                                 ]
                               }

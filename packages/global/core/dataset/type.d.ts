@@ -36,6 +36,7 @@ export type DatasetSchemaType = {
   };
   externalReadUrl?: string;
   defaultPermission: PermissionValueType;
+  kb_id?: string;
 };
 
 export type DatasetCollectionSchemaType = {
@@ -57,6 +58,7 @@ export type DatasetCollectionSchemaType = {
   tags?: string[];
 
   fileId?: string; // local file id
+  extraFileId?: string; //爱动文件id
   rawLink?: string; // link url
   externalFileId?: string; //external file id
 
@@ -142,7 +144,7 @@ export type DatasetListItemType = {
   permission: DatasetPermission;
   vectorModel: VectorModelItemType;
   defaultPermission: PermissionValueType;
-  userId: string;
+  userId?: string;
   adId?: string;
 };
 
