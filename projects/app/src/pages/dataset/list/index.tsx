@@ -17,7 +17,7 @@ import MyIcon from '@fastgpt/web/components/common/Icon';
 import { FolderIcon, FolderImgUrl } from '@fastgpt/global/common/file/image/constants';
 import { EditFolderFormType } from '@fastgpt/web/components/common/MyModal/EditFolderModal';
 import dynamic from 'next/dynamic';
-import { postCreateDataset, putDatasetById,createAdDatasets } from '@/web/core/dataset/api';
+import { postCreateDataset, putDatasetById, createAdDatasets } from '@/web/core/dataset/api';
 import { DatasetTypeEnum } from '@fastgpt/global/core/dataset/constants';
 import FolderSlideCard from '@/components/common/folder/SlideCard';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
@@ -93,48 +93,48 @@ const Dataset = () => {
               }}
             />
             {userInfo?.team?.permission.hasWritePer && (
-                <Button variant={'primary'} px="0" onClick={onOpenCreateModal}>
-                    <Flex alignItems={'center'} px={'20px'}>
-                      <AddIcon mr={2} />
-                      <Box>{t('common.Create New')}</Box>
-                    </Flex>
-                  </Button>
-            //   <MyMenu
-            //     offset={[-30, 5]}
-            //     width={120}
-            //     Button={
-            //       <Button variant={'primary'} px="0">
-            //         <Flex alignItems={'center'} px={'20px'}>
-            //           <AddIcon mr={2} />
-            //           <Box>{t('common.Create New')}</Box>
-            //         </Flex>
-            //       </Button>
-            //     }
-            //     menuList={[
-            //       {
-            //         children: [
-            //           {
-            //             label: (
-            //               <Flex>
-            //                 <MyIcon name={FolderIcon} w={'20px'} mr={1} />
-            //                 {t('Folder')}
-            //               </Flex>
-            //             ),
-            //             onClick: () => setEditFolderData({})
-            //           },
-            //           {
-            //             label: (
-            //               <Flex>
-            //                 <Image src={'/imgs/workflow/db.png'} alt={''} w={'20px'} mr={1} />
-            //                 {t('core.dataset.Dataset')}
-            //               </Flex>
-            //             ),
-            //             onClick: onOpenCreateModal
-            //           }
-            //         ]
-            //       }
-            //     ]}
-            //   />
+              <Button variant={'primary'} px="0" onClick={onOpenCreateModal}>
+                <Flex alignItems={'center'} px={'20px'}>
+                  <AddIcon mr={2} />
+                  <Box>{t('common.Create New')}</Box>
+                </Flex>
+              </Button>
+              //   <MyMenu
+              //     offset={[-30, 5]}
+              //     width={120}
+              //     Button={
+              //       <Button variant={'primary'} px="0">
+              //         <Flex alignItems={'center'} px={'20px'}>
+              //           <AddIcon mr={2} />
+              //           <Box>{t('common.Create New')}</Box>
+              //         </Flex>
+              //       </Button>
+              //     }
+              //     menuList={[
+              //       {
+              //         children: [
+              //           {
+              //             label: (
+              //               <Flex>
+              //                 <MyIcon name={FolderIcon} w={'20px'} mr={1} />
+              //                 {t('Folder')}
+              //               </Flex>
+              //             ),
+              //             onClick: () => setEditFolderData({})
+              //           },
+              //           {
+              //             label: (
+              //               <Flex>
+              //                 <Image src={'/imgs/workflow/db.png'} alt={''} w={'20px'} mr={1} />
+              //                 {t('core.dataset.Dataset')}
+              //               </Flex>
+              //             ),
+              //             onClick: onOpenCreateModal
+              //           }
+              //         ]
+              //       }
+              //     ]}
+              //   />
             )}
           </Flex>
           <Box flexGrow={1}>
@@ -219,15 +219,15 @@ const Dataset = () => {
                 kb_name: name,
                 user_id: userInfo?._id
               });
-            //   await createAdDatasets({
-            //     parentId: parentId || undefined,
-            //     name,
-            //     type: DatasetTypeEnum.folder,
-            //     avatar: FolderImgUrl,
-            //     intro: '',
-            //     kb_name: name,
-            //     user_id: userInfo?._id
-            //   });
+              //   await createAdDatasets({
+              //     parentId: parentId || undefined,
+              //     name,
+              //     type: DatasetTypeEnum.folder,
+              //     avatar: FolderImgUrl,
+              //     intro: '',
+              //     kb_name: name,
+              //     user_id: userInfo?._id
+              //   });
               refetchDatasets();
               refetchPaths();
             } catch (error) {

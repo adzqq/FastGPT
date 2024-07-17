@@ -68,7 +68,7 @@ const Header = ({}: {}) => {
       tip: t('dataset.Manual collection Tip'),
       canEmpty: false
     });
-    
+
   const {
     isOpen: isOpenFileSourceSelector,
     onOpen: onOpenFileSourceSelector,
@@ -190,22 +190,22 @@ const Header = ({}: {}) => {
       {datasetDetail.permission.hasWritePer && (
         <>
           {datasetDetail?.type === DatasetTypeEnum.dataset && (
-                 <Button
-                  _hover={{
-                    color: 'primary.500'
-                  }}
-                  fontSize={['sm', 'md']}
-                  onClick={() =>{
-                    router.replace({
-                        query: {
-                          ...router.query,
-                          currentTab: TabEnum.import,
-                          source: ImportDataSourceEnum.fileLocal
-                        }
-                      })
-                  }}
-                >
-                  {/* <Flex
+            <Button
+              _hover={{
+                color: 'primary.500'
+              }}
+              fontSize={['sm', 'md']}
+              onClick={() => {
+                router.replace({
+                  query: {
+                    ...router.query,
+                    currentTab: TabEnum.import,
+                    source: ImportDataSourceEnum.fileLocal
+                  }
+                });
+              }}
+            >
+              {/* <Flex
                     alignItems={'center'}
                     px={5}
                     py={2}
@@ -216,10 +216,10 @@ const Header = ({}: {}) => {
                     color={'white'}
                     h={['28px', '35px']}
                   > */}
-                    <MyIcon name={'common/importLight'} mr={2} w={'14px'} />
-                    <Box>{t('dataset.collections.Create And Import')}</Box>
-                  {/* </Flex> */}
-                </Button>
+              <MyIcon name={'common/importLight'} mr={2} w={'14px'} />
+              <Box>{t('dataset.collections.Create And Import')}</Box>
+              {/* </Flex> */}
+            </Button>
             // <MyMenu
             //   offset={[0, 5]}
             //   Button={
@@ -302,7 +302,6 @@ const Header = ({}: {}) => {
             //     }
             //   ]}
             // />
-
           )}
           {datasetDetail?.type === DatasetTypeEnum.websiteDataset && (
             <>

@@ -58,7 +58,7 @@ export type DatasetCollectionSchemaType = {
   tags?: string[];
 
   fileId?: string; // local file id
-  extraFileId?: string; //爱动文件id
+  adFileId?: string; //爱动文件id
   rawLink?: string; // link url
   externalFileId?: string; //external file id
 
@@ -130,7 +130,7 @@ export type DatasetSimpleItemType = {
   avatar: string;
   name: string;
   vectorModel: VectorModelItemType;
-  adId?: string;
+  kb_id?: string;
 };
 
 //添加userId字段
@@ -145,7 +145,7 @@ export type DatasetListItemType = {
   vectorModel: VectorModelItemType;
   defaultPermission: PermissionValueType;
   userId?: string;
-  adId?: string;
+  kb_id?: string;
 };
 
 export type DatasetItemType = Omit<DatasetSchemaType, 'vectorModel' | 'agentModel'> & {

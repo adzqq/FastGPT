@@ -214,7 +214,7 @@ function List() {
                       pathname: '/dataset/detail',
                       query: {
                         datasetId: dataset._id,
-                        kb_id: dataset.adId
+                        kb_id: dataset.kb_id
                       }
                     });
                   }
@@ -306,7 +306,7 @@ function List() {
                                     icon: 'delete',
                                     label: t('common.Delete'),
                                     type: 'danger' as 'danger',
-                                    onClick: () => onClickDeleteDataset(dataset._id, dataset.adId)
+                                    onClick: () => onClickDeleteDataset(dataset._id, dataset.kb_id)
                                   }
                                 ]
                               }

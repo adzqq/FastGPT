@@ -15,6 +15,9 @@ import { MongoChat } from '@fastgpt/service/core/chat/chatSchema';
 import { ChatErrEnum } from '@fastgpt/global/common/error/code/chat';
 import { ChatRoleEnum } from '@fastgpt/global/core/chat/constants';
 import { getAppLatestVersion } from '@fastgpt/service/core/app/controller';
+import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
+
+import { MongoOutLink } from '@fastgpt/service/support/outLink/schema';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -31,7 +34,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       MongoChat.findOne({ appId, chatId, shareId }).lean(),
       MongoApp.findById(appId).lean()
     ]);
-
     if (!app) {
       throw new Error(AppErrEnum.unExist);
     }
@@ -40,6 +42,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (chat && chat.outLinkUid !== uid) {
       throw new Error(ChatErrEnum.unAuthChat);
     }
+
+    const outlinkData = await MongoOutLink.findOne({ appId, shareId }).lean();
+    const userId = outlinkData.userId;
+
+    console.log('爱动outlinkData');
 
     const [{ history }, { nodes }] = await Promise.all([
       getChatItems({
@@ -62,6 +69,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
     });
 
+    let kb_ids = [];
+    const node = app.modules.find((x) => x.flowNodeType == FlowNodeTypeEnum.datasetSearchNode);
+    if (node) {
+      const datasetInfos = node?.inputs.find((x) => x.key === 'datasets')?.value;
+      if (datasetInfos) {
+        kb_ids = datasetInfos.map((x) => x.kb_id);
+      }
+    }
     jsonRes<InitChatResponse>(res, {
       data: {
         chatId,
@@ -71,6 +86,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         userAvatar: tmb?.userId?.avatar,
         variables: chat?.variables || {},
         history,
+        kb_ids,
+        userId,
         app: {
           chatConfig: getAppChatConfig({
             chatConfig: app.chatConfig,

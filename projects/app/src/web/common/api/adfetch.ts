@@ -114,8 +114,6 @@ export const adStreamFetch = ({
       const variables = data?.variables || {};
       variables.cTime = dayjs().format('YYYY-MM-DD HH:mm:ss dddd');
 
-      console.log('爱动inputdata', data);
-
       const postData = {
         user_id: data?.user_id,
         kb_ids: data?.kb_ids,

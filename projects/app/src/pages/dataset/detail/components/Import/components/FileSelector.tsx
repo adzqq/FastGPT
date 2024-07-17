@@ -16,9 +16,7 @@ import { ImportSourceItemType } from '@/web/core/dataset/type';
 import { useI18n } from '@/web/context/I18n';
 import { useUserStore } from '@/web/support/user/useUserStore';
 
-import { getAdDatasetsDocs} from '@/web/core/dataset/api';
-
-
+import { getAdDatasetsDocs } from '@/web/core/dataset/api';
 
 export type SelectFileItemType = {
   fileId: string;
@@ -39,16 +37,14 @@ const FileSelector = ({
 }: {
   fileType: string;
   selectFiles: ImportSourceItemType[];
-  datasetId:string,
-  kb_id:string,
+  datasetId: string;
+  kb_id: string;
   setSelectFiles: React.Dispatch<React.SetStateAction<ImportSourceItemType[]>>;
   onStartSelect: () => void;
   onFinishSelect: () => void;
-  isFileUploading:boolean
+  isFileUploading: boolean;
 } & FlexProps) => {
-
-
-  console.log("爱动FileSelector",datasetId+"==========="+kb_id)  
+  console.log('爱动FileSelector', datasetId + '===========' + kb_id);
   const { t } = useTranslation();
   const { fileT } = useI18n();
 
@@ -66,7 +62,6 @@ const FileSelector = ({
     maxCount
   });
   const [isDragging, setIsDragging] = useState(false);
-
 
   const isMaxSelected = useMemo(
     () => selectFiles.length >= maxCount,
@@ -104,7 +99,7 @@ const FileSelector = ({
           return results;
         });
         try {
-           //上传文件之前判断是否有文件名重复 
+          //上传文件之前判断是否有文件名重复
           // upload file
           await Promise.all(
             files.map(async ({ fileId, file }) => {
@@ -127,36 +122,35 @@ const FileSelector = ({
               //上传到爱动服务器
               const uploadInfo = await uploadFile2AidongDB({
                 kb_id,
-                user_id:userInfo._id,
+                user_id: userInfo._id,
                 file,
                 percentListen: (e) => {
-                    setSelectFiles((state) =>
-                      state.map((item) =>
-                        item.id === fileId
-                          ? {
-                              ...item,
-                              uploadedFileRate: e
-                            }
-                          : item
-                      )
-                    );
-                  }
-            });
-              if(uploadInfo.file&&Object.values(uploadInfo.file).length>0){
-                    const serverFileId = Object.values(uploadInfo.file)[0];
-                    setSelectFiles((state) =>
-                        state.map((item) =>
-                        item.id === fileId
-                            ? {
-                                ...item,
-                                dbFileId: serverFileId,
-                                isUploading: false
-                            }
-                            : item
-                        )
-                    );
+                  setSelectFiles((state) =>
+                    state.map((item) =>
+                      item.id === fileId
+                        ? {
+                            ...item,
+                            uploadedFileRate: e
+                          }
+                        : item
+                    )
+                  );
                 }
-              
+              });
+              if (uploadInfo.file && Object.values(uploadInfo.file).length > 0) {
+                const serverFileId = Object.values(uploadInfo.file)[0];
+                setSelectFiles((state) =>
+                  state.map((item) =>
+                    item.id === fileId
+                      ? {
+                          ...item,
+                          dbFileId: serverFileId,
+                          isUploading: false
+                        }
+                      : item
+                  )
+                );
+              }
             })
           );
         } catch (error) {
@@ -167,36 +161,35 @@ const FileSelector = ({
     }
   });
 
-  const hasDuplicates =(selectFiles:any,files:any,serverNames:any)=> {
-    const selectFileNames = selectFiles.map((item:any) => item.file.name);
-    const fileNames = files.map((item:any) => item.file.name);
-    const tempFileNames = selectFileNames.concat(fileNames)
-    const finalNames = tempFileNames.concat(serverNames)
+  const hasDuplicates = (selectFiles: any, files: any, serverNames: any) => {
+    const selectFileNames = selectFiles.map((item: any) => item.file.name);
+    const fileNames = files.map((item: any) => item.file.name);
+    const tempFileNames = selectFileNames.concat(fileNames);
+    const finalNames = tempFileNames.concat(serverNames);
     const uniqueNames = new Set(finalNames);
     return finalNames.length !== uniqueNames.size;
   };
 
   const selectFileCallback = useCallback(
     async (files: SelectFileItemType[]) => {
-
-    const result = await getAdDatasetsDocs(userInfo._id,kb_id)
-    if(result&&result.length>0){
-        let serverFilesNames = result.map((item:any) => item[1]);
-        if(hasDuplicates(selectFiles,files,serverFilesNames)){
-            toast({
-                status: 'warning',
-                title: "知识库中所有的文件名都不可重复"
-              });
-            return;
-          }
-    }
-    // console.log("爱动getAdDatasetsDocs",result)
-        //新增爱动判断，文件名不可以重复
-      if(hasDuplicates(selectFiles,files,[])){
-        toast({
+      const result = await getAdDatasetsDocs(userInfo._id, kb_id);
+      if (result && result.length > 0) {
+        let serverFilesNames = result.map((item: any) => item[1]);
+        if (hasDuplicates(selectFiles, files, serverFilesNames)) {
+          toast({
             status: 'warning',
-            title: "文件名不可以重复"
+            title: '知识库中所有的文件名都不可重复'
           });
+          return;
+        }
+      }
+      // console.log("爱动getAdDatasetsDocs",result)
+      //新增爱动判断，文件名不可以重复
+      if (hasDuplicates(selectFiles, files, [])) {
+        toast({
+          status: 'warning',
+          title: '文件名不可以重复'
+        });
         return;
       }
       if (selectFiles.length + files.length > maxCount) {
@@ -207,9 +200,9 @@ const FileSelector = ({
         });
       }
       // size check
-    //   if (!maxSize) {
-    //     return onSelectFile(files);
-    //   }
+      //   if (!maxSize) {
+      //     return onSelectFile(files);
+      //   }
       const filterFiles = files.filter((item) => item.file.size <= maxSize);
 
       if (filterFiles.length < files.length) {
@@ -218,7 +211,7 @@ const FileSelector = ({
           title: fileT('Some file size exceeds limit', { maxSize: formatFileSize(maxSize) })
         });
       }
-      
+
       setSelectFiles((state) => {
         const formatFiles = filterFiles.map<ImportSourceItemType>((selectFile) => {
           const { fileId, file } = selectFile;
@@ -238,7 +231,7 @@ const FileSelector = ({
         return results;
       });
 
-    //   return onSelectFile(filterFiles);
+      //   return onSelectFile(filterFiles);
     },
     [fileT, maxCount, maxSize, onSelectFile, selectFiles.length, toast]
   );

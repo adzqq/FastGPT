@@ -131,6 +131,7 @@ async function handler(req: NextApiRequest) {
           status: 1,
           updateTime: 1,
           fileId: 1,
+          adFileId: 1,
           rawLink: 1,
           dataAmount: {
             $ifNull: [{ $arrayElemAt: ['$dataCount.count', 0] }, 0]

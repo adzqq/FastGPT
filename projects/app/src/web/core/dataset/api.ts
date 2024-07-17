@@ -95,11 +95,9 @@ export const getDatasetCollections = async (data: GetDatasetCollectionsProps) =>
 
   if (aidongResult && aidongResult.data && result.data.length > 0) {
     result.data.forEach((item) => {
-      const findItem = aidongResult.data.find((x) => x.file_name === item.name);
+      const findItem = aidongResult.data.find((x) => x.file_id === item.adFileId);
       if (findItem) {
-        console.log('爱动findItem', findItem);
         item.trainingAmount = findItem.status == 'green' ? 0 : 5;
-        item.adFileId = findItem.file_id;
       }
     });
   }

@@ -33,6 +33,8 @@ export type InitChatResponse = {
   title: string;
   variables: Record<string, any>;
   history: ChatItemType[];
+  kb_ids?: string[];
+  userId?: string;
   app: {
     chatConfig?: AppChatConfigType;
     chatModels?: string[];

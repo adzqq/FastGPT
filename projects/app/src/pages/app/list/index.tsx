@@ -125,7 +125,7 @@ const MyApps = () => {
                 {
                   label: appT('type.All'),
                   value: 'ALL'
-                },
+                }
                 // {
                 //   label: appT('type.Simple bot'),
                 //   value: AppTypeEnum.simple
@@ -157,11 +157,16 @@ const MyApps = () => {
 
             {userInfo?.team.permission.hasWritePer &&
               folderDetail?.type !== AppTypeEnum.httpPlugin && (
-                                
-                <Button variant={'primary'} leftIcon={<AddIcon />} onClick={()=>{setCreateAppType(AppTypeEnum.simple)}}>
-                    <Box>{t('common.Create New')}</Box>
+                <Button
+                  variant={'primary'}
+                  leftIcon={<AddIcon />}
+                  onClick={() => {
+                    setCreateAppType(AppTypeEnum.simple);
+                  }}
+                >
+                  <Box>{t('common.Create New')}</Box>
                 </Button>
-                  
+
                 // <MyMenu
                 //   iconSize="1.5rem"
                 //   Button={

@@ -30,7 +30,7 @@ export async function createOneCollection({
   qaPrompt,
 
   fileId,
-  extraFileId,
+  adFileId,
   rawLink,
 
   externalFileId,
@@ -47,9 +47,6 @@ export async function createOneCollection({
   [key: string]: any;
   session?: ClientSession;
 }) {
-
-  
-    
   const [collection] = await MongoDatasetCollection.create(
     [
       {
@@ -67,7 +64,7 @@ export async function createOneCollection({
         qaPrompt,
 
         fileId,
-        extraFileId,
+        adFileId,
         rawLink,
         externalFileId,
         externalFileUrl,

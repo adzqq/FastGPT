@@ -82,19 +82,7 @@ const Chat = ({
         (x) => x.flowNodeType == FlowNodeTypeEnum.datasetSearchNode
       );
       const datasetInfos = node?.inputs.find((x) => x.key === 'datasets')?.value;
-      const datasetIds = datasetInfos.map((x) => x.datasetId);
-      const kb_ids = [];
-      const fastGptres = await getAllDataset();
-      const adres = await getAdDatasets(userInfo?._id);
-      const filterRes = fastGptres.filter((item) => datasetIds.includes(item._id));
-      filterRes.forEach((item) => {
-        const result = adres.data.find((adx) => adx.kb_name === item.name);
-        if (result) {
-          item.adId = result.kb_id;
-          kb_ids.push(item.adId);
-        }
-      });
-
+      const kb_ids = datasetInfos.map((x) => x.kb_id);
       const { responseText, responseData } = await adStreamFetch({
         data: {
           question: prompts?.find((x) => x.role === 'user')?.content,

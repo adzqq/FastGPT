@@ -4,7 +4,7 @@ import { POST } from '@fastgpt/service/common/api/plusRequest';
 import { FastGPTProUrl } from '@fastgpt/service/common/system/constants';
 
 export function createUsage(data: CreateUsageProps) {
-    console.log('爱动aidongcreateUsage', FastGPTProUrl);
+  console.log('爱动aidongcreateUsage', FastGPTProUrl);
   if (!FastGPTProUrl) return;
   if (data.totalPoints === 0) {
     addLog.info('0 totalPoints', data);

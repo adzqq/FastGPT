@@ -20,7 +20,7 @@ export type DatasetCollectionsListItemType = {
   fileId?: string;
   rawLink?: string;
   permission: DatasetPermission;
-  adFileId?:string
+  adFileId?: string;
 };
 
 /* ================= data ===================== */

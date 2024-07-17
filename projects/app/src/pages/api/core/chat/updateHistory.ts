@@ -24,9 +24,8 @@ async function handler(req: ApiRequestProps<UpdateHistoryProps>, res: NextApiRes
       ...(customTitle !== undefined && { customTitle }),
       ...(top !== undefined && { top })
     },
-    {upsert: true}
+    { upsert: true }
   );
-  console.log("爱动updateHistory",result)
   jsonRes(res);
 }
 

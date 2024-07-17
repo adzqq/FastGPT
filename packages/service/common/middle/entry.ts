@@ -17,9 +17,6 @@ export const NextEntry = ({ beforeCallback = [] }: { beforeCallback?: Promise<an
 
       try {
         await Promise.all([withNextCors(req, res), ...beforeCallback]);
-
-        console.log('爱动NextEntry', args);
-
         let response = null;
         for (const handler of args) {
           response = await handler(req, res);

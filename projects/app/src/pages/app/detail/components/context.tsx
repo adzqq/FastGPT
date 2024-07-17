@@ -127,7 +127,7 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
         router.replace('/app/list');
       },
       onSuccess(res) {
-        console.log("爱动setAppDetail",res)
+        console.log('爱动setAppDetail', res);
         setAppDetail(res);
       }
     }

@@ -46,20 +46,10 @@ export const useChatTest = ({
       //根据appId 获取知识库id
 
       const node = nodes.find((x) => x.flowNodeType == FlowNodeTypeEnum.datasetSearchNode);
-      const kb_ids = [];
+      let kb_ids = [];
       if (node) {
         const datasetInfos = node?.inputs.find((x) => x.key === 'datasets')?.value;
-        const datasetIds = datasetInfos.map((x) => x.datasetId);
-        const fastGptres = await getAllDataset();
-        const adres = await getAdDatasets(userInfo?._id);
-        const filterRes = fastGptres.filter((item) => datasetIds.includes(item._id));
-        filterRes.forEach((item) => {
-          const result = adres.data.find((adx) => adx.kb_name === item.name);
-          if (result) {
-            item.adId = result.kb_id;
-            kb_ids.push(item.adId);
-          }
-        });
+        kb_ids = datasetInfos.map((x) => x.kb_id);
       }
       const prompt = chatList[chatList.length - 2].value;
       console.log('爱动prompt', prompt);

@@ -114,8 +114,8 @@ const CollectionPageContextProvider = ({ children }: { children: ReactNode }) =>
       parentId,
       searchText,
       //添加爱动参数
-      kb_id:router.query.kb_id,
-      user_id:userInfo?._id
+      kb_id: router.query.kb_id,
+      user_id: userInfo?._id
     },
     defaultRequest: false
   });

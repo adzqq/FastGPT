@@ -13,12 +13,16 @@ async function handler(req: NextApiRequest) {
   const {
     parentId,
     name,
+    kb_id,
+    user_id,
     type = DatasetTypeEnum.dataset,
     avatar,
     vectorModel = global.vectorModels[0].model,
     agentModel = getDatasetModel().model,
     defaultPermission = NullPermission
   } = req.body as CreateDatasetParams;
+
+  console.log('爱动createDataset', kb_id);
 
   // auth
   const { teamId, tmbId } = await authUserPer({
@@ -42,6 +46,7 @@ async function handler(req: NextApiRequest) {
     name,
     teamId,
     tmbId,
+    kb_id,
     vectorModel,
     agentModel,
     avatar,

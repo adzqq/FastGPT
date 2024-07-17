@@ -32,9 +32,9 @@ export enum TabEnum {
   info = 'info',
   import = 'import'
 }
-type Props = { datasetId: string; currentTab: TabEnum,kb_id:string };
+type Props = { datasetId: string; currentTab: TabEnum; kb_id: string };
 
-const Detail = ({ datasetId, currentTab,kb_id }: Props) => {
+const Detail = ({ datasetId, currentTab, kb_id }: Props) => {
   const { t } = useTranslation();
   const { toast } = useToast();
   const router = useRouter();
@@ -68,7 +68,7 @@ const Detail = ({ datasetId, currentTab,kb_id }: Props) => {
               {currentTab === TabEnum.dataCard && <DataCard />}
               {currentTab === TabEnum.test && <Test datasetId={datasetId} />}
               {currentTab === TabEnum.info && <Info datasetId={datasetId} />}
-              {currentTab === TabEnum.import && <Import datasetId={datasetId} kb_id={kb_id}/>}
+              {currentTab === TabEnum.import && <Import datasetId={datasetId} kb_id={kb_id} />}
             </Box>
           )}
         </MyBox>
@@ -88,11 +88,16 @@ export async function getServerSideProps(context: any) {
   const currentTab = context?.query?.currentTab || TabEnum.collectionCard;
   const datasetId = context?.query?.datasetId;
   //日志打印在服务端
-  console.log('爱动getServerSideProps',context.query)
+  console.log('爱动getServerSideProps', context.query);
 
-  const kb_id = context?.query?.kb_id??'';
+  const kb_id = context?.query?.kb_id ?? '';
 
   return {
-    props: { currentTab, datasetId,kb_id, ...(await serviceSideProps(context, ['dataset', 'file'])) }
+    props: {
+      currentTab,
+      datasetId,
+      kb_id,
+      ...(await serviceSideProps(context, ['dataset', 'file']))
+    }
   };
 }

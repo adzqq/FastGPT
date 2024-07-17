@@ -109,30 +109,9 @@ const OutLink = ({ appName, appIntro, appAvatar }: Props) => {
         '*'
       );
 
-      //根据shareId获取userId
-      const outlinkList = await findShareChat({ appId, type: PublishChannelEnum.share, shareId });
-      let userId = '';
-      if (outlinkList && outlinkList.length > 0) {
-        userId = outlinkList[0].userId;
-      }
+      const userId = chatData.userId;
 
-      //根据appId 获取知识库id
-      const result = await getAppDetailById(appId);
-      console.log('爱动result', result);
-      const node = result.modules.find((x) => x.flowNodeType == FlowNodeTypeEnum.datasetSearchNode);
-      const datasetInfos = node?.inputs.find((x) => x.key === 'datasets')?.value;
-      const datasetIds = datasetInfos.map((x) => x.datasetId);
-      const kb_ids = [];
-      const fastGptres = await getAllDataset();
-      const adres = await getAdDatasets(userId);
-      const filterRes = fastGptres.filter((item) => datasetIds.includes(item._id));
-      filterRes.forEach((item) => {
-        const result = adres.data.find((adx) => adx.kb_name === item.name);
-        if (result) {
-          item.adId = result.kb_id;
-          kb_ids.push(item.adId);
-        }
-      });
+      const kb_ids = chatData.kb_ids;
 
       const { responseText, responseData } = await adStreamFetch({
         data: {

@@ -86,7 +86,7 @@ type AuthResponseType = {
 };
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  console.log('爱动的adcompletions执行了  req.body', req.body);
+  console.log('爱动的adcompletions执行了  req.body');
 
   res.on('close', () => {
     res.end();
@@ -184,15 +184,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       })();
 
     //打印这些字段 teamId, tmbId, user, app, responseDetail, authType, apikey, canWrite, outLinkUserId
-    console.log('爱动打印关键字段teamId', teamId);
-    console.log('爱动打印关键字段tmbId', tmbId);
-    console.log('爱动打印关键字段user', user);
-    console.log('爱动打印关键字段app', app);
-    console.log('爱动打印关键字段responseDetail', responseDetail);
-    console.log('爱动打印关键字段authType', authType);
-    console.log('爱动打印关键字段apikey', apikey);
-    console.log('爱动打印关键字段canWrite', canWrite);
-    console.log('爱动打印关键字段outLinkUserId', outLinkUserId);
+    // console.log('爱动打印关键字段teamId', teamId);
+    // console.log('爱动打印关键字段tmbId', tmbId);
+    // console.log('爱动打印关键字段user', user);
+    // console.log('爱动打印关键字段app', app);
+    // console.log('爱动打印关键字段responseDetail', responseDetail);
+    // console.log('爱动打印关键字段authType', authType);
+    // console.log('爱动打印关键字段apikey', apikey);
+    // console.log('爱动打印关键字段canWrite', canWrite);
+    // console.log('爱动打印关键字段outLinkUserId', outLinkUserId);
     // 1. get and concat history; 2. get app workflow
     const limit = getMaxHistoryLimitFromNodes(app.modules);
     const [{ history }, { nodes, edges, chatConfig }] = await Promise.all([

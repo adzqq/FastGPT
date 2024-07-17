@@ -129,7 +129,7 @@ const CreateModal = ({ onClose, type }: { type: CreateAppType; onClose: () => vo
     errorToast: t('common.Create Failed')
   });
 
-  console.log("爱动typeData.templates",typeData.templates)
+  console.log('爱动typeData.templates', typeData.templates);
 
   return (
     <MyModal

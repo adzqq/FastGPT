@@ -1,4 +1,4 @@
-import { postUploadImg, postUploadFiles,postAidongUploadFiles } from '@/web/common/file/api';
+import { postUploadImg, postUploadFiles, postAidongUploadFiles } from '@/web/common/file/api';
 import { UploadImgProps } from '@fastgpt/global/common/file/api';
 import { BucketNameEnum } from '@fastgpt/global/common/file/constants';
 import { preUploadImgProps } from '@fastgpt/global/common/file/api';
@@ -30,29 +30,27 @@ export const uploadFile2DB = ({
   });
 };
 
-
 export const uploadFile2AidongDB = ({
-    kb_id,
-    user_id,
-    file,
-    percentListen
-  }: {
-    file: File;
-    kb_id:string,
-    user_id:string,
-    percentListen?: (percent: number) => void;
-  }) => {
-    const form = new FormData();
-    form.append('kb_id', kb_id);
-    form.append('user_id', 'user'+user_id);
-    form.append('files', file, file.name);
-    return postAidongUploadFiles(form, (e) => {
-      if (!e.total) return;
-         const percent = Math.round((e.loaded / e.total) * 100);
-        percentListen && percentListen(percent);
-    });
-  };
-
+  kb_id,
+  user_id,
+  file,
+  percentListen
+}: {
+  file: File;
+  kb_id: string;
+  user_id: string;
+  percentListen?: (percent: number) => void;
+}) => {
+  const form = new FormData();
+  form.append('kb_id', kb_id);
+  form.append('user_id', 'user' + user_id);
+  form.append('files', file, file.name);
+  return postAidongUploadFiles(form, (e) => {
+    if (!e.total) return;
+    const percent = Math.round((e.loaded / e.total) * 100);
+    percentListen && percentListen(percent);
+  });
+};
 
 export const getUploadBase64ImgController = (
   props: CompressImgProps & UploadImgProps,

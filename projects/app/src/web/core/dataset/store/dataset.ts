@@ -23,20 +23,20 @@ export const useDatasetStore = create<State>()(
         allDatasets: [],
         async loadAllDatasets() {
           const res = await getAllDataset();
-          //获取账号信息
-          const accountInfo = await getTokenLogin();
-          //用户id
-          const userId = accountInfo._id;
-          //获取知识库列表
-          const adres = await getAdDatasets(userId);
-          if (adres.status == 'success') {
-            res.forEach((item, index) => {
-              const result = adres.data.find((adx) => adx.kb_name === item.name);
-              if (result) {
-                item.adId = result.kb_id;
-              }
-            });
-          }
+          //   //获取账号信息
+          //   const accountInfo = await getTokenLogin();
+          //   //用户id
+          //   const userId = accountInfo._id;
+          //   //获取知识库列表
+          //   const adres = await getAdDatasets(userId);
+          //   if (adres.status == 'success') {
+          //     res.forEach((item, index) => {
+          //       const result = adres.data.find((adx) => adx.kb_name === item.name);
+          //       if (result) {
+          //         item.kb_id = result.kb_id;
+          //       }
+          //     });
+          //   }
 
           set((state) => {
             state.allDatasets = res;
@@ -47,20 +47,20 @@ export const useDatasetStore = create<State>()(
         async loadMyDatasets(parentId = '') {
           console.log('爱动loadMyDatasets');
           const res = await getDatasets({ parentId });
-          //获取账号信息
-          const accountInfo = await getTokenLogin();
-          //用户id
-          const userId = accountInfo._id;
-          //获取知识库列表
-          const adres = await getAdDatasets(userId);
-          if (adres.status == 'success') {
-            res.forEach((item, index) => {
-              const result = adres.data.find((adx) => adx.kb_name === item.name);
-              if (result) {
-                item.adId = result.kb_id;
-              }
-            });
-          }
+          //   //获取账号信息
+          //   const accountInfo = await getTokenLogin();
+          //   //用户id
+          //   const userId = accountInfo._id;
+          //   //获取知识库列表
+          //   const adres = await getAdDatasets(userId);
+          //   if (adres.status == 'success') {
+          //     res.forEach((item, index) => {
+          //       const result = adres.data.find((adx) => adx.kb_name === item.name);
+          //       if (result) {
+          //         item.kb_id = result.kb_id;
+          //       }
+          //     });
+          //   }
           set((state) => {
             state.myDatasets = res;
           });

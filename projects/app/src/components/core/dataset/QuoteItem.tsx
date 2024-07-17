@@ -197,7 +197,7 @@ const QuoteItem = ({
             ))}
         </Flex>
 
-        <Box flex={'1 0 0'} >
+        <Box flex={'1 0 0'}>
           <Box color={'black'}>{quoteItem.q}</Box>
           {/* <Box color={'myGray.600'}>{quoteItem.a}</Box> */}
           <Markdown source={quoteItem.a} showAnimation={true} />

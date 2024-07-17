@@ -76,6 +76,11 @@ const DatasetCollectionSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'dataset.files'
   },
+
+  adFileId: {
+    type: String
+  },
+
   // web link collection
   rawLink: String,
   // external collection

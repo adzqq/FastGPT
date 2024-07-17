@@ -64,6 +64,7 @@ async function handler(req: NextApiRequest): Promise<DatasetSimpleItemType[]> {
     _id: item._id,
     avatar: item.avatar,
     name: item.name,
+    kb_id: item.kb_id,
     vectorModel: getVectorModel(item.vectorModel)
   }));
 }

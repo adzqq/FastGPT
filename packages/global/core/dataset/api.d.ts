@@ -38,7 +38,7 @@ export type CreateDatasetCollectionParams = DatasetCollectionChunkMetadataType &
   tags?: string[];
 
   fileId?: string;
-  extraFileId?: string;
+  adFileId?: string;
   rawLink?: string;
   externalFileId?: string;
 
@@ -60,7 +60,7 @@ export type LinkCreateDatasetCollectionParams = ApiCreateDatasetCollectionParams
 };
 export type FileIdCreateDatasetCollectionParams = ApiCreateDatasetCollectionParams & {
   fileId: string;
-  extraFileId?: string;
+  adFileId?: string;
 };
 export type FileCreateDatasetCollectionParams = ApiCreateDatasetCollectionParams & {
   fileMetadata?: Record<string, any>;

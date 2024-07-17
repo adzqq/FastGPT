@@ -1,7 +1,7 @@
 import { VectorModelItemType } from '../ai/model.d';
 import { NodeInputKeyEnum } from './constants';
 
-export type SelectedDatasetType = { datasetId: string }[];
+export type SelectedDatasetType = { datasetId: string; kb_id: string | undefined }[];
 
 export type HttpBodyType<T = Record<string, any>> = {
   [NodeInputKeyEnum.addInputParam]: Record<string, any>;

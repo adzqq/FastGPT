@@ -73,6 +73,7 @@ async function handler(req: NextApiRequest) {
       name: item.name,
       intro: item.intro,
       type: item.type,
+      kb_id: item.kb_id,
       permission: item.permission,
       vectorModel: getVectorModel(item.vectorModel),
       defaultPermission: item.defaultPermission ?? DatasetDefaultPermissionVal

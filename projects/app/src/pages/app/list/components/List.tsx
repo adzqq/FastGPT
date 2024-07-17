@@ -266,7 +266,7 @@ const ListItem = () => {
                                       });
                                     }
                                   }
-                                },
+                                }
                                 // ...(folderDetail?.type === AppTypeEnum.httpPlugin
                                 //   ? []
                                 //   : [

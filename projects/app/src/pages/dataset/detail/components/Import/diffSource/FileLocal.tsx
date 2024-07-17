@@ -158,7 +158,7 @@ const SelectFile = React.memo(function SelectFile({
                   qaPrompt: '',
                   name: file?.name,
                   fileId: uploadFileId,
-                  extraFileId: serverFileId
+                  adFileId: serverFileId
                 };
                 await postCreateDatasetFileCollection(commonParams);
               }

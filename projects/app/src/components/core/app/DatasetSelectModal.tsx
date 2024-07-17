@@ -151,7 +151,10 @@ export const DatasetSelectModal = ({
                               title: t('dataset.Select Dataset Tips')
                             });
                           }
-                          setSelectedDatasets((state) => [...state, { datasetId: item._id }]);
+                          setSelectedDatasets((state) => [
+                            ...state,
+                            { datasetId: item._id, kb_id: item.kb_id }
+                          ]);
                         }
                       }}
                     >

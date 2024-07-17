@@ -22,8 +22,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
     const { teamId, tmbId } = await authCert({ req, authToken: true });
 
-    console.log('teamId=====================================',teamId)
-    console.log('tmbId=====================================',tmbId)
+    console.log('teamId=====================================', teamId);
+    console.log('tmbId=====================================', tmbId);
 
     if (!bucketName) {
       throw new Error('bucketName is empty');

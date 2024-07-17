@@ -76,8 +76,6 @@ const EditForm = ({
 
   const { appDetail } = useContextSelector(AppContext, (v) => v);
 
-  console.log('爱动appForm', appForm);
-
   const { allDatasets } = useDatasetStore();
   const { llmModelList } = useSystemStore();
   const [, startTst] = useTransition();
@@ -242,7 +240,7 @@ const EditForm = ({
                       pathname: '/dataset/detail',
                       query: {
                         datasetId: item._id,
-                        kb_id:item.adId
+                        kb_id: item.kb_id
                       }
                     })
                   }
@@ -429,6 +427,7 @@ const EditForm = ({
           isOpen={isOpenDatasetSelect}
           defaultSelectedDatasets={selectDatasets.map((item) => ({
             datasetId: item._id,
+            kb_id: item.kb_id,
             vectorModel: item.vectorModel
           }))}
           onClose={onCloseKbSelect}

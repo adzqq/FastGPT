@@ -85,6 +85,7 @@ const CreateModal = ({ onClose, parentId }: { onClose: () => void; parentId?: st
       data.kb_name = data.name;
       const result = await createAdDatasets(data);
       if (result && result.status == 'success') {
+        data.kb_id = result.data.kb_id;
         const id = await postCreateDataset(data);
         return { id, kb_id: result.data.kb_id };
       }

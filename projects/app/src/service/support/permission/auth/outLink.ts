@@ -35,12 +35,10 @@ export const authOutLink = async ({
     return Promise.reject(OutLinkErrEnum.linkUnInvalid);
   }
   const result = await authOutLinkValid({ shareId });
-
   const { uid } = await authOutLinkInit({
     outLinkUid,
     tokenUrl: result.shareChat.limit?.hookUrl
   });
-
   return {
     ...result,
     uid
