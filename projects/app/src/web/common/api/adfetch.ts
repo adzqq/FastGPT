@@ -67,7 +67,7 @@ export const adStreamFetch = ({
     const failedFinish = (err?: any) => {
       finished = true;
       reject({
-        message: getErrText(err, errMsg ?? '响应过程出现异常~'),
+        message: getErrText(err, errMsg ?? '服务器开小差了，请稍后再试~'),
         responseText
       });
     };
