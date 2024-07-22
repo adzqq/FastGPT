@@ -34,6 +34,9 @@ import { DatasetPageContext } from '@/web/core/dataset/context/datasetPageContex
 
 const FileSourceSelector = dynamic(() => import('../Import/components/FileSourceSelector'));
 
+//动态引入ChooseTagModal
+const ChooseTagModal = dynamic(() => import('../ChooseTagModal'));
+
 const Header = ({}: {}) => {
   const { t } = useTranslation();
   const theme = useTheme();
@@ -74,6 +77,14 @@ const Header = ({}: {}) => {
     onOpen: onOpenFileSourceSelector,
     onClose: onCloseFileSourceSelector
   } = useDisclosure();
+
+  //标签弹窗
+  const {
+    isOpen: isOpenTagModal,
+    onOpen: onOpenTagModal,
+    onClose: onCloseTagModal
+  } = useDisclosure();
+
   const { mutate: onCreateCollection } = useRequest({
     mutationFn: async ({
       name,
@@ -196,6 +207,7 @@ const Header = ({}: {}) => {
               }}
               fontSize={['sm', 'md']}
               onClick={() => {
+                // onOpenTagModal();
                 router.replace({
                   query: {
                     ...router.query,
@@ -428,6 +440,7 @@ const Header = ({}: {}) => {
       )}
       <EditCreateVirtualFileModal iconSrc={'modal/manualDataset'} closeBtnText={''} />
       {isOpenFileSourceSelector && <FileSourceSelector onClose={onCloseFileSourceSelector} />}
+      {isOpenTagModal && <ChooseTagModal onClose={onCloseTagModal} />}
     </Flex>
   );
 };
