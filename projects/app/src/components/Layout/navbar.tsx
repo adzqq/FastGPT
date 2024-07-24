@@ -48,6 +48,13 @@ const Navbar = ({ unread }: { unread: number }) => {
         activeLink: ['/dataset/list', '/dataset/detail']
       },
       {
+        label: t('navbar.Config'),
+        icon: 'core/config/configLight',
+        activeIcon: 'core/config/configFill',
+        link: `/config`,
+        activeLink: ['/config']
+      },
+      {
         label: t('navbar.Account'),
         icon: 'support/user/userLight',
         activeIcon: 'support/user/userFill',

@@ -208,20 +208,14 @@ const Header = ({}: {}) => {
                 }}
                 fontSize={['sm', 'md']}
                 onClick={() => {
-                  // onOpenTagModal();
-                  router.replace({
-                    query: {
-                      ...router.query,
-                      currentTab: TabEnum.import,
-                      source: ImportDataSourceEnum.fileLocal
-                    }
-                  });
+                  onOpenTagModal();
                 }}
               >
                 <MyIcon name={'common/importLight'} mr={2} w={'14px'} />
-                <Box>{t('dataset.collections.Create And Import')}</Box>
+                <Box>批量设置tag</Box>
               </Button>
               <Button
+                ml={4}
                 _hover={{
                   color: 'primary.500'
                 }}

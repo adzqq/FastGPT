@@ -18,6 +18,11 @@ const Tools = () => {
       label: '我的知识库',
       link: '/dataset/list'
     },
+    {
+      icon: 'core/config/configLight',
+      label: '配置中心',
+      link: '/config'
+    },
     // ...(feConfigs?.show_git
     //   ? [
     //       {
