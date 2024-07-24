@@ -23,7 +23,7 @@ export const useInitApp = () => {
 
     // setTitle(systemTitle || 'FastGPT');
 
-    setTitle('LD-GPT');
+    setTitle('KION-GPT');
 
     // log fastgpt
     if (!isPlus) {
