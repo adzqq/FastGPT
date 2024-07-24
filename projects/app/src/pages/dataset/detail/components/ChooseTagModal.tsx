@@ -12,7 +12,8 @@ import {
   CheckboxGroup,
   HStack,
   FormControl,
-  FormLabel
+  FormLabel,
+  FormErrorMessage
 } from '@chakra-ui/react';
 import { useForm, Controller } from 'react-hook-form';
 import { getErrText } from '@fastgpt/global/common/error/utils';
@@ -43,7 +44,12 @@ const ChooseTagModal = ({ onClose }: { onClose: () => void }) => {
   const router = useRouter();
   const { isPc, feConfigs } = useSystemStore();
 
-  const { register, setValue, getValues, handleSubmit, control } = useForm<ChooseTagModalProps>({
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors }
+  } = useForm<ChooseTagModalProps>({
     defaultValues: {
       inputValue: '',
       radioValue: '',
@@ -55,9 +61,6 @@ const ChooseTagModal = ({ onClose }: { onClose: () => void }) => {
   /* create a new kb and router to it */
   const { mutate: onclickCreate, isLoading: creating } = useRequest({
     mutationFn: async (data: ChooseTagModalProps) => {
-      // const id = await postCreateDataset(data);
-      // return { id };
-      console.log('getValues', getValues());
       console.log('data', data);
       return null;
     },
@@ -67,13 +70,6 @@ const ChooseTagModal = ({ onClose }: { onClose: () => void }) => {
       //设置成功以后执行的操作
     }
   });
-
-  const handleRadioChange = useCallback(
-    (e: string) => {
-      setValue('radioValue', e);
-    },
-    [setValue, toast]
-  );
 
   return (
     <MyModal
@@ -85,8 +81,8 @@ const ChooseTagModal = ({ onClose }: { onClose: () => void }) => {
       w={'600px'}
     >
       <ModalBody py={2}>
-        <FormControl>
-          <FormLabel>Radio Group</FormLabel>
+        <FormControl isRequired={true} isInvalid={!!errors.radioValue}>
+          <FormLabel color={'black'}>单选按钮</FormLabel>
           <Controller
             name="radioValue"
             control={control}
@@ -101,10 +97,11 @@ const ChooseTagModal = ({ onClose }: { onClose: () => void }) => {
               </RadioGroup>
             )}
           />
+          <FormErrorMessage>{errors.radioValue && errors.radioValue.message}</FormErrorMessage>
         </FormControl>
 
-        <FormControl mt={3}>
-          <FormLabel>Checkbox Group</FormLabel>
+        <FormControl mt={5} isRequired={true} isInvalid={!!errors.checkboxValues}>
+          <FormLabel>多选按钮</FormLabel>
           <Controller
             name="checkboxValues"
             control={control}
@@ -125,6 +122,9 @@ const ChooseTagModal = ({ onClose }: { onClose: () => void }) => {
               </CheckboxGroup>
             )}
           />
+          <FormErrorMessage>
+            {errors.checkboxValues && errors.checkboxValues.message}
+          </FormErrorMessage>
         </FormControl>
 
         <Box mt={5}>

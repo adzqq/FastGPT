@@ -456,10 +456,12 @@ const Radio = radioStyle({
         bg: 'primary.50',
         boxShadow: shadowLight,
         _before: {
-          bg: 'primary.600'
+          bg: 'primary.600',
+          borderColor: 'primary.400'
         },
         _hover: {
-          bg: 'primary.50'
+          bg: 'primary.50',
+          borderColor: 'primary.400'
         }
       }
     }
@@ -479,11 +481,22 @@ const Checkbox = checkBoxMultiStyle({
         color: 'primary.600',
         boxShadow: `${shadowLight} !important`,
         _hover: {
-          bg: 'primary.50'
+          bg: 'primary.50',
+          borderColor: 'primary.400'
         }
       },
       _hover: {
         borderColor: 'primary.400'
+      },
+      _indeterminate: {
+        bg: 'primary.50',
+        borderColor: 'primary.600',
+        color: 'primary.600',
+        boxShadow: `${shadowLight} !important`,
+        _hover: {
+          bg: 'primary.50',
+          borderColor: 'primary.400'
+        }
       }
     }
   })

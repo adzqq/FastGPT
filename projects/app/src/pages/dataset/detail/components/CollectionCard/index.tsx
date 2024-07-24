@@ -9,7 +9,8 @@ import {
   Th,
   Td,
   Tbody,
-  MenuButton
+  MenuButton,
+  Checkbox
 } from '@chakra-ui/react';
 import {
   delDatasetCollectionById,
@@ -45,8 +46,14 @@ import { CollectionPageContext } from './Context';
 import { DatasetPageContext } from '@/web/core/dataset/context/datasetPageContext';
 import { useUserStore } from '@/web/support/user/useUserStore';
 
+import { useForm, Controller } from 'react-hook-form';
+
 const Header = dynamic(() => import('./Header'));
 const EmptyCollectionTip = dynamic(() => import('./EmptyCollectionTip'));
+
+interface SelectedItemProps {
+  selectedItems: string[];
+}
 
 const CollectionCard = () => {
   const BoxRef = useRef<HTMLDivElement>(null);
@@ -174,6 +181,25 @@ const CollectionCard = () => {
     }
   );
 
+  const { handleSubmit, control, getValues, setValue, watch } = useForm<SelectedItemProps>({
+    defaultValues: {
+      selectedItems: []
+    }
+  });
+
+  const selectedItems = watch('selectedItems');
+
+  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      setValue(
+        'selectedItems',
+        formatCollections.map((item) => item._id)
+      );
+    } else {
+      setValue('selectedItems', []);
+    }
+  };
+
   return (
     <MyBox isLoading={isLoading} h={'100%'} py={[2, 4]}>
       <Flex ref={BoxRef} flexDirection={'column'} py={[1, 3]} h={'100%'}>
@@ -192,9 +218,18 @@ const CollectionCard = () => {
           <Table variant={'simple'} draggable={false}>
             <Thead draggable={false}>
               <Tr>
+                <Th py={4}>
+                  <Checkbox
+                    isChecked={selectedItems.length === formatCollections.length}
+                    isIndeterminate={
+                      selectedItems.length > 0 && selectedItems.length < formatCollections.length
+                    }
+                    onChange={handleSelectAll}
+                  />
+                </Th>
                 <Th py={4}>#</Th>
                 <Th py={4}>{t('common.Name')}</Th>
-                <Th py={4}>{t('dataset.collections.Data Amount')}</Th>
+                {/* <Th py={4}>{t('dataset.collections.Data Amount')}</Th> */}
                 <Th py={4}>{t('core.dataset.Sync Time')}</Th>
                 <Th py={4}>{t('common.Status')}</Th>
                 <Th py={4} />
@@ -240,25 +275,26 @@ const CollectionCard = () => {
                     } catch (error) {}
                     setDragTargetId(undefined);
                   }}
-                  //   onClick={() => {
-                  //     if (collection.type === DatasetCollectionTypeEnum.folder) {
-                  //       router.replace({
-                  //         query: {
-                  //           ...router.query,
-                  //           parentId: collection._id
-                  //         }
-                  //       });
-                  //     } else {
-                  //       router.replace({
-                  //         query: {
-                  //           ...router.query,
-                  //           collectionId: collection._id,
-                  //           currentTab: TabEnum.dataCard
-                  //         }
-                  //       });
-                  //     }
-                  //   }}
                 >
+                  <Td>
+                    <Controller
+                      name="selectedItems"
+                      control={control}
+                      render={({ field }) => (
+                        <Checkbox
+                          isChecked={field.value.includes(collection._id)}
+                          onChange={(e) => {
+                            const newValue = e.target.checked
+                              ? [...field.value, collection._id]
+                              : (field.value as string[]).filter(
+                                  (id: string) => id !== collection._id
+                                );
+                            setValue('selectedItems', newValue);
+                          }}
+                        />
+                      )}
+                    />
+                  </Td>
                   <Td w={'50px'}>{index + 1}</Td>
                   <Td minW={'150px'} maxW={['200px', '300px']} draggable>
                     <Flex alignItems={'center'}>
@@ -270,7 +306,7 @@ const CollectionCard = () => {
                       </MyTooltip>
                     </Flex>
                   </Td>
-                  <Td>{collection.dataAmount || '-'}</Td>
+                  {/* <Td>{collection.dataAmount || '-'}</Td> */}
                   <Td>{dayjs(collection.updateTime).format('YYYY/MM/DD HH:mm')}</Td>
                   <Td>
                     <Box
@@ -344,34 +380,6 @@ const CollectionCard = () => {
                                     }
                                   ]
                                 : [])
-                              //   {
-                              //     label: (
-                              //       <Flex alignItems={'center'}>
-                              //         <MyIcon name={'common/file/move'} w={'14px'} mr={2} />
-                              //         {t('Move')}
-                              //       </Flex>
-                              //     ),
-                              //     onClick: () =>
-                              //       setMoveCollectionData({ collectionId: collection._id })
-                              //   },
-                              //   {
-                              //     label: (
-                              //       <Flex alignItems={'center'}>
-                              //         <MyIcon name={'edit'} w={'14px'} mr={2} />
-                              //         {t('Rename')}
-                              //       </Flex>
-                              //     ),
-                              //     onClick: () =>
-                              //       onOpenEditTitleModal({
-                              //         defaultVal: collection.name,
-                              //         onSuccess: (newName) => {
-                              //           onUpdateCollectionName({
-                              //             collectionId: collection._id,
-                              //             name: newName
-                              //           });
-                              //         }
-                              //       })
-                              //   }
                             ]
                           },
                           {
