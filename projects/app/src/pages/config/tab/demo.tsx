@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   VStack,
@@ -14,6 +14,11 @@ import {
 
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { useRequest } from '@fastgpt/web/hooks/useRequest';
+import { postCreateConfigTag } from '@/web/core/tag/api';
+import { CreateTagParams } from '@/global/core/tag/api';
+
+import { useUserStore } from '@/web/support/user/useUserStore';
 
 interface TagItem {
   id: number;
@@ -33,6 +38,42 @@ const TabTag = () => {
     reset
   } = useForm<FormValues>();
   const { toast } = useToast();
+  const { userInfo } = useUserStore();
+
+  useEffect(() => {
+    // 从网络加载标签数据
+    const fetchTags = async () => {
+      try {
+        const response = await fetch('/api/tags');
+        const data: TagItem[] = await response.json();
+        setTags(data);
+      } catch (error) {
+        toast({
+          title: '加载数据失败',
+          status: 'error',
+          duration: 3000,
+          isClosable: true
+        });
+      } finally {
+        // setLoading(false);
+      }
+    };
+
+    fetchTags();
+  }, []);
+
+  const { mutate: onclickCreate, isLoading: creating } = useRequest({
+    mutationFn: async (data: CreateTagParams) => {
+      let id = await postCreateConfigTag(data);
+      return { id, name: data.name };
+    },
+    successToast: '新增成功',
+    errorToast: '新增失败',
+    onSuccess({ id, name }) {
+      setTags([...tags, { id, label: name }]);
+      reset();
+    }
+  });
 
   const addTag: SubmitHandler<FormValues> = ({ tag }) => {
     if (tags.some((t) => t.label === tag)) {
@@ -42,10 +83,11 @@ const TabTag = () => {
         duration: 3000,
         isClosable: true
       });
-      return;
     }
-    setTags([...tags, { id: Date.now(), label: tag }]);
-    reset();
+    const user_id = userInfo?._id;
+    onclickCreate({ user_id, name: tag });
+    // setTags([...tags, { id: Date.now(), label: tag }]);
+    // reset();
   };
 
   const removeTag = (id: number) => {
@@ -67,7 +109,7 @@ const TabTag = () => {
                 placeholder="请输入标签名称"
                 {...register('tag', { required: '请输入标签名称' })}
               />
-              <Button colorScheme="blue" type="submit">
+              <Button colorScheme="blue" type="submit" isLoading={creating}>
                 新增标签
               </Button>
             </HStack>

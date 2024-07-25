@@ -3,22 +3,11 @@ import dynamic from 'next/dynamic';
 import { serviceSideProps } from '@/web/common/utils/i18n';
 import PageContainer from '@/components/PageContainer';
 //动态引入 TabTag 组件
-const TabTag = dynamic(() => import('./tab/TabTag'));
+const TabTag = dynamic(() => import('./tab/Tag'));
 const Config = () => {
   return (
     <PageContainer>
-      <Tabs pt={4}>
-        <TabList>
-          <Tab>分类</Tab>
-          <Tab>标签</Tab>
-        </TabList>
-        <TabPanels>
-          <TabPanel>分类配置</TabPanel>
-          <TabPanel>
-            <TabTag></TabTag>
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+      <TabTag />
     </PageContainer>
   );
 };
