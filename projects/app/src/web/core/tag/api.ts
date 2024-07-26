@@ -11,7 +11,7 @@ export const postCreateConfigTag = (data: CreateTagParams) => {
 /**
  * 根据ID更新模型
  */
-export const putConfigTagById = (id: string) => PUT<void>(`/core/dataset/update?id=${id}`);
+export const putConfigTagById = (data: CreateTagParams) => PUT<void>(`/core/tag/update`, data);
 
 /**
  * 根据ID删除模型
@@ -21,4 +21,4 @@ export const delConfigTagById = (id: string) => DELETE(`/core/tag/delete?id=${id
 /**
  * 根据user_id获取模型列表
  */
-export const getConfigTagListByUid = (user_id: string) => POST(`/core/tag/list`, { user_id });
+export const getConfigTagListByUid = (user_id: string) => POST<any>(`/core/tag/list`, { user_id });

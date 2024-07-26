@@ -220,7 +220,10 @@ const CollectionCard = () => {
               <Tr>
                 <Th py={4}>
                   <Checkbox
-                    isChecked={selectedItems.length === formatCollections.length}
+                    isChecked={
+                      formatCollections.length > 0 &&
+                      selectedItems.length === formatCollections.length
+                    }
                     isIndeterminate={
                       selectedItems.length > 0 && selectedItems.length < formatCollections.length
                     }

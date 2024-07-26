@@ -44,7 +44,6 @@ const FileSelector = ({
   onFinishSelect: () => void;
   isFileUploading: boolean;
 } & FlexProps) => {
-  console.log('爱动FileSelector', datasetId + '===========' + kb_id);
   const { t } = useTranslation();
   const { fileT } = useI18n();
 
@@ -223,7 +222,7 @@ const FileSelector = ({
             sourceName: file.name,
             sourceSize: formatFileSize(file.size),
             icon: getFileIcon(file.name),
-            isUploading: true,
+            isUploading: false,
             uploadedFileRate: 0
           };
         });

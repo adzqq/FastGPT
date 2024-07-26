@@ -29,9 +29,15 @@ import { AddIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useRequest } from '@fastgpt/web/hooks/useRequest';
 import { CreateTagParams } from '@/global/core/tag/api';
-import { postCreateConfigTag, getConfigTagListByUid } from '@/web/core/tag/api';
+import {
+  postCreateConfigTag,
+  getConfigTagListByUid,
+  putConfigTagById,
+  delConfigTagById
+} from '@/web/core/tag/api';
 import { useRequest2 } from '@fastgpt/web/hooks/useRequest';
-import { TagItemType } from '@fastgpt/global/core/config/type';
+import { TagItemType } from '@fastgpt/global/core/tag/type';
+import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
 
 const TagInfo: React.FC = () => {
   const [tags, setTags] = useState<TagItemType[]>([]);
@@ -77,10 +83,25 @@ const TagInfo: React.FC = () => {
     setTagModalOpen(false);
   };
 
-  const { mutate: onclickCreate, isLoading: creating } = useRequest({
+  const { mutate: onAddTag, isLoading: creating } = useRequest({
     mutationFn: async (data: CreateTagParams) => {
       let id = await postCreateConfigTag(data);
       return { id, tagKey: data.tagKey, tagValue: data.tagValue };
+    },
+    successToast: '新增成功',
+    errorToast: '新增失败',
+    onSuccess(result: TagItemType) {
+      setTags([...tags, result]);
+      resetTag();
+      closeTagModal();
+      refresh();
+    }
+  });
+
+  const { mutate: onEditTag, isLoading: editLoading } = useRequest({
+    mutationFn: async (data: CreateTagParams) => {
+      let result = await putConfigTagById(data);
+      return result;
     },
     successToast: '新增成功',
     errorToast: '新增失败',
@@ -103,17 +124,37 @@ const TagInfo: React.FC = () => {
       });
       return;
     }
-    onclickCreate({ tagKey, tagValue });
+    onAddTag({ tagKey, tagValue });
   };
 
-  const editTag: SubmitHandler<TagItemType> = ({ tagKey, tagValue }) => {
+  const editTag: SubmitHandler<TagItemType> = (data) => {
     if (currentTagId === null) return;
-    setTags(tags.map((tag) => (tag._id === currentTagId ? { ...tag, tagKey, tagValue } : tag)));
-    closeTagModal();
+    onEditTag({ _id: currentTagId, ...data });
   };
 
-  const removeTag = (tagId: string | undefined) => {
-    setTags(tags.filter((tag) => tag._id !== tagId));
+  const { openConfirm, ConfirmModal } = useConfirm({
+    type: 'delete'
+  });
+
+  const removeTag = (_id: string) => {
+    openConfirm(
+      () =>
+        new Promise<void>((resolve) => {
+          delConfigTagById(_id)
+            .then((res) => {
+              refresh();
+              resolve();
+            })
+            .catch(() => {
+              toast({
+                status: 'error',
+                title: '删除失败，请重试'
+              });
+            });
+        }),
+      undefined,
+      '确认删除该标签？删除后数据无法恢复，请确认！'
+    )();
   };
 
   return (
@@ -179,6 +220,9 @@ const TagInfo: React.FC = () => {
                 <FormLabel>标签键</FormLabel>
                 <Input
                   placeholder="请输入标签键"
+                  defaultValue={
+                    currentTagId ? tags.find((tag) => tag._id === currentTagId)?.tagKey : ''
+                  }
                   {...registerTag('tagKey', { required: '请输入标签键' })}
                 />
                 <FormErrorMessage>{tagErrors.tagKey && tagErrors.tagKey.message}</FormErrorMessage>
@@ -187,6 +231,9 @@ const TagInfo: React.FC = () => {
                 <FormLabel>标签值</FormLabel>
                 <Input
                   placeholder="请输入标签值"
+                  defaultValue={
+                    currentTagId ? tags.find((tag) => tag._id === currentTagId)?.tagValue : ''
+                  }
                   {...registerTag('tagValue', { required: '请输入标签值' })}
                 />
                 <FormErrorMessage>
@@ -199,7 +246,7 @@ const TagInfo: React.FC = () => {
             <Button
               colorScheme="blue"
               mr={3}
-              isLoading={creating}
+              isLoading={creating || editLoading}
               onClick={handleTagSubmit(isEditTag ? editTag : addTag)}
             >
               确定
@@ -210,6 +257,7 @@ const TagInfo: React.FC = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
+      <ConfirmModal />
     </Box>
   );
 };

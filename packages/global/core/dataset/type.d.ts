@@ -71,6 +71,10 @@ export type DatasetCollectionSchemaType = {
 
     [key: string]: any;
   };
+  tagInfo?: {
+    key: string;
+    values: [];
+  };
 };
 
 export type DatasetDataIndexItemType = {

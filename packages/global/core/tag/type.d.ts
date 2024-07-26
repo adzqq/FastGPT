@@ -10,3 +10,8 @@ export type TagItemType = {
   tagValue: string;
   tagKey: string;
 };
+
+export type SelectTagFormValues = {
+  key: string;
+  values: TagItemType[];
+};

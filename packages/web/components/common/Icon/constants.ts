@@ -170,6 +170,7 @@ export const iconPaths = {
   edit: () => import('./icons/edit.svg'),
   empty: () => import('./icons/empty.svg'),
   export: () => import('./icons/export.svg'),
+  tag: () => import('./icons/tag.svg'),
   'file/csv': () => import('./icons/file/csv.svg'),
   'file/fill/csv': () => import('./icons/file/fill/csv.svg'),
   'file/fill/doc': () => import('./icons/file/fill/doc.svg'),

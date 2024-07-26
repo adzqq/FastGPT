@@ -93,13 +93,14 @@ const SelectFile = React.memo(function SelectFile({
   const { mutate: onSelectFile, isLoading } = useRequest({
     mutationFn: async (files: ImportSourceItemType[]) => {
       {
+        console.log('爱动onSelectFile', files);
         setUploading(true);
         try {
           //上传文件之前判断是否有文件名重复
           // upload file
 
           await Promise.all(
-            files.map(async ({ id, file }) => {
+            files.map(async ({ id, file, tagInfo }) => {
               //上传到爱动服务器
               const uploadInfo = await uploadFile2AidongDB({
                 kb_id,
@@ -158,7 +159,8 @@ const SelectFile = React.memo(function SelectFile({
                   qaPrompt: '',
                   name: file?.name,
                   fileId: uploadFileId,
-                  adFileId: serverFileId
+                  adFileId: serverFileId,
+                  tagInfo
                 };
                 await postCreateDatasetFileCollection(commonParams);
               }

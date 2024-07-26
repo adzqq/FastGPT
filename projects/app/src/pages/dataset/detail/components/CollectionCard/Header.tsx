@@ -31,11 +31,12 @@ import { ImportDataSourceEnum } from '@fastgpt/global/core/dataset/constants';
 import { useContextSelector } from 'use-context-selector';
 import { CollectionPageContext } from './Context';
 import { DatasetPageContext } from '@/web/core/dataset/context/datasetPageContext';
+import { TagItemType, SelectTagFormValues } from '@fastgpt/global/core/tag/type';
 
 const FileSourceSelector = dynamic(() => import('../Import/components/FileSourceSelector'));
 
 //动态引入ChooseTagModal
-const ChooseTagModal = dynamic(() => import('../ChooseTagModal'));
+const ChooseTagModal = dynamic(() => import('../SelectTagModal'));
 
 const Header = ({}: {}) => {
   const { t } = useTranslation();
@@ -121,6 +122,10 @@ const Header = ({}: {}) => {
     errorToast: t('common.Create Failed')
   });
 
+  const onSubmit = (result: SelectTagFormValues) => {
+    console.log('提交result', result);
+  };
+
   return (
     <Flex px={[2, 6]} alignItems={'flex-start'} h={'35px'}>
       <Box flex={1}>
@@ -202,7 +207,7 @@ const Header = ({}: {}) => {
         <>
           {datasetDetail?.type === DatasetTypeEnum.dataset && (
             <Box>
-              <Button
+              {/* <Button
                 _hover={{
                   color: 'primary.500'
                 }}
@@ -213,7 +218,7 @@ const Header = ({}: {}) => {
               >
                 <MyIcon name={'common/importLight'} mr={2} w={'14px'} />
                 <Box>批量设置tag</Box>
-              </Button>
+              </Button> */}
               <Button
                 ml={4}
                 _hover={{
@@ -361,7 +366,9 @@ const Header = ({}: {}) => {
       )}
       <EditCreateVirtualFileModal iconSrc={'modal/manualDataset'} closeBtnText={''} />
       {isOpenFileSourceSelector && <FileSourceSelector onClose={onCloseFileSourceSelector} />}
-      {isOpenTagModal && <ChooseTagModal onClose={onCloseTagModal} />}
+      {isOpenTagModal && (
+        <ChooseTagModal onClose={onCloseTagModal} isOpen={isOpenTagModal} onSubmit={onSubmit} />
+      )}
     </Flex>
   );
 };
