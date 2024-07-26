@@ -19,9 +19,9 @@ const Tools = () => {
       link: '/dataset/list'
     },
     {
-      icon: 'core/config/configLight',
-      label: '配置中心',
-      link: '/config'
+      icon: 'core/tag/tagLight',
+      label: '标签管理',
+      link: '/tag'
     },
     // ...(feConfigs?.show_git
     //   ? [
