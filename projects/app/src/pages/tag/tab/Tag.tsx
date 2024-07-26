@@ -161,7 +161,9 @@ const TagInfo: React.FC = () => {
     <Box p={8}>
       <VStack spacing={5} align="stretch">
         <Flex alignItems={'center'}>
-          <Box flex={1}>标签</Box>
+          <Box flex={1} className="textlg" letterSpacing={1} fontSize={'24px'} fontWeight={'bold'}>
+            标签
+          </Box>
           <Button
             ml={4}
             _hover={{
