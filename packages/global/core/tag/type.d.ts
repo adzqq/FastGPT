@@ -23,3 +23,7 @@ export type SubmitFormTagValues = {
   key: string;
   values: string[];
 };
+
+export type FormTagValues = {
+  values: TagItemType[];
+};

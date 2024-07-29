@@ -32,7 +32,7 @@ export type ImportSourceItemType = {
   externalFileUrl?: string;
   externalFileId?: string;
 
-  tagInfo?: SubmitFormTagValues;
+  tagInfo?: TagItemType[];
 };
 
 export type ImportSourceParamsType = UseFormReturn<

@@ -21,11 +21,11 @@ import { useTranslation } from 'next-i18next';
 import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
 import dynamic from 'next/dynamic';
 import { useI18n } from '@/web/context/I18n';
-import { SelectTagFormValues } from '@fastgpt/global/core/tag/type';
+import { SelectTagFormValues, TagItemType, FormTagValues } from '@fastgpt/global/core/tag/type';
 
 const PreviewRawText = dynamic(() => import('./PreviewRawText'));
 
-const SelectTagModal = dynamic(() => import('../../SelectTagModal'));
+const SelectTagModal = dynamic(() => import('../../SelectTagModal1'));
 
 export const RenderUploadFiles = ({
   files,
@@ -47,11 +47,10 @@ export const RenderUploadFiles = ({
     onClose: onCloseTagModal
   } = useDisclosure();
 
-  const onSubmit = (result: SubmitFormTagValues) => {
+  const onSubmit = (result: FormTagValues) => {
     if (tagFile) {
-      console.log('爱动onSubmit', result);
       setFiles((state) =>
-        state.map((file) => (file.id === tagFile.id ? { ...file, tagInfo: result } : file))
+        state.map((file) => (file.id === tagFile.id ? { ...file, tagInfo: result.values } : file))
       );
     }
   };
@@ -91,9 +90,9 @@ export const RenderUploadFiles = ({
                 <Td>
                   <Flex alignItems={'center'}>
                     <HStack spacing={2}>
-                      {item.tagInfo?.values.map((tag, index) => (
+                      {item.tagInfo?.map((tag, index) => (
                         <Tag key={index} variant="solid" colorScheme="primary" borderRadius="full">
-                          <TagLabel>{tag}</TagLabel>
+                          <TagLabel>{tag.tagValue}</TagLabel>
                         </Tag>
                       ))}
                     </HStack>

@@ -95,8 +95,8 @@ const DatasetCollectionSchema = new Schema({
     default: {}
   },
   tagInfo: {
-    type: Object,
-    default: {}
+    type: Array,
+    default: []
   }
 });
 

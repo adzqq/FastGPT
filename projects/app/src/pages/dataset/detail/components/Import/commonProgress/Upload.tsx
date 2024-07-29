@@ -63,13 +63,14 @@ const Upload = ({ kb_id }: { kb_id: string }) => {
               : source
           )
         );
-        console.log('爱动开始上传文件');
+        console.log('爱动开始上传文件', item);
         const uploadInfo = await uploadFile2AidongDB({
           kb_id: kb_id,
           user_id: userInfo._id,
           file: item.file,
           doc_type: mode
         });
+
         if (uploadInfo.status !== 'success') {
           //上传异常
           return new Promise((resolve, reject) => reject());
@@ -85,7 +86,8 @@ const Upload = ({ kb_id }: { kb_id: string }) => {
             chunkSplitter: customSplitChar,
             qaPrompt,
             name: item.sourceName,
-            adFileId: serverFileId
+            adFileId: serverFileId,
+            tagInfo: item.tagInfo
           };
           if (importSource === ImportDataSourceEnum.fileLocal && item.dbFileId) {
             await postCreateDatasetFileCollection({

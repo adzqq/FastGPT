@@ -12,6 +12,8 @@ import {
 import { DatasetPermission } from '../../support/permission/dataset/controller';
 import { Permission } from '../../support/permission/controller';
 
+import { TagItemType } from '../tag/type';
+
 /* schema */
 export type DatasetSchemaType = {
   _id: string;
@@ -71,10 +73,7 @@ export type DatasetCollectionSchemaType = {
 
     [key: string]: any;
   };
-  tagInfo?: {
-    key: string;
-    values: string[];
-  };
+  tagInfo?: TagItemType[];
 };
 
 export type DatasetDataIndexItemType = {

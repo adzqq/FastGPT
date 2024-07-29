@@ -3,7 +3,7 @@ import { DatasetDataIndexItemType, DatasetSchemaType } from './type';
 import { TrainingModeEnum, DatasetCollectionTypeEnum } from './constants';
 import type { LLMModelItemType } from '../ai/model.d';
 import { ParentIdType } from 'common/parentFolder/type';
-import { SubmitFormTagValues } from '../tag/type';
+import { TagItemType } from '../tag/type';
 
 /* ================= dataset ===================== */
 export type DatasetUpdateBody = {
@@ -63,7 +63,7 @@ export type LinkCreateDatasetCollectionParams = ApiCreateDatasetCollectionParams
 export type FileIdCreateDatasetCollectionParams = ApiCreateDatasetCollectionParams & {
   fileId: string;
   adFileId?: string;
-  tagInfo?: SubmitFormTagValues;
+  tagInfo?: TagItemType[];
 };
 export type FileCreateDatasetCollectionParams = ApiCreateDatasetCollectionParams & {
   fileMetadata?: Record<string, any>;
