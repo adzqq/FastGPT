@@ -15,3 +15,11 @@ export type SelectTagFormValues = {
   key: string;
   values: TagItemType[];
 };
+
+/**
+ * 提交时的数据结构
+ */
+export type SubmitFormTagValues = {
+  key: string;
+  values: string[];
+};

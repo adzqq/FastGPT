@@ -16,7 +16,8 @@ import {
   delDatasetCollectionById,
   putDatasetCollectionById,
   postLinkCollectionSync,
-  delAdDatasetDocs
+  delAdDatasetDocs,
+  vectorizeAdDatasetsDocs
 } from '@/web/core/dataset/api';
 import { useQuery } from '@tanstack/react-query';
 import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
@@ -70,6 +71,10 @@ const CollectionCard = () => {
   const { openConfirm: openSyncConfirm, ConfirmModal: ConfirmSyncModal } = useConfirm({
     content: t('core.dataset.collection.Start Sync Tip')
   });
+  //重新向量化弹框
+  const { openConfirm: openEmConfirm, ConfirmModal: ConfirmEmdModal } = useConfirm({
+    content: '确定需要重新建立索引？'
+  });
 
   const { onOpenModal: onOpenEditTitleModal, EditModal: EditTitleModal } = useEditTitle({
     title: t('Rename')
@@ -88,7 +93,8 @@ const CollectionCard = () => {
       collections.map((collection) => {
         const icon = getCollectionIcon(collection.type, collection.name);
         const status = (() => {
-          if (collection.trainingAmount > 0) {
+          //   if (collection.trainingAmount > 0) {
+          if (collection.status == 1) {
             return {
               //   statusText: t('dataset.collections.Collection Embedding', {
               //     total: collection.trainingAmount
@@ -97,6 +103,13 @@ const CollectionCard = () => {
               color: 'myGray.600',
               bg: 'myGray.50',
               borderColor: 'borderColor.low'
+            };
+          } else if (collection.status == 3) {
+            return {
+              statusText: '索引失败',
+              color: 'red.600',
+              bg: 'red.50',
+              borderColor: 'red.300'
             };
           }
           return {
@@ -392,6 +405,38 @@ const CollectionCard = () => {
                                   <Flex alignItems={'center'}>
                                     <MyIcon
                                       mr={1}
+                                      name={'common/refreshLight'}
+                                      w={'14px'}
+                                      _hover={{ color: 'red.600' }}
+                                    />
+                                    <Box>{'重新索引'}</Box>
+                                  </Flex>
+                                ),
+                                type: 'primary',
+                                onClick: () =>
+                                  openEmConfirm(
+                                    async () => {
+                                      const result = await vectorizeAdDatasetsDocs(
+                                        userInfo._id,
+                                        router.query.kb_id,
+                                        collection.adFileId
+                                      );
+                                      if (result && result.status == 'success') {
+                                        toast({
+                                          status: 'success',
+                                          title: '重新索引请求发送成功'
+                                        });
+                                      }
+                                    },
+                                    undefined,
+                                    ''
+                                  )()
+                              },
+                              {
+                                label: (
+                                  <Flex alignItems={'center'}>
+                                    <MyIcon
+                                      mr={1}
                                       name={'delete'}
                                       w={'14px'}
                                       _hover={{ color: 'red.600' }}
@@ -440,6 +485,7 @@ const CollectionCard = () => {
         <ConfirmDeleteModal />
         <ConfirmSyncModal />
         <EditTitleModal />
+        <ConfirmEmdModal />
 
         {!!moveCollectionData && (
           <SelectCollections

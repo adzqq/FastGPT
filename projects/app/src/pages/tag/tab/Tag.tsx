@@ -39,10 +39,13 @@ import { useRequest2 } from '@fastgpt/web/hooks/useRequest';
 import { TagItemType } from '@fastgpt/global/core/tag/type';
 import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
 
+import MyBox from '@fastgpt/web/components/common/MyBox';
+
 const TagInfo: React.FC = () => {
   const [tags, setTags] = useState<TagItemType[]>([]);
   const [isTagModalOpen, setTagModalOpen] = useState(false);
   const [isEditTag, setIsEditTag] = useState(false);
+  const [listLoading, setListLoading] = useState(false);
   const [currentTagId, setCurrentTagId] = useState<string | undefined>('');
   const {
     handleSubmit: handleTagSubmit,
@@ -52,8 +55,9 @@ const TagInfo: React.FC = () => {
   } = useForm<TagItemType>();
   const { toast } = useToast();
 
-  const { listLoading, refresh } = useRequest2(
+  const { refresh } = useRequest2(
     async () => {
+      setListLoading(true);
       const result = await getConfigTagListByUid('');
       setTags(result || []);
     },
@@ -63,7 +67,9 @@ const TagInfo: React.FC = () => {
       onError(e: any) {
         console.log(e);
       },
-      onFinally() {}
+      onFinally() {
+        setListLoading(false);
+      }
     }
   );
 
@@ -158,7 +164,7 @@ const TagInfo: React.FC = () => {
   };
 
   return (
-    <Box p={8}>
+    <MyBox p={8} isLoading={listLoading}>
       <VStack spacing={5} align="stretch">
         <Flex alignItems={'center'}>
           <Box flex={1} className="textlg" letterSpacing={1} fontSize={'24px'} fontWeight={'bold'}>
@@ -260,7 +266,7 @@ const TagInfo: React.FC = () => {
         </ModalContent>
       </Modal>
       <ConfirmModal />
-    </Box>
+    </MyBox>
   );
 };
 

@@ -73,7 +73,7 @@ export type DatasetCollectionSchemaType = {
   };
   tagInfo?: {
     key: string;
-    values: [];
+    values: string[];
   };
 };
 

@@ -17,12 +17,16 @@ import {
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import Select from 'react-select';
 import { getConfigTagListByUid } from '@/web/core/tag/api';
-import { TagItemType, SelectTagFormValues } from '@fastgpt/global/core/tag/type';
+import {
+  TagItemType,
+  SelectTagFormValues,
+  SubmitFormTagValues
+} from '@fastgpt/global/core/tag/type';
 
 interface SelectTagModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: SubmitHandler<SelectTagFormValues>;
+  onSubmit: SubmitHandler<SubmitFormTagValues>;
 }
 
 const SelectTagModal: React.FC<SelectTagModalProps> = ({ isOpen, onClose, onSubmit }) => {
@@ -35,7 +39,7 @@ const SelectTagModal: React.FC<SelectTagModalProps> = ({ isOpen, onClose, onSubm
     reset,
     setValue,
     resetField
-  } = useForm<SelectTagFormValues>();
+  } = useForm<SubmitFormTagValues>();
   const [tags, setTags] = useState<SelectTagFormValues[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -65,7 +69,7 @@ const SelectTagModal: React.FC<SelectTagModalProps> = ({ isOpen, onClose, onSubm
         }
       });
     }
-  }, [isOpen]);
+  }, []);
 
   const tagKeys = tags.map((tag) => ({ value: tag.key, label: tag.key }));
   const selectedKey = watch('key');
@@ -88,7 +92,7 @@ const SelectTagModal: React.FC<SelectTagModalProps> = ({ isOpen, onClose, onSubm
     }
   });
 
-  const handleFormSubmit = handleSubmit((data: SelectTagFormValues) => {
+  const handleFormSubmit = handleSubmit((data: SubmitFormTagValues) => {
     onSubmit(data);
     onClose();
   });

@@ -21,6 +21,8 @@ export type DatasetCollectionsListItemType = {
   rawLink?: string;
   permission: DatasetPermission;
   adFileId?: string;
+  //表示向量化状态  1进行中 2.成功  3.失败
+  status?: number;
 };
 
 /* ================= data ===================== */

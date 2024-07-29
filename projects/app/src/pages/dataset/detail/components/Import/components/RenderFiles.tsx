@@ -47,8 +47,9 @@ export const RenderUploadFiles = ({
     onClose: onCloseTagModal
   } = useDisclosure();
 
-  const onSubmit = (result: SelectTagFormValues) => {
+  const onSubmit = (result: SubmitFormTagValues) => {
     if (tagFile) {
+      console.log('爱动onSubmit', result);
       setFiles((state) =>
         state.map((file) => (file.id === tagFile.id ? { ...file, tagInfo: result } : file))
       );

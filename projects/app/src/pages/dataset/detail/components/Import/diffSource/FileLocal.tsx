@@ -19,7 +19,7 @@ import { BucketNameEnum } from '@fastgpt/global/common/file/constants';
 import { useRouter } from 'next/router';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 
-import { postCreateDatasetFileCollection } from '@/web/core/dataset/api';
+import { postCreateDatasetFileCollection, vectorizeAdDatasetsDocs } from '@/web/core/dataset/api';
 
 import { TabEnum } from '../../../index';
 
@@ -57,7 +57,7 @@ const SelectFile = React.memo(function SelectFile({
   datasetId: string;
   kb_id: string;
 }) {
-  console.log('爱动SelectFile', datasetId + '---' + kb_id);
+  //   console.log('爱动SelectFile', datasetId + '---' + kb_id);
   const { t } = useTranslation();
   const { goToNext, sources, setSources } = useContextSelector(DatasetImportContext, (v) => v);
   const [selectFiles, setSelectFiles] = useState<ImportSourceItemType[]>(
@@ -85,7 +85,7 @@ const SelectFile = React.memo(function SelectFile({
   const { userInfo } = useUserStore();
 
   const startUpload = () => {
-    console.log('爱动selectFiles', selectFiles);
+    // console.log('爱动selectFiles', selectFiles);
 
     onSelectFile(selectFiles);
   };
@@ -106,6 +106,7 @@ const SelectFile = React.memo(function SelectFile({
                 kb_id,
                 user_id: userInfo._id,
                 file,
+                doc_type: tagInfo?.values?.length > 0 ? tagInfo.values[0] : '',
                 percentListen: (e) => {
                   console.log('爱动percentListen', e);
                   setSelectFiles((state) =>
@@ -163,6 +164,9 @@ const SelectFile = React.memo(function SelectFile({
                   tagInfo
                 };
                 await postCreateDatasetFileCollection(commonParams);
+
+                //向量化指定文件
+                await vectorizeAdDatasetsDocs(userInfo._id, kb_id, serverFileId);
               }
             })
           );
