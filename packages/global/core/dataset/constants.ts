@@ -95,7 +95,9 @@ export enum ImportDataSourceEnum {
 export enum TrainingModeEnum {
   chunk = 'chunk',
   auto = 'auto',
-  qa = 'qa'
+  qa = 'qa',
+  general = 'general',
+  error_code = 'error_code'
 }
 
 export const TrainingTypeMap = {

@@ -98,7 +98,6 @@ const FileSelector = ({
           return results;
         });
         try {
-          //上传文件之前判断是否有文件名重复
           // upload file
           await Promise.all(
             files.map(async ({ fileId, file }) => {
@@ -118,38 +117,17 @@ const FileSelector = ({
                   );
                 }
               });
-              //上传到爱动服务器
-              const uploadInfo = await uploadFile2AidongDB({
-                kb_id,
-                user_id: userInfo._id,
-                file,
-                percentListen: (e) => {
-                  setSelectFiles((state) =>
-                    state.map((item) =>
-                      item.id === fileId
-                        ? {
-                            ...item,
-                            uploadedFileRate: e
-                          }
-                        : item
-                    )
-                  );
-                }
-              });
-              if (uploadInfo.file && Object.values(uploadInfo.file).length > 0) {
-                const serverFileId = Object.values(uploadInfo.file)[0];
-                setSelectFiles((state) =>
-                  state.map((item) =>
-                    item.id === fileId
-                      ? {
-                          ...item,
-                          dbFileId: serverFileId,
-                          isUploading: false
-                        }
-                      : item
-                  )
-                );
-              }
+              setSelectFiles((state) =>
+                state.map((item) =>
+                  item.id === fileId
+                    ? {
+                        ...item,
+                        dbFileId: uploadFileId,
+                        isUploading: false
+                      }
+                    : item
+                )
+              );
             })
           );
         } catch (error) {
@@ -174,6 +152,7 @@ const FileSelector = ({
       const result = await getAdDatasetsDocs(userInfo._id, kb_id);
       if (result && result.length > 0) {
         let serverFilesNames = result.map((item: any) => item[1]);
+        //新增爱动判断，文件名不可以重复
         if (hasDuplicates(selectFiles, files, serverFilesNames)) {
           toast({
             status: 'warning',
@@ -181,15 +160,6 @@ const FileSelector = ({
           });
           return;
         }
-      }
-      // console.log("爱动getAdDatasetsDocs",result)
-      //新增爱动判断，文件名不可以重复
-      if (hasDuplicates(selectFiles, files, [])) {
-        toast({
-          status: 'warning',
-          title: '文件名不可以重复'
-        });
-        return;
       }
       if (selectFiles.length + files.length > maxCount) {
         files = files.slice(0, maxCount - selectFiles.length);
@@ -199,9 +169,9 @@ const FileSelector = ({
         });
       }
       // size check
-      //   if (!maxSize) {
-      //     return onSelectFile(files);
-      //   }
+      if (!maxSize) {
+        return onSelectFile(files);
+      }
       const filterFiles = files.filter((item) => item.file.size <= maxSize);
 
       if (filterFiles.length < files.length) {
@@ -211,26 +181,7 @@ const FileSelector = ({
         });
       }
 
-      setSelectFiles((state) => {
-        const formatFiles = filterFiles.map<ImportSourceItemType>((selectFile) => {
-          const { fileId, file } = selectFile;
-
-          return {
-            id: fileId,
-            createStatus: 'waiting',
-            file,
-            sourceName: file.name,
-            sourceSize: formatFileSize(file.size),
-            icon: getFileIcon(file.name),
-            isUploading: false,
-            uploadedFileRate: 0
-          };
-        });
-        const results = formatFiles.concat(state).slice(0, maxCount);
-        return results;
-      });
-
-      //   return onSelectFile(filterFiles);
+      return onSelectFile(filterFiles);
     },
     [fileT, maxCount, maxSize, onSelectFile, selectFiles.length, toast]
   );

@@ -17,7 +17,7 @@ import {
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import { useTranslation } from 'next-i18next';
 import LeftRadio from '@fastgpt/web/components/common/Radio/LeftRadio';
-import { TrainingModeEnum, TrainingTypeMap } from '@fastgpt/global/core/dataset/constants';
+import { TrainingModeEnum } from '@fastgpt/global/core/dataset/constants';
 import { ImportProcessWayEnum } from '@/web/core/dataset/constants';
 import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
@@ -55,14 +55,25 @@ function DataProcess({ showPreviewChunks = true }: { showPreviewChunks: boolean 
     onClose: onCloseCustomPrompt
   } = useDisclosure();
 
+  const docTypeMap = {
+    [TrainingModeEnum.general]: {
+      label: '通用',
+      openSource: true
+    },
+    [TrainingModeEnum.error_code]: {
+      label: '故障码',
+      openSource: true
+    }
+  };
+
   const trainingModeList = useMemo(() => {
-    const list = Object.entries(TrainingTypeMap);
+    const list = Object.entries(docTypeMap);
     return list;
   }, []);
 
   const onSelectTrainWay = useCallback(
     (e: TrainingModeEnum) => {
-      if (!feConfigs?.isPlus && !TrainingTypeMap[e]?.openSource) {
+      if (!feConfigs?.isPlus && !docTypeMap[e]?.openSource) {
         return toast({
           status: 'warning',
           title: t('common.system.Commercial version function')
@@ -82,12 +93,12 @@ function DataProcess({ showPreviewChunks = true }: { showPreviewChunks: boolean 
         </Flex>
 
         <Flex mt={4} alignItems={'center'}>
-          <FormLabel flex={'0 0 100px'}>{t('core.dataset.import.Training mode')}</FormLabel>
+          {/* <FormLabel flex={'0 0 100px'}>{t('core.dataset.import.Training mode')}</FormLabel> */}
+          <FormLabel flex={'0 0 100px'}>文档类型</FormLabel>
           <LeftRadio
             list={trainingModeList.map(([key, value]) => ({
-              title: t(value.label),
-              value: key,
-              tooltip: t(value.tooltip)
+              title: value.label,
+              value: key
             }))}
             px={3}
             py={2}
@@ -99,7 +110,7 @@ function DataProcess({ showPreviewChunks = true }: { showPreviewChunks: boolean 
             flexWrap={'wrap'}
           />
         </Flex>
-        <Flex mt={5}>
+        {/* <Flex mt={5}>
           <FormLabel flex={'0 0 100px'}>{t('core.dataset.import.Process way')}</FormLabel>
           <LeftRadio
             list={[
@@ -263,8 +274,8 @@ function DataProcess({ showPreviewChunks = true }: { showPreviewChunks: boolean 
               setValue('way', e);
             }}
           ></LeftRadio>
-        </Flex>
-        <Flex mt={5} alignItems={'center'} pl={'100px'} gap={3}>
+        </Flex> */}
+        {/* <Flex mt={5} alignItems={'center'} pl={'100px'} gap={3}>
           {feConfigs?.show_pay && (
             <MyTooltip label={priceTip}>
               <MyTag colorSchema={'gray'} py={'6px'} borderRadius={'md'} px={3}>
@@ -272,7 +283,7 @@ function DataProcess({ showPreviewChunks = true }: { showPreviewChunks: boolean 
               </MyTag>
             </MyTooltip>
           )}
-        </Flex>
+        </Flex> */}
         <Flex mt={5} gap={3} justifyContent={'flex-end'}>
           <Button
             onClick={() => {

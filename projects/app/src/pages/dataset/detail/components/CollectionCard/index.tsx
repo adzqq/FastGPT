@@ -400,38 +400,47 @@ const CollectionCard = () => {
                           },
                           {
                             children: [
-                              {
-                                label: (
-                                  <Flex alignItems={'center'}>
-                                    <MyIcon
-                                      mr={1}
-                                      name={'common/refreshLight'}
-                                      w={'14px'}
-                                      _hover={{ color: 'red.600' }}
-                                    />
-                                    <Box>{'重新索引'}</Box>
-                                  </Flex>
-                                ),
-                                type: 'primary',
-                                onClick: () =>
-                                  openEmConfirm(
-                                    async () => {
-                                      const result = await vectorizeAdDatasetsDocs(
-                                        userInfo._id,
-                                        router.query.kb_id,
-                                        collection.adFileId
-                                      );
-                                      if (result && result.status == 'success') {
-                                        toast({
-                                          status: 'success',
-                                          title: '重新索引请求发送成功'
-                                        });
-                                      }
-                                    },
-                                    undefined,
-                                    ''
-                                  )()
-                              },
+                              //索引进行中不可删除
+                              ...(collection.status != 1
+                                ? [
+                                    {
+                                      label: (
+                                        <Flex alignItems={'center'}>
+                                          <MyIcon
+                                            mr={1}
+                                            name={'common/refreshLight'}
+                                            w={'14px'}
+                                            _hover={{ color: 'red.600' }}
+                                          />
+                                          <Box>{'重新索引'}</Box>
+                                        </Flex>
+                                      ),
+                                      type: 'primary',
+                                      onClick: () =>
+                                        openEmConfirm(
+                                          async () => {
+                                            const result = await vectorizeAdDatasetsDocs(
+                                              userInfo._id,
+                                              router.query.kb_id,
+                                              collection.adFileId
+                                            );
+                                            if (result && result.status == 'success') {
+                                              toast({
+                                                status: 'success',
+                                                title: '重新索引请求发送成功'
+                                              });
+                                            }
+                                          },
+                                          undefined,
+                                          ''
+                                        )()
+                                    }
+                                  ]
+                                : [])
+                            ]
+                          },
+                          {
+                            children: [
                               {
                                 label: (
                                   <Flex alignItems={'center'}>
