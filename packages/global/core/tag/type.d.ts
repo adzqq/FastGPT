@@ -10,20 +10,9 @@ export type TagItemType = {
   tagValue: string;
   tagKey: string;
 };
-
-export type SelectTagFormValues = {
-  key: string;
-  values: TagItemType[];
-};
-
 /**
  * 提交时的数据结构
  */
-export type SubmitFormTagValues = {
-  key: string;
-  values: string[];
-};
-
 export type FormTagValues = {
   values: TagItemType[];
 };

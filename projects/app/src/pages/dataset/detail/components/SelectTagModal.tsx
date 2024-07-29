@@ -17,16 +17,12 @@ import {
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import Select from 'react-select';
 import { getConfigTagListByUid } from '@/web/core/tag/api';
-import {
-  TagItemType,
-  SelectTagFormValues,
-  SubmitFormTagValues
-} from '@fastgpt/global/core/tag/type';
+import { TagItemType, FormTagValues } from '@fastgpt/global/core/tag/type';
 
 interface SelectTagModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: SubmitHandler<SubmitFormTagValues>;
+  onSubmit: SubmitHandler<FormTagValues>;
 }
 
 const SelectTagModal: React.FC<SelectTagModalProps> = ({ isOpen, onClose, onSubmit }) => {
@@ -39,8 +35,8 @@ const SelectTagModal: React.FC<SelectTagModalProps> = ({ isOpen, onClose, onSubm
     reset,
     setValue,
     resetField
-  } = useForm<SubmitFormTagValues>();
-  const [tags, setTags] = useState<SelectTagFormValues[]>([]);
+  } = useForm<FormTagValues>();
+  const [tags, setTags] = useState<TagItemType[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -50,33 +46,20 @@ const SelectTagModal: React.FC<SelectTagModalProps> = ({ isOpen, onClose, onSubm
         if (res) {
           //格式转换
           const tags: TagItemType[] = res;
-          const mergeTagFn = (tags: TagItemType[]): SelectTagFormValues[] => {
-            const tagMap: { [key: string]: TagItemType[] } = {}; //定义tagMap的类型
-            tags.forEach((tag) => {
-              if (!tagMap[tag.tagKey]) {
-                tagMap[tag.tagKey] = [];
-              }
-              tagMap[tag.tagKey].push(tag);
-            });
-            return Object.keys(tagMap).map((key) => ({
-              key,
-              values: tagMap[key]
-            }));
-          };
-          const mergedTags = mergeTagFn(tags);
-          setTags(mergedTags);
+          setTags(tags);
           setLoading(false);
         }
       });
     }
   }, []);
 
-  const tagKeys = tags.map((tag) => ({ value: tag.key, label: tag.key }));
-  const selectedKey = watch('key');
-  const selectedTag = tags.find((tag) => tag.key === selectedKey);
-  const tagValuesOptions = selectedTag
-    ? selectedTag.values.map((item) => ({ value: item.tagValue, label: item.tagValue }))
-    : [];
+  //   const tagKeys = tags.map((tag) => ({ value: tag.key, label: tag.key }));
+  //   const selectedKey = watch('key');
+  //   const selectedTag = tags.find((tag) => tag.key === selectedKey);
+  //   const tagValuesOptions = selectedTag
+  //     ? selectedTag.values.map((item) => ({ value: item.tagValue, label: item.tagValue }))
+  //     : [];
+  // const tagValuesOptions = tags.map((tag) => ({ value: tag.tagValue, label: tag.tagValue }));
 
   const handleClose = () => {
     reset();
@@ -92,7 +75,7 @@ const SelectTagModal: React.FC<SelectTagModalProps> = ({ isOpen, onClose, onSubm
     }
   });
 
-  const handleFormSubmit = handleSubmit((data: SubmitFormTagValues) => {
+  const handleFormSubmit = handleSubmit((data: FormTagValues) => {
     onSubmit(data);
     onClose();
   });
@@ -108,7 +91,7 @@ const SelectTagModal: React.FC<SelectTagModalProps> = ({ isOpen, onClose, onSubm
             <Spinner />
           ) : (
             <form onSubmit={handleSubmit(onSubmit)}>
-              <FormControl isInvalid={!!errors.key}>
+              {/* <FormControl isInvalid={!!errors.key}>
                 <FormLabel>标签键</FormLabel>
                 <Controller
                   name="key"
@@ -129,30 +112,32 @@ const SelectTagModal: React.FC<SelectTagModalProps> = ({ isOpen, onClose, onSubm
                   )}
                 />
                 <FormErrorMessage>{errors.key && errors.key.message}</FormErrorMessage>
-              </FormControl>
+              </FormControl> */}
 
-              {selectedKey && (
-                <FormControl isInvalid={!!errors.values} mt={4}>
-                  <FormLabel>标签值</FormLabel>
-                  <Controller
-                    name="values"
-                    control={control}
-                    rules={{ required: '请选择标签值' }}
-                    render={({ field }) => (
-                      <Select
-                        options={tagValuesOptions}
-                        isMulti
-                        onChange={(selectedOptions) =>
-                          field.onChange(selectedOptions.map((option) => option.value))
-                        }
-                        placeholder="请选择标签值"
-                        theme={customTheme}
-                      />
-                    )}
-                  />
-                  <FormErrorMessage>{errors.values && errors.values.message}</FormErrorMessage>
-                </FormControl>
-              )}
+              <FormControl isInvalid={!!errors.values} mt={4}>
+                {/* <FormLabel>标签值</FormLabel> */}
+                <Controller
+                  name="values"
+                  control={control}
+                  rules={{ required: '请选择标签' }}
+                  render={({ field }) => (
+                    <Select
+                      options={tags.map((tag) => ({ value: tag.tagValue, label: tag.tagValue }))}
+                      isMulti
+                      onChange={(selectedOptions) =>
+                        field.onChange(
+                          selectedOptions.map((x) => {
+                            return { tagKey: x.value, tagValue: x.label };
+                          })
+                        )
+                      }
+                      placeholder="请选择标签"
+                      theme={customTheme}
+                    />
+                  )}
+                />
+                <FormErrorMessage>{errors.values && errors.values.message}</FormErrorMessage>
+              </FormControl>
             </form>
           )}
         </ModalBody>

@@ -21,11 +21,11 @@ import { useTranslation } from 'next-i18next';
 import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
 import dynamic from 'next/dynamic';
 import { useI18n } from '@/web/context/I18n';
-import { SelectTagFormValues, TagItemType, FormTagValues } from '@fastgpt/global/core/tag/type';
+import { FormTagValues } from '@fastgpt/global/core/tag/type';
 
 const PreviewRawText = dynamic(() => import('./PreviewRawText'));
 
-const SelectTagModal = dynamic(() => import('../../SelectTagModal1'));
+const SelectTagModal = dynamic(() => import('../../SelectTagModal'));
 
 export const RenderUploadFiles = ({
   files,

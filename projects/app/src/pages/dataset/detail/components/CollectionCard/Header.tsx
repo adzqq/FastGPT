@@ -31,7 +31,7 @@ import { ImportDataSourceEnum } from '@fastgpt/global/core/dataset/constants';
 import { useContextSelector } from 'use-context-selector';
 import { CollectionPageContext } from './Context';
 import { DatasetPageContext } from '@/web/core/dataset/context/datasetPageContext';
-import { TagItemType, SelectTagFormValues } from '@fastgpt/global/core/tag/type';
+import { TagItemType } from '@fastgpt/global/core/tag/type';
 
 const FileSourceSelector = dynamic(() => import('../Import/components/FileSourceSelector'));
 
@@ -122,7 +122,7 @@ const Header = ({}: {}) => {
     errorToast: t('common.Create Failed')
   });
 
-  const onSubmit = (result: SelectTagFormValues) => {
+  const onSubmit = (result: TagItemType[]) => {
     console.log('提交result', result);
   };
 
