@@ -92,7 +92,8 @@ export const RenderUploadFiles = ({
                     <HStack spacing={2}>
                       {item.tagInfo?.map((tag, index) => (
                         <Tag key={index} variant="solid" colorScheme="primary" borderRadius="full">
-                          <TagLabel>{tag.tagValue}</TagLabel>
+                          {/* <TagLabel>{tag.tagValue}</TagLabel> */}
+                          {tag.tagValue}
                         </Tag>
                       ))}
                     </HStack>
@@ -165,7 +166,12 @@ export const RenderUploadFiles = ({
         <PreviewRawText previewSource={previewFile} onClose={() => setPreviewFile(undefined)} />
       )}
       {isOpenTagModal && (
-        <SelectTagModal onClose={onCloseTagModal} isOpen={isOpenTagModal} onSubmit={onSubmit} />
+        <SelectTagModal
+          onClose={onCloseTagModal}
+          isOpen={isOpenTagModal}
+          onSubmit={onSubmit}
+          selectTags={tagFile?.tagInfo}
+        />
       )}
     </>
   ) : null;

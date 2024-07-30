@@ -10,7 +10,10 @@ import {
   Td,
   Tbody,
   MenuButton,
-  Checkbox
+  Checkbox,
+  HStack,
+  Tag,
+  useDisclosure
 } from '@chakra-ui/react';
 import {
   delDatasetCollectionById,
@@ -48,9 +51,13 @@ import { DatasetPageContext } from '@/web/core/dataset/context/datasetPageContex
 import { useUserStore } from '@/web/support/user/useUserStore';
 
 import { useForm, Controller } from 'react-hook-form';
+import { DatasetCollectionsListItemType } from '@/global/core/dataset/type';
+import { FormTagValues, TagItemType } from '@fastgpt/global/core/tag/type';
+import { ImportSourceItemType } from '@/web/core/dataset/type';
 
 const Header = dynamic(() => import('./Header'));
 const EmptyCollectionTip = dynamic(() => import('./EmptyCollectionTip'));
+const SelectTagModal = dynamic(() => import('../SelectTagModal'));
 
 interface SelectedItemProps {
   selectedItems: string[];
@@ -63,6 +70,7 @@ const CollectionCard = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
   const { datasetDetail, loadDatasetDetail } = useContextSelector(DatasetPageContext, (v) => v);
+  const [currentCollection, setCurrentCollection] = useState<DatasetCollectionsListItemType>();
 
   const { openConfirm: openDeleteConfirm, ConfirmModal: ConfirmDeleteModal } = useConfirm({
     content: t('dataset.Confirm to delete the file'),
@@ -79,6 +87,12 @@ const CollectionCard = () => {
   const { onOpenModal: onOpenEditTitleModal, EditModal: EditTitleModal } = useEditTitle({
     title: t('Rename')
   });
+
+  const {
+    isOpen: isOpenTagModal,
+    onOpen: onOpenTagModal,
+    onClose: onCloseTagModal
+  } = useDisclosure();
 
   const [moveCollectionData, setMoveCollectionData] = useState<{ collectionId: string }>();
 
@@ -129,19 +143,19 @@ const CollectionCard = () => {
     [collections, t]
   );
 
-  const { mutate: onUpdateCollectionName } = useRequest({
-    mutationFn: ({ collectionId, name }: { collectionId: string; name: string }) => {
+  const { mutate: onUpdateCollectionTag } = useRequest({
+    mutationFn: ({ collectionId, tagInfo }: { collectionId: string; tagInfo: TagItemType[] }) => {
       return putDatasetCollectionById({
         id: collectionId,
-        name
+        tagInfo
       });
     },
     onSuccess() {
       getData(pageNum);
     },
 
-    successToast: t('common.Rename Success'),
-    errorToast: t('common.Rename Failed')
+    successToast: '标签设置成功',
+    errorToast: '标签设置失败'
   });
   const { mutate: onDelCollection, isLoading: isDeleting } = useRequest({
     mutationFn: (collectionId: string) => {
@@ -213,6 +227,28 @@ const CollectionCard = () => {
     }
   };
 
+  const getTagInfo = (collection: DatasetCollectionsListItemType) => {
+    return (
+      <HStack spacing={2}>
+        {collection.tagInfo?.map((tag, index) => (
+          <Tag key={index} variant="solid" colorScheme="primary" borderRadius="full">
+            {tag.tagValue}
+          </Tag>
+        ))}
+      </HStack>
+    );
+  };
+
+  const onSubmit = (result: FormTagValues) => {
+    if (currentCollection) {
+      //更新数据库中的tagInfo  updateDatasetCollectionTagInfo
+      onUpdateCollectionTag({
+        collectionId: currentCollection._id,
+        tagInfo: result.values
+      });
+    }
+  };
+
   return (
     <MyBox isLoading={isLoading} h={'100%'} py={[2, 4]}>
       <Flex ref={BoxRef} flexDirection={'column'} py={[1, 3]} h={'100%'}>
@@ -245,7 +281,7 @@ const CollectionCard = () => {
                 </Th>
                 <Th py={4}>#</Th>
                 <Th py={4}>{t('common.Name')}</Th>
-                {/* <Th py={4}>{t('dataset.collections.Data Amount')}</Th> */}
+                <Th py={4}>标签</Th>
                 <Th py={4}>{t('core.dataset.Sync Time')}</Th>
                 <Th py={4}>{t('common.Status')}</Th>
                 <Th py={4} />
@@ -322,7 +358,7 @@ const CollectionCard = () => {
                       </MyTooltip>
                     </Flex>
                   </Td>
-                  {/* <Td>{collection.dataAmount || '-'}</Td> */}
+                  <Td>{getTagInfo(collection)}</Td>
                   <Td>{dayjs(collection.updateTime).format('YYYY/MM/DD HH:mm')}</Td>
                   <Td>
                     <Box
@@ -446,6 +482,24 @@ const CollectionCard = () => {
                                   <Flex alignItems={'center'}>
                                     <MyIcon
                                       mr={1}
+                                      name={'core/tag/tagFill'}
+                                      w={'14px'}
+                                      _hover={{ color: 'red.600' }}
+                                    />
+                                    <Box>设置标签</Box>
+                                  </Flex>
+                                ),
+                                type: 'primary',
+                                onClick: () => {
+                                  onOpenTagModal();
+                                  setCurrentCollection(collection);
+                                }
+                              },
+                              {
+                                label: (
+                                  <Flex alignItems={'center'}>
+                                    <MyIcon
+                                      mr={1}
                                       name={'delete'}
                                       w={'14px'}
                                       _hover={{ color: 'red.600' }}
@@ -495,6 +549,14 @@ const CollectionCard = () => {
         <ConfirmSyncModal />
         <EditTitleModal />
         <ConfirmEmdModal />
+        {isOpenTagModal && (
+          <SelectTagModal
+            onClose={onCloseTagModal}
+            isOpen={isOpenTagModal}
+            onSubmit={onSubmit}
+            selectTags={currentCollection?.tagInfo}
+          />
+        )}
 
         {!!moveCollectionData && (
           <SelectCollections

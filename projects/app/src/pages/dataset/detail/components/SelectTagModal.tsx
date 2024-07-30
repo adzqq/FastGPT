@@ -23,9 +23,15 @@ interface SelectTagModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: SubmitHandler<FormTagValues>;
+  selectTags: TagItemType[] | undefined;
 }
 
-const SelectTagModal: React.FC<SelectTagModalProps> = ({ isOpen, onClose, onSubmit }) => {
+const SelectTagModal: React.FC<SelectTagModalProps> = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  selectTags
+}) => {
   const {
     handleSubmit,
     control,
@@ -122,6 +128,10 @@ const SelectTagModal: React.FC<SelectTagModalProps> = ({ isOpen, onClose, onSubm
                   rules={{ required: '请选择标签' }}
                   render={({ field }) => (
                     <Select
+                      defaultValue={selectTags?.map((tag) => ({
+                        value: tag.tagValue,
+                        label: tag.tagValue
+                      }))}
                       options={tags.map((tag) => ({ value: tag.tagValue, label: tag.tagValue }))}
                       isMulti
                       onChange={(selectedOptions) =>

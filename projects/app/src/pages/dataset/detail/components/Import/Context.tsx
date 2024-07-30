@@ -154,7 +154,7 @@ const DatasetImportContextProvider = ({ children }: { children: React.ReactNode 
 
   const processParamsForm = useForm<ImportFormType>({
     defaultValues: {
-      mode: TrainingModeEnum.chunk,
+      mode: TrainingModeEnum.general,
       way: ImportProcessWayEnum.auto,
       embeddingChunkSize: vectorModel?.defaultToken || 512,
       customSplitChar: '',
