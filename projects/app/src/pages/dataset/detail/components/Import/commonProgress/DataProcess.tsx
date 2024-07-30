@@ -63,6 +63,10 @@ function DataProcess({ showPreviewChunks = true }: { showPreviewChunks: boolean 
     [TrainingModeEnum.error_code]: {
       label: '故障码',
       openSource: true
+    },
+    [TrainingModeEnum.diagram]: {
+      label: '图表',
+      openSource: true
     }
   };
 

@@ -97,7 +97,8 @@ export enum TrainingModeEnum {
   auto = 'auto',
   qa = 'qa',
   general = 'general',
-  error_code = 'error_code'
+  error_code = 'error_code',
+  diagram = 'diagram'
 }
 
 export const TrainingTypeMap = {

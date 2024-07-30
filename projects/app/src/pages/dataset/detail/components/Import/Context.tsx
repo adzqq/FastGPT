@@ -244,6 +244,21 @@ const DatasetImportContextProvider = ({ children }: { children: React.ReactNode 
       }),
       uploadRate: 30,
       docType: 'error_code '
+    },
+    [TrainingModeEnum.diagram]: {
+      chunkOverlapRatio: 0,
+      maxChunkSize: 8000,
+      minChunkSize: 3000,
+      autoChunkSize: agentModel.maxContext * 0.55 || 6000,
+      chunkSize: agentModel.maxContext * 0.55 || 6000,
+      showChunkInput: false,
+      showPromptInput: true,
+      charsPointsPrice: agentModel.charsPointsPrice,
+      priceTip: t('core.dataset.import.QA Estimated Price Tips', {
+        price: agentModel?.charsPointsPrice
+      }),
+      uploadRate: 30,
+      docType: 'diagram '
     }
   };
   const selectModelStaticParam = modeStaticParams[mode];

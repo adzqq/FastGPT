@@ -81,7 +81,7 @@ const CollectionCard = () => {
   });
   //重新向量化弹框
   const { openConfirm: openEmConfirm, ConfirmModal: ConfirmEmdModal } = useConfirm({
-    content: '确定需要重新建立索引？'
+    content: '确定重新建立索引？'
   });
 
   const { onOpenModal: onOpenEditTitleModal, EditModal: EditTitleModal } = useEditTitle({
