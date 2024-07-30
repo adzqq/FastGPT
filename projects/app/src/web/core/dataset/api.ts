@@ -216,5 +216,9 @@ export const getAdDatasetsDocs = (user_id: string, kb_id: string) =>
  *
  *向量化指定文件
  *  */
-export const vectorizeAdDatasetsDocs = (user_id: string, kb_id: string, adFileId: string) =>
-  POST(`/aidong/kbqa/emb_kb`, { user_id: 'user' + user_id, kb_id, file_ids: [adFileId] });
+export const vectorizeAdDatasetsDocs = (
+  user_id: string,
+  kb_id: string,
+  adFileId: string,
+  lang: string
+) => POST(`/aidong/kbqa/emb_kb`, { user_id: 'user' + user_id, kb_id, file_ids: [adFileId], lang });

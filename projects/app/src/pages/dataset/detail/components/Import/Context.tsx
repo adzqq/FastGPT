@@ -46,6 +46,7 @@ export type ImportFormType = {
   customSplitChar: string;
   qaPrompt: string;
   webSelector: string;
+  lang?: string;
 };
 
 export const DatasetImportContext = createContext<DatasetImportContextType>({
@@ -159,7 +160,8 @@ const DatasetImportContextProvider = ({ children }: { children: React.ReactNode 
       embeddingChunkSize: vectorModel?.defaultToken || 512,
       customSplitChar: '',
       qaPrompt: Prompt_AgentQA.description,
-      webSelector: ''
+      webSelector: '',
+      lang: 'ch'
     }
   });
 

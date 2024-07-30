@@ -47,11 +47,11 @@ const Upload = ({ kb_id }: { kb_id: string }) => {
   const { handleSubmit } = processParamsForm;
 
   const { mutate: startUpload, isLoading } = useRequest({
-    mutationFn: async ({ mode, customSplitChar, qaPrompt, webSelector }: ImportFormType) => {
+    mutationFn: async ({ mode, customSplitChar, qaPrompt, webSelector, lang }: ImportFormType) => {
       if (sources.length === 0) return;
       const filterWaitingSources = sources.filter((item) => item.createStatus === 'waiting');
 
-      // Batch create collection and upload chunks
+      // Batch create collection and upload chunks,
       for await (const item of filterWaitingSources) {
         setSources((state) =>
           state.map((source) =>
@@ -95,7 +95,7 @@ const Upload = ({ kb_id }: { kb_id: string }) => {
               fileId: item.dbFileId
             });
             //创建成功后，对单个文件进行向量化
-            await vectorizeAdDatasetsDocs(userInfo._id, kb_id, serverFileId);
+            await vectorizeAdDatasetsDocs(userInfo._id, kb_id, serverFileId, lang);
           } else if (importSource === ImportDataSourceEnum.fileLink && item.link) {
             await postCreateDatasetLinkCollection({
               ...commonParams,

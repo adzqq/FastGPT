@@ -47,6 +47,7 @@ function DataProcess({ showPreviewChunks = true }: { showPreviewChunks: boolean 
   const { getValues, setValue, register, watch } = processParamsForm;
   const { toast } = useToast();
   const mode = watch('mode');
+  const lang = watch('lang');
   const way = watch('way');
 
   const {
@@ -108,6 +109,26 @@ function DataProcess({ showPreviewChunks = true }: { showPreviewChunks: boolean 
             py={2}
             value={mode}
             onChange={onSelectTrainWay}
+            defaultBg="white"
+            activeBg="white"
+            display={'flex'}
+            flexWrap={'wrap'}
+          />
+        </Flex>
+        <Flex mt={6} alignItems={'center'}>
+          {/* <FormLabel flex={'0 0 100px'}>{t('core.dataset.import.Training mode')}</FormLabel> */}
+          <FormLabel flex={'0 0 100px'}>语言</FormLabel>
+          <LeftRadio
+            list={[
+              { title: '中文', value: 'ch' },
+              { title: '英文', value: 'en' }
+            ]}
+            px={3}
+            py={2}
+            value={lang}
+            onChange={(e) => {
+              setValue('lang', e);
+            }}
             defaultBg="white"
             activeBg="white"
             display={'flex'}
