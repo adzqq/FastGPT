@@ -40,6 +40,7 @@ export const adStreamFetch = ({
 
     // response data
     let responseText = '';
+    let responseImageList: string[] = [];
     let responseQueue: (
       | { event: SseResponseEventEnum.fastAnswer | SseResponseEventEnum.answer; text: string }
       | {
@@ -189,7 +190,7 @@ export const adStreamFetch = ({
                 text: item
               });
             }
-            //获取应用文档
+            //获取应用文档和图片
             if (parseJson.source_documents && parseJson.source_documents.length > 0) {
               console.log('爱动source_documents', parseJson.source_documents);
               const quoteList = parseJson.source_documents.map((x) => {
@@ -199,11 +200,18 @@ export const adStreamFetch = ({
                   q: x.retrieval_query
                 };
               });
+              parseJson.source_documents.forEach((x) => {
+                if (x.image) {
+                  const tempdata = 'data:image/png;base64,' + x.image;
+                  responseImageList.push(`<img src="${tempdata}" />`);
+                }
+              });
               responseData = [
                 {
                   nodeId: new Date().getTime() + '',
                   moduleName: '知识库检索',
                   moduleType: FlowNodeTypeEnum.datasetSearchNode,
+                  imageList: responseImageList,
                   quoteList
                 }
               ];
