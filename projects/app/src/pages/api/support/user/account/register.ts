@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
       ]);
       // init root team
-      await createDefaultTeam({ userId: _id, balance: 9999 * 100000, session });
+      await createDefaultTeam({ userId: _id, teamName: username, balance: 9999 * 100000, session });
     });
 
     jsonRes(res, {
