@@ -89,7 +89,7 @@ export const adStreamFetch = ({
       }
 
       if (responseQueue.length > 0) {
-        const fetchCount = Math.max(1, Math.round(responseQueue.length / 10));
+        const fetchCount = Math.max(1, Math.ceil(responseQueue.length / 30));
         for (let i = 0; i < fetchCount; i++) {
           const item = responseQueue[i];
           onMessage(item);
@@ -183,7 +183,6 @@ export const adStreamFetch = ({
           })();
           if (aidongEvent === SseResponseEventEnum.answer) {
             const text = parseJson.response;
-
             for (const item of text) {
               responseQueue.push({
                 event: aidongEvent,
@@ -192,7 +191,6 @@ export const adStreamFetch = ({
             }
             //获取应用文档和图片
             if (parseJson.source_documents && parseJson.source_documents.length > 0) {
-              console.log('爱动source_documents', parseJson.source_documents);
               const quoteList = parseJson.source_documents.map((x) => {
                 return {
                   sourceName: x.file_name,

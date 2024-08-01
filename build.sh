@@ -13,6 +13,6 @@ docker login aidong-backend.tencentcloudcr.com --username 100020139216 --passwor
 #构建中力版本镜像
 # docker build -f ./projects/app/Dockerfile -t aidong-backend.tencentcloudcr.com/aidong/fastgpt:zlv4.8.5 . --build-arg name=zlfastgpt --build-arg proxy=taobao
 
-docker push aidong-backend.tencentcloudcr.com/aidong/lindefastgpt:lindev4.8.5
+docker push aidong-backend.tencentcloudcr.com/aidong/fastgpt:lindev4.8.5
 
 

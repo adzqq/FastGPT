@@ -8,7 +8,7 @@ const nextConfig = {
     i18n,
     output: 'standalone',
     reactStrictMode: isDev ? false : true,
-    compress: true,
+    compress: false,
     webpack(config, { isServer, nextRuntime }) {
         Object.assign(config.resolve.alias, {
             '@mongodb-js/zstd': false,
@@ -101,7 +101,7 @@ const nextConfig = {
         return [
             //接口请求 前缀带上/api-text/
             // { source: '/api/aidong/kbqa/dbs', destination: `http://180.100.206.221:8180/kbqa/dbs` },
-            { source: '/api/aidong/:path*', destination: `http://180.100.206.221:8180/:path*` },
+            { source: '/api/aidong/:path*', destination: `http://180.100.206.221:8180/:path*` }
 
         ]
     },

@@ -58,10 +58,13 @@ export const useChatTest = ({
       const endIndex = Math.max(startIndex - 10, 0);
       // 获取从倒数第二条数据往前的11条数据
       const sliceResult = chatList.slice(endIndex, startIndex + 1);
-      const history = sliceResult.map((item) => ({
-        content: item.value[0].text?.content,
-        role: item.obj == 'Human' ? 'user' : 'assistant'
-      }));
+      const history =
+        chatList.length > 2
+          ? sliceResult.map((item) => ({
+              content: item.value[0].text?.content,
+              role: item.obj == 'Human' ? 'user' : 'assistant'
+            }))
+          : [];
 
       // 流请求，获取数据
       const { responseText, responseData } = await adStreamFetch({
