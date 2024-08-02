@@ -28,7 +28,7 @@ export type StreamResponseType = {
 class FatalError extends Error {}
 
 export const adStreamFetch = ({
-  url = '/api/aidong/kbqa/adrag_chat',
+  url = `/api/aidong/kbqa/adrag_chat`,
   data,
   onMessage,
   abortCtrl
@@ -142,6 +142,8 @@ export const adStreamFetch = ({
       await fetchEventSource(url, {
         ...requestData,
         async onopen(res) {
+          console.log('fetchEventSource-open', res);
+
           clearTimeout(timeoutId);
           const contentType = res.headers.get('content-type');
 
@@ -256,6 +258,7 @@ export const adStreamFetch = ({
           //聊天成功后，聊天记录传入数据
         },
         onerror(err) {
+          console.log('fetchEventSource-err', err);
           if (err instanceof FatalError) {
             throw err;
           }
@@ -265,6 +268,8 @@ export const adStreamFetch = ({
         openWhenHidden: true
       });
     } catch (err: any) {
+      console.log('fetchEventSource-err', err);
+
       clearTimeout(timeoutId);
 
       if (abortCtrl.signal.aborted) {
