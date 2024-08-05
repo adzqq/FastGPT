@@ -97,13 +97,13 @@ const nextConfig = {
         ],
         outputFileTracingRoot: path.join(__dirname, '../../')
     },
-    // async rewrites() { //默认30s超时
-    //     return isDev ? [
-    //         //接口请求 前缀带上/api-text/
-    //         { source: '/api/aidong/:path*', destination: `http://180.100.206.221:8180/:path*` }
+    async rewrites() { //默认30s超时
+        return isDev ? [
+            //接口请求 前缀带上/api-text/
+            { source: '/api/aidong/:path*', destination: `http://180.100.206.221:8180/:path*` }
 
-    //     ] : []
-    // },
+        ] : []
+    },
     typescript: {
         // 关闭构建时的类型检查
         ignoreBuildErrors: true,
