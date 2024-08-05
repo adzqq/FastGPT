@@ -82,7 +82,7 @@ const Chat = ({
         (x) => x.flowNodeType == FlowNodeTypeEnum.datasetSearchNode
       );
       const datasetInfos = node?.inputs.find((x) => x.key === 'datasets')?.value;
-      const kb_ids = datasetInfos.map((x) => x.kb_id);
+      const kb_ids = datasetInfos?.map((x) => x.kb_id);
 
       const startIndex = messages.length - 3;
       // 计算需要截取的起始索引，确保不会产生负数索引

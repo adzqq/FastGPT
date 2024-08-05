@@ -28,7 +28,7 @@ export type StreamResponseType = {
 class FatalError extends Error {}
 
 export const adStreamFetch = ({
-  url = '/api/aidong/kbqa/adrag_chat',
+  url = `/api/aidong/kbqa/adrag_chat`,
   data,
   onMessage,
   abortCtrl
@@ -194,6 +194,8 @@ export const adStreamFetch = ({
               const quoteList = parseJson.source_documents.map((x) => {
                 return {
                   sourceName: x.file_name,
+                  sourceId: x.file_id,
+                  collectionId: x.file_id,
                   a: x.content,
                   q: x.retrieval_query
                 };

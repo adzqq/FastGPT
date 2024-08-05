@@ -34,6 +34,7 @@
         "echarts-gl": "2.0.9",
         "formidable": "^2.1.1",
         "framer-motion": "^9.0.6",
+        "http-proxy-middleware": "^3.0.0",
         "hyperdown": "^2.4.29",
         "i18next": "23.10.0",
         "immer": "^9.0.19",
