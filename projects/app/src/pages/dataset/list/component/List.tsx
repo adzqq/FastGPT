@@ -134,7 +134,7 @@ function List() {
       () =>
         new Promise<void>((resolve) => {
           deleteAdDatasets(userInfo?._id, kb_id).then((res) => {
-            if (res.status == 'success') {
+            if (res.status) {
               onDelDataset(id, kb_id).then(() => {
                 refetchPaths();
                 refetchDatasets();
