@@ -206,40 +206,103 @@ const Header = ({}: {}) => {
       {datasetDetail.permission.hasWritePer && (
         <>
           {datasetDetail?.type === DatasetTypeEnum.dataset && (
-            <Box>
-              {/* <Button
-                _hover={{
-                  color: 'primary.500'
-                }}
-                fontSize={['sm', 'md']}
-                onClick={() => {
-                  onOpenTagModal();
-                }}
-              >
-                <MyIcon name={'common/importLight'} mr={2} w={'14px'} />
-                <Box>批量设置tag</Box>
-              </Button> */}
-              <Button
-                ml={4}
-                _hover={{
-                  color: 'primary.500'
-                }}
-                fontSize={['sm', 'md']}
-                onClick={() => {
-                  // onOpenTagModal();
-                  router.replace({
-                    query: {
-                      ...router.query,
-                      currentTab: TabEnum.import,
-                      source: ImportDataSourceEnum.fileLocal
+            <MyMenu
+              offset={[0, 5]}
+              Button={
+                <MenuButton
+                  _hover={{
+                    color: 'primary.500'
+                  }}
+                  fontSize={['sm', 'md']}
+                >
+                  <Flex
+                    alignItems={'center'}
+                    px={5}
+                    py={2}
+                    borderRadius={'md'}
+                    cursor={'pointer'}
+                    bg={'primary.500'}
+                    overflow={'hidden'}
+                    color={'white'}
+                    h={['28px', '35px']}
+                  >
+                    <MyIcon name={'common/importLight'} mr={2} w={'14px'} />
+                    <Box>{t('dataset.collections.Create And Import')}</Box>
+                  </Flex>
+                </MenuButton>
+              }
+              menuList={[
+                {
+                  children: [
+                    {
+                      label: <Flex>通用文档</Flex>,
+                      onClick: () => {
+                        router.replace({
+                          query: {
+                            ...router.query,
+                            currentTab: TabEnum.import,
+                            source: ImportDataSourceEnum.fileLocal,
+                            doc_type: 'general'
+                          }
+                        });
+                      }
+                    },
+                    {
+                      label: <Flex>故障码</Flex>,
+                      onClick: () => {
+                        router.replace({
+                          query: {
+                            ...router.query,
+                            currentTab: TabEnum.import,
+                            source: ImportDataSourceEnum.fileLocal,
+                            doc_type: 'error_code'
+                          }
+                        });
+                      }
+                    },
+                    {
+                      label: <Flex>图表</Flex>,
+                      onClick: () => {
+                        router.replace({
+                          query: {
+                            ...router.query,
+                            currentTab: TabEnum.import,
+                            source: ImportDataSourceEnum.fileLocal,
+                            doc_type: 'diagram'
+                          }
+                        });
+                      }
+                    },
+                    {
+                      label: <Flex>车辆外观</Flex>,
+                      onClick: () => {
+                        router.replace({
+                          query: {
+                            ...router.query,
+                            currentTab: TabEnum.import,
+                            source: ImportDataSourceEnum.fileLocal,
+                            doc_type: 'forklift_appearance'
+                          }
+                        });
+                      }
+                    },
+                    {
+                      label: <Flex>视频</Flex>,
+                      onClick: () => {
+                        router.replace({
+                          query: {
+                            ...router.query,
+                            currentTab: TabEnum.import,
+                            source: ImportDataSourceEnum.fileLocal,
+                            doc_type: 'video'
+                          }
+                        });
+                      }
                     }
-                  });
-                }}
-              >
-                <MyIcon name={'common/importLight'} mr={2} w={'14px'} />
-                <Box>{t('dataset.collections.Create And Import')}</Box>
-              </Button>
-            </Box>
+                  ]
+                }
+              ]}
+            />
           )}
           {datasetDetail?.type === DatasetTypeEnum.websiteDataset && (
             <>
