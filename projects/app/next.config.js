@@ -100,7 +100,7 @@ const nextConfig = {
     async rewrites() { //默认30s超时
         return isDev ? [
             //接口请求 前缀带上/api-text/
-            { source: '/api/aidong/:path*', destination: `http://180.100.206.221:8180/:path*` }
+            { source: '/api/aidong/:path*', destination: `http://114.216.6.203:8180/:path*` }
 
         ] : []
     },
